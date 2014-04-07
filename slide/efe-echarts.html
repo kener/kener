@@ -15,8 +15,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <link rel="stylesheet" href="css/reveal.min.css">
-        <!--link rel="stylesheet" href="css/theme/default.css" id="theme"-->
-        <link rel="stylesheet" href="css/theme/solarized.css" id="theme">
+        <link rel="stylesheet" href="css/theme/default.css" id="theme">
 
         <!-- For syntax highlighting -->
         <link rel="stylesheet" href="lib/css/zenburn.css">
@@ -75,9 +74,6 @@
                 text-align: center !important;
                 font-size: 0.7em !important;
             }
-            .reveal .slides section .fragment.highlight-green.visible {
-                color: #9acd32;
-            }
             .reveal small,.reveal a.roll {
                 line-height: 1.5em;
             }
@@ -87,82 +83,130 @@
             .reveal blockquote small{
                 line-height: 1.5em;
             }
-            .reveal section img {
-                border-width:0;
-            }
-            .reveal img {
-                max-width:100%;
-                max-height:100%;
-            }
             .reveal img.echarts-icon {
                 margin:0;
                 padding:7px;
                 border:0;
                 background:none
             }
+            .reveal img {
+                max-width:100%;
+                max-height:100%;
+            }
             .reveal .slides>section, .reveal .slides>section>section {
                 padding:0;
             }
-            .table-hover tbody tr td {
-                background-color: #FBF9EC;
-                color: #586e75;
-            }
-            .table-striped tbody > tr:nth-child(odd) > td,
-            .table-striped tbody > tr:nth-child(odd) > th {
-              background-color: #ddd;
-            }
-            
-            .table-hover tbody tr:hover > td,
-            .table-hover tbody tr:hover > th {
-              background-color: #cde;
-            }
-            
-            .table tbody tr.success > td, .table tbody tr td.success {
-              background-color: #dff0d8;
-            }
-            .table tbody tr.error > td, .table tbody tr td.error {
-              background-color: #f2dede;
+            .reveal ul ul li {
+                font-size:20px;
+                color:#78B9E6
             }
         </style>
     </head>
 
     <body>
-        <div style="text-align:center;margin:0 auto;position:absolute;top:0;left:0;border:0;z-index:0;height:100%;width:100%;">
-            <img style="border:0;height:100%;width:100%;" src="./img/dtccBgMain.png" alt="Dtcc 2014">
-        </div>
+        <a href="https://github.com/ecomfe/echarts" target="_blank">
+            <img style="position:absolute;top:0;right:0;border:0;z-index:1000" src="img/fork.png" alt="Fork me on GitHub">
+        </a>
         <div class="reveal">
             <!-- Any section element inside of this container is displayed as a slide -->
             <div class="slides">
-                <section style="height:100%;width:100%">
-                    <div style="text-align:center;margin:0 auto;position:absolute;top:0;left:0;border:0;z-index:-1;height:100%;width:100%;">
-                        <img style="border:0;height:100%;width:100%;max-height:100%;max-width:100%;margin:0" src="./img/dtccBgFace.png" alt="Dtcc 2014">
-                    </div>
-                    <div style="position:absolute;left:55px;bottom:20px;text-align: left">
-                        <small>开源来自百度商业前端数据可视化团队</small><br/>
-                        <small>Created by <a href="http://weibo.com/kenerlinfeng" target="_blank">@Kener-林峰</a></small>
+                <section>
+                    <h4>Data Visualization</h4>
+                    <div class="fragment roll-in">
+                        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="100%" height="572"> 
+                            <param name="movie" value="http://localhost/kener/slide/lib/vcastr22.swf?vcastr_file=http://localhost/kener/slide/img/whydv.flv"> 
+                            <param name="quality" value="high"> 
+                            <embed src="http://localhost/kener/slide/lib/vcastr22.swf?vcastr_file=http://localhost/kener/slide/img/whydv.flv" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="100%" height="572"></embed> 
+                        </object> 
                     </div>
                 </section>
                 
                 <section>
-                    <h4>About Author</h4>
+                    <h4>About Us</h4>
                     <div style="margin-left:160px;padding-left:30px;text-align: left;border-left:5px solid #9acd32">
-                        <img src="./img/kener.jpeg" style="width:120px;position:absolute;left:0;margin:0;"/>
-                        <p><a href="http://weibo.com/kenerlinfeng" target="_blank">@Kener-林峰</a></p>
-                        <p><small>百度&nbsp;&nbsp;web前端研发攻城狮 &nbsp;&nbsp;商业前端<strong>数据可视化方向</strong>打杂掌柜</small></p>
+                        <img src="./img/EFE.png" style="width:120px;position:absolute;left:0;margin:0;background:#fff;"/>
+                        <p><a href="http://fe.baidu.com/doc/ecom/tech/topic/dv/index.html" target="_blank">百度商业前端数据可视化团队</a></p>
                         <small>
                             <ul>
-                                <li>商业产品图表库： <a href="http://echarts.baidu.com/" target="_blank">ECharts</a>（2013.3~）</li>
-                                <li>轻量级Canvas类库： <a href="http://ecomfe.github.io/zrender/index.html" target="_blank">ZRender</a>（2012.12~）</li>
-                                <li><a href="http://uedc.baidu.com/fc" target="_blank">凤巢系统用户体验数据监控中心（UEDC）</a>创造者（~2012）</li>
-                                <li><a href="fengchao.baidu.com" target="_blank">百度推广业务系统（凤巢）</a>前端技术负责人（~2011）</li>
-                                <li>...</li>
-                                <li><small style="vertical-align:middle"><i>北邮 - 计科 - 国重网研 - 交换与智能控制研究中心 - 下一代网络</i></small></li>
-                                <li><small style="vertical-align:middle"><i><a href="http://www.oschina.net/question/947559_144622" target="_blank">http://www.oschina.net/question/947559_144622</a></i></small></li>
+                                <li>制定并维护商业产品各类数据可视化项目标准：</li>
+                                <ul>
+                                    <li>百度图表库标准 <a href="http://fe.baidu.com/doc/ecom/std/chart.text" target="_blank">1.0.0</a></li>
+                                </ul>
+                                <li>推动并实现商业级数据可视化产品：</li>
+                                <ul>
+                                <li>商业产品图表库： <a href="http://echarts.baidu.com/" target="_blank">ECharts</a></li>
+                                <li>轻量级Canvas类库： <a href="http://ecomfe.github.io/zrender/index.html" target="_blank">ZRender</a></li>
+                                <li>3D Webgl绘图引擎： <a href="https://github.com/pissang/qtek" target="_blank">Qtek</a></li>
+                                </ul>
+                                <li>百度商业体系数据可视化相关项目支持：</li>
+                                <ul>
+                                    <li>凤巢、广告管家、鸿媒体、一站式、百度推广开发者中心、知心业务系统、百度站长平台、指挥官等数十个项目</li>
+                                </ul>
+                                <li>数据可视化相关技术研究及布道：</li>
+                                <ul>
+                                    <li>Hackathon、ecomfe北京 | 上海、searchfe、搜素营销研究院、OPFE、KA等</li>
+                                    <li>2014中国数据库大会、统计之都技术沙龙、华媒基金会 · 数据新闻工作坊、数据科学家联盟技术沙龙、HackHacker北京等</li>
+                                </ul>
                             </ul>
                         </small>
                     </div>
                 </section>
+                
+                <section>
+                    <h1 style="margin:-10px 0 0 0">
+                        <img src="./img/echarts_logo.png" style="margin:0;background:rgba(0,0,0,0);border-width: 0;box-shadow: 0 0 0px rgba(0, 0, 0, 0);"/>
+                    </h1>
+                    <h5>大数据时代，重新定义数据图表的时候到了！</h5><br/>
+                    <div>
+                        <small>开源来自百度商业前端数据可视化团队</small><br/>
+                        <small>Created by <a href="http://weibo.com/kenerlinfeng" target="_blank">@Kener-林峰</a></small>
+                    </div>
+                </section>
 
+                <section>
+                    <h4>业界影响力-社区传播</h4>
+                    <div class="fragment">
+                        <img src="./img/iSns.png" width="100%" height="100%"/>
+                    </div>
+                </section>
+                
+                <section>
+                    <h4>业界影响力-同行评价</h4>
+                    <div class="fragment">
+                        <img src="./img/iPeer.png" width="100%" height="100%"/>
+                    </div>
+                </section>
+                
+                <section>
+                    <h4>业界影响力-媒体关注</h4>
+                    <div class="fragment">
+                        <img src="./img/iMedia.png" width="100%" height="100%"/>
+                    </div>
+                </section>
+                
+                <section>
+                    <h4>业界影响力-开源社区</h4>
+                    <div class="fragment">
+                        <img src="./img/iOs1.png" width="100%" height="100%"/>
+                        <img src="./img/iOs2.png" width="100%" height="400" class="fragment" style="position:absolute;top:50px;left:0px"/>
+                    </div>
+                </section>
+                
+                <section>
+                    <h4>项目应用</h4>
+                    <div class="fragment">
+                        <img src="./img/usage1.png" width="100%" height="100%"/>
+                        <img src="./img/usage2.png" width="100%" height="500" class="fragment" style="position:absolute;top:50px;left:0px"/>
+                    </div>
+                </section>
+
+                <section>
+                    <h4>业界已经有多如牛毛的图表库了！</h4>
+                    <div class="fragment" style="text-align:right;">
+                        <hr/>Why <strong style="color:#9acd32">ECharts</strong> ?
+                    </div>
+                </section>
+                
                 <section>
                     <h3>《大数据时代》</h3>
                     <small>维克托 · 迈尔 - 舍恩伯格</small>
@@ -193,26 +237,15 @@
                         <div class="fragment grow highlight-green">数据可视化</div>
                     </div>
                 </section>
-                
-                <section>
-                    <h4>为什么需要数据可视化？</h4>
-                    <div class="fragment roll-in">
-                        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" width="100%" height="572"> 
-                            <param name="movie" value="http://localhost/kener/slide/lib/vcastr22.swf?vcastr_file=http://localhost/kener/slide/img/whydv.flv"> 
-                            <param name="quality" value="high"> 
-                            <embed src="http://localhost/kener/slide/lib/vcastr22.swf?vcastr_file=http://localhost/kener/slide/img/whydv.flv" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="100%" height="572"></embed> 
-                        </object> 
-                    </div>
-                </section>
 
                 <section>
                     <h4>数据可视化进程(1)</h4>
                     <div class="fragment">
                         <p><small>
-                            <strong style="font-size: 30px;">简易图表</strong>
+                            <strong>简易图表</strong>
                             <br/>常见于excel、ppt、word等工具实现的简单图表，这也是目前最常用的数据可视化输出。
                         </small></p>
-                        <img src="./img/dv1.png" width="100%" height="300"/>
+                        <img src="./img/dv1.png" width="100%" height="400"/>
                     </div>
                     <div class="fragment" style="text-align:right;">
                         <hr/><small>缺乏视觉表现力更别谈交互能力</small>
@@ -223,10 +256,10 @@
                     <h4>数据可视化进程(2)</h4>
                     <div class="fragment">
                         <p><small>
-                            <strong style="font-size: 30px;">信息图表</strong>
+                            <strong>信息图表</strong>
                             <br/>在信息图泛滥的当下大家再熟悉不过了，信息图能充分发挥设计人员在视觉表现上创造力。
                         </small></p>
-                        <img src="./img/dv2.png" width="100%" height="300"/>
+                        <img src="./img/dv2.png" width="100%" height="400"/>
                     </div>
                     <div class="fragment" style="text-align:right;">
                         <hr/><small>极度依赖设计人员对数据的分析处理，无法自动生成也容易产生视觉误导</small>
@@ -237,11 +270,11 @@
                     <h4>数据可视化进程(3)</h4>
                     <div class="fragment">
                         <p><small>
-                            <strong style="font-size: 30px;">数据可视化</strong>
+                            <strong>数据可视化</strong>
                             <br/>让数据分析的结果与视觉上的表现力充分结合，创造出冲击力极强的数据可视化作品。
                         </small></p>
-                        <img src="./img/dv31.png" width="100%" height="300"/>
-                        <img src="./img/dv32.png" width="100%" height="300" class="fragment" style="position:absolute;top:127px;left:0px"/>
+                        <img src="./img/dv31.png" width="100%" height="400"/>
+                        <img src="./img/dv32.png" width="100%" height="400" class="fragment" style="position:absolute;top:125px;left:0px"/>
                     </div>
                     <div class="fragment" style="text-align:right;">
                         <hr/><small>大多数都是为特定诉求实现，没有太多人机互动也难以广泛重用。</small>
@@ -269,7 +302,7 @@
                     <h4>业界领先的数据可视化产品</h4>
                     <div class="fragment">
                         <p><small>
-                            <strong style="font-size: 30px;">深度数据互动可视化</strong>
+                            <strong>深度数据互动可视化</strong>
                             <br/>打破单纯的视觉呈现，拥有<strong>互动图形用户界面（GUI）</strong>的数据可视化。数据呈现<strong>不仅是诉说</strong>，而是允许用户对所呈现数据进行<strong>挖掘、整合</strong>，让可视化成为<strong>辅助人们进行视觉化思考</strong>的方式。
                         </small></p>
                         <img src="./img/dv41.png" width="100%" height="400"/>
@@ -668,15 +701,15 @@
                     </p>
                 </section>
 
-                <section style="height:100%;width:100%">
-                    <div style="text-align:center;margin:0 auto;position:absolute;top:0;left:0;border:0;z-index:-1;height:100%;width:100%;">
-                        <img style="border:0;height:100%;width:100%;max-height:100%;max-width:100%;margin:0" src="./img/dtccBgEnd.png" alt="Dtcc 2014">
-                    </div>
-                    <div style="position:absolute;width:100%;bottom:100px;text-align:center;margin:0 auto;">
-                        <a href="http://weibo.com/kenerlinfeng" target="_blank">@Kener-林峰</a><br/>
-                        <small>2014-04-12</small>
+                <section>
+                    <h1>THE END</h1>
+                    <h5>Thank you</h5>
+                    <br/>
+                    <div>
+                        <small>Created by <a href="http://weibo.com/kenerlinfeng" target="_blank">@Kener-林峰</a></small>
                     </div>
                 </section>
+
             </div>
 
         </div>

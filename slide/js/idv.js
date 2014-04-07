@@ -964,7 +964,7 @@ var optionMap = {
                 large: true,
                 data: (function() {
                     var d = [];
-                    var len = 10000;
+                    var len = 25000;
                     var x = 0;
                     while (len--) {
                         x = (Math.random() * 10).toFixed(3) - 0;
@@ -983,7 +983,7 @@ var optionMap = {
                 large: true,
                 data: (function() {
                     var d = [];
-                    var len = 10000;
+                    var len = 25000;
                     var x = 0;
                     while (len--) {
                         x = (Math.random() * 10).toFixed(3) - 0;
@@ -1442,7 +1442,10 @@ var optionMap = {
     },
     stack : {
         tooltip : {
-            trigger: 'axis'
+            trigger: 'axis',
+            axisPointer:{
+                type:'shadow'
+            }
         },
         legend: {
             data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎','百度','谷歌','必应','其他']
@@ -2074,6 +2077,7 @@ var optionMap = {
             legend: {
                 orient: 'vertical',
                 x:'left',
+                selectedMode:'single',
                 data:['八纵通道', '八横通道'],
                 textStyle : {
                     color: '#fff'
