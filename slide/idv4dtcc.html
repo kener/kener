@@ -40,6 +40,7 @@
                 height: 400px;
                 overflow: hidden;
                 padding : 10px !important;
+                /*
                 border: 1px solid #e3e3e3;
                 -webkit-border-radius: 4px;
                    -moz-border-radius: 4px;
@@ -47,9 +48,10 @@
                 -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
                    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
                         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+                        */
             }
             .noLoading {
-                background: #fff;
+                background: rgba(0,0,0,0);
             }
             .main canvas {
                left:0;
@@ -102,6 +104,7 @@
             }
             .reveal .slides>section, .reveal .slides>section>section {
                 padding:0;
+                margin-top:-20px;
             }
             .table-hover tbody tr td {
                 background-color: #FBF9EC;
@@ -118,10 +121,10 @@
             }
             
             .table tbody tr.success > td, .table tbody tr td.success {
-              background-color: #dff0d8;
+              background-color: #cfffbb;
             }
             .table tbody tr.error > td, .table tbody tr td.error {
-              background-color: #f2dede;
+              background-color: #ff9f77;
             }
         </style>
     </head>
@@ -146,7 +149,7 @@
                 <section>
                     <h4>About Author</h4>
                     <div style="margin-left:160px;padding-left:30px;text-align: left;border-left:5px solid #9acd32">
-                        <img src="./img/kener.jpeg" style="width:120px;position:absolute;left:0;margin:0;"/>
+                        <img src="./img/kener.jpg" style="width:120px;position:absolute;left:0;margin:0;"/>
                         <p><a href="http://weibo.com/kenerlinfeng" target="_blank">@Kener-林峰</a></p>
                         <p><small>百度&nbsp;&nbsp;web前端研发攻城狮 &nbsp;&nbsp;商业前端<strong>数据可视化方向</strong>打杂掌柜</small></p>
                         <small>
@@ -630,8 +633,8 @@
                             <tr><td>图片导出</td><td>Yes</td><td>Yes</td></tr>
                             <tr>
                                 <td><br/>License &amp; Pricing</td>
-                                <td class='success'>Free<br/><a href="https://github.com/ecomfe/echarts/blob/master/LICENSE.txt" target="_blank">Baidu BSD</a></td>
-                                <td class='success'>Non-commercial free under CC3.0<br/><br/>Commercial licenses $90~$3600</td>
+                                <td class='success'><a href="https://github.com/ecomfe/echarts/blob/master/LICENSE.txt" target="_blank">Baidu BSD</a><br/>Free</td>
+                                <td class='success'><a href="http://shop.highsoft.com/highcharts.html" target="_blank">Non-commercial free under CC3.0</a><br/>Commercial licenses $90~$3600</td>
                             </tr>
                         </tbody>
                     </table>
