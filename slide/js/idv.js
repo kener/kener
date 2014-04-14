@@ -398,7 +398,8 @@ var optionMap = {
         series : [
             {
                 name:'浏览器占比',
-                type:'pie',radius : ['30%', '70%'],
+                type:'pie',
+                radius : ['30%', '70%'],
                 data:[
                     {value:535, name:'Chrome'},
                     {value:310, name:'Firefox'},
