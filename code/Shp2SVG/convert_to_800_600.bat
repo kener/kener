@@ -1,0 +1,1 @@
+shp2svg -shp=½ÖÇø.shp -svg=½ÖÇø800-600.svg -width=800 -height=600 -strokecolor=#0000ff -fillcolor=#eeeeee

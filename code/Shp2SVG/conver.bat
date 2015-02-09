@@ -1,0 +1,1 @@
+shp2svg -shp=½ÖÇø.shp -svg=½ÖÇø.svg -uom=0.1 -strokecolor=#0000ff -fillcolor=#eeeeee
