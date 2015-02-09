@@ -1,0 +1,85 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <style>
+    input {width: 80px;}
+    input.lock {width: 18px; margin: 0 0 0 -18px; position: relative; top: 2px;}
+    </style>
+</head>
+<body>
+
+<script src="esl.js"></script>
+
+
+小值：<input id="minVal" value="-2.01" /><input id="minLock" class="lock" type="checkbox" />
+大值：<input id="maxVal" value="10" /><input id="maxLock" class="lock" type="checkbox" />
+原始跨度：<input id="spanVal" value="" />
+指定段数：<input id="secVal" value="" />
+<input type="button" value="随机" id="rndTest" />
+<br />
+
+最小：<input id="newMin" value="" />
+最大：<input id="newMax" value="" />
+实际跨度：<input id="newSpan" value="" />
+实际段数：<input id="newSec" value="" />
+步长：<input id="step" value="" />
+<br />
+
+误差：<input id="deltMin" value="" />
+误差：<input id="deltMax" value="" />
+跨度误差：<input id="deltSpan" value="" />
+计算量级：<input id="expon" value="" />
+
+
+<div id="stepsShow"></div>
+
+
+<script type="text/javascript">
+onload = function () {
+require(['smartSteps'], function (smartSteps) {
+    function getEle(sid) {return document.getElementById(sid);}
+    function test() {
+        var opts    = {};
+        var min     = +getEle('minVal').value;
+        var max     = +getEle('maxVal').value;
+        var sec     = +getEle('secVal').value;
+        if (getEle('minLock').checked) {
+            opts.min = min;
+        }
+        if (getEle('maxLock').checked) {
+            opts.max = max;
+        }
+        //opts.steps = [10, 20, 25, 50];
+        var stepOpt = smartSteps(min, max, sec, opts);
+        getEle('spanVal').value = (max - min).toFixed(5);
+        getEle('newMin').value  = stepOpt.min;
+        getEle('newMax').value  = stepOpt.max;
+        getEle('newSec').value  = stepOpt.secs;
+        getEle('step').value    = stepOpt.step;
+        getEle('newSpan').value = (stepOpt.max - stepOpt.min).toFixed(5);;
+        getEle('deltMin').value = (100 * (min - stepOpt.min) / (max - min)).toFixed(2) + '%';
+        getEle('deltMax').value = (100 * (stepOpt.max - max) / (max - min)).toFixed(2) + '%';
+        getEle('deltSpan').value = (100 * (stepOpt.max - stepOpt.min - max + min) / (max - min)).toFixed(2) + '%';
+        getEle('expon').value = stepOpt.exp;
+        getEle('stepsShow').innerHTML = stepOpt.pnts.join(',  ');
+    }
+
+    document.getElementById('rndTest').onclick = function () {
+        var exp10   = Math.pow(10, Math.random() * 6 - 2);
+        var rnd0    = (Math.random() * 3 - Math.random()) * exp10;
+        var rnd1    = (Math.random() * 3 - Math.random()) * exp10;
+        getEle('minVal').value = Math.min(rnd0, rnd1).toFixed(5);
+        getEle('maxVal').value = Math.max(rnd0, rnd1).toFixed(5);
+    }
+    setInterval(test, 300);
+});
+};
+</script>
+
+
+</body>
+
+</html>
+
