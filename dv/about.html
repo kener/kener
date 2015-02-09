@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>数据可视化 &middot; Data Visualization</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+        font-family: "微软雅黑";
+      }
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 50px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 100px;
+        line-height: 1;
+      }
+      .jumbotron .lead {
+        font-size: 24px;
+        line-height: 1.25;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+      .img-circle {
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          padding: 4px;
+          margin: 5px;
+      }
+    </style>
+    
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+  </head>
+
+  <body>
+
+    <!-- NAVBAR
+    ================================================== -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="index.html"><img src="assets/ico/favicon.png" /> 数据可视化</a>
+          <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li><a href="index.html"><i class="icon-home icon-white"></i> 首页</a></li>
+                <li><a href="work.html">工作</a></li>
+                <li><a href="exhibition.html">展览</a></li>
+                <li><a href="reference.html">参考</a></li>
+                <li class="active"><a href="about.html">关于</a></li>
+                <!-- Read about Bootstrap dropdowns at http://twitter.github.com/bootstrap/javascript.html#dropdowns -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">链接 <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="http://fe.baidu.com/doc/ecom/" target="_blank">Ecom-FE</a></li>
+                    <li><a href="http://fe.baidu.com/doc/ecom/tech/topic/" target="_blank">Topic</a></li>
+                    <li class="divider"></li>
+                    <!--li class="nav-header">Library</li-->
+                    <li><a href="http://tangram.baidu.com/" target="_blank">Tangram</a></li>
+                  </ul>
+                </li>
+              </ul>
+           </div><!--/.nav-collapse -->
+        </div><!-- /.container -->
+      </div><!-- /.navbar-inner -->
+    </div><!-- /.navbar-wrapper -->
+
+    <div class="container">
+      <h1>职责</h1>
+      <div class="row">
+        <div class="span12">
+            <ul>
+                <li>制定并维护商业产品各类数据可视化项目标准</li>
+                <li>数据可视化相关技术研究及布道，包括并不局限于Canvas，SVG，WebGL等</li>
+                <li>推动并实现可商用基础图形库，如数据统计图表库，热力图，力导布局图等</li>
+            </ul>
+        </div>
+      </div>
+      
+      <hr>
+      
+      <!-- Jumbotron -->
+      <div class="jumbotron">
+        <h1>加入我们!</h1>
+        <p class="lead">充满激情、喜欢挑战的你还犹豫什么？赶快行动！</p>
+        <a class="btn btn-large btn-success" href="mailto:linzhifeng@baidu.com"><i class="icon-envelope icon-white"></i> Contact Us &raquo;</a>
+      </div>
+      <p>欢迎各位加入商业运营体系前端技术组数据可视化方向！！</p>
+      <p>正如erik描述的，日后我们得肩负起“标准规范制定、通用技术产品研发、技术和方案支持、技术调研与积累等技术工作将由相关的方向主导”的责任，或许还会被“产品线需要相关技术与方案支持时寻求支持”，后面工作将会陆续开展，所以为了保证咱们团队的战斗力，如果“当产品线工作持续较忙，无时间经历参与横向工作时，建议暂时退出”，我们随时欢迎你归来的~~</p>
+      <p>但付出总会有收获的，除了个人能力将会得到大幅提升外，大家一起做出NB东西后可以“通过商业运营体系前端技术组向产品线发布”流芳百世，我说的不仅在公司内部，是业界领先！！相信大家，我们可以的！！更实际点的，别忘了还有“考核结果可为产品线经理与ETC-FE参考”，是的，正所谓多线操作基地建造，屠农骚扰，打怪升级都不误啊！！</p>
+      <hr>
+      <h1>成员</h1>
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="span4">
+          <img class="img-circle pull-right" src="assets/img/about/linzhifeng.jpg">
+          <h2>林峰</h2>
+          <p>来自凤巢，商业体系前端技术组成员，数据可视化方向负责人，喜欢设计，热爱编程， <a href="http://ecomfe.github.com/zrender/" target="_blank">ZRender</a>， <a href="echarts.baidu.com" target="_blank">ECharts</a> 作者，目前专注于数据可视化方面的研究工作。</p>
+          <p><a class="btn" href="mailto:linzhifeng@baidu.com"><i class="icon-envelope"></i> contact &raquo;</a></p>
+        </div>
+        <div class="span4">
+          <img class="img-circle pull-right" src="assets/img/about/shenyi.jpg">
+          <h2>沈毅</h2>
+          <p>来自凤巢，非典型前端工程师，画面控，无脑喜欢任何很帅的东西，偏科前端图形，犹爱web3d。还是sublime text2脑残粉和快捷键记忆无能儿。</p>
+          <p><a class="btn" href="mailto:shenyi01@baidu.com"><i class="icon-envelope"></i> contact &raquo;</a></p>
+        </div>
+        <div class="span4">
+          <img class="img-circle pull-right" src="assets/img/about/sushuang.jpg">
+          <h2>宿爽</h2>
+          <p>来自rigel，喜欢做有颜色的东西，好操作的东西，炫的东西。项目中做过些svg/vml的js图。实习的时候用GUI做过些数据可视化方面的概念原型。</p>
+          <p><a class="btn" href="mailto:sushuang@baidu.com"><i class="icon-envelope"></i> contact &raquo;</a></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="span4">
+          <img class="img-circle pull-right" src="assets/img/about/yangji.jpg">
+          <h2>杨骥</h2>
+          <p>来自凤巢，喜欢图形处理方面的东西，爱编程，爱旅游，爱dota，千里之行始于足下，喜欢在路上的感觉。</p>
+          <p><a class="btn" href="mailto:yangji01@baidu.com"><i class="icon-envelope"></i> contact &raquo;</a></p>
+        </div>
+        <div class="span4">
+          <img class="img-circle pull-right" src="assets/img/about/loutongbing.jpg">
+          <h2>娄同兵</h2>
+          <p>来自锦囊，负责大客户广告业务端项目，基于ER框架的前端开发，并对ER框架进行订制。另外，进行大客户广告的物料开发。</p>
+          <p><a class="btn" href="mailto:loutongbing@baidu.com"><i class="icon-envelope"></i> contact &raquo;</a></p>
+        </div>
+        <div class="span4">
+          <img class="img-circle pull-right" src="assets/img/home/求贤若渴.jpg" width="120">
+          <h2>You!</h2>
+          <p>商业体系前端技术组 - 横向数据可视化方向，欢迎感兴趣的同学参与。</p>
+          <p><a class="btn" href="mailto:linzhifeng@baidu.com"><i class="icon-envelope"></i> contact &raquo;</a></p>
+        </div>
+      </div>
+      <hr>
+      <h3>曾经的杰出贡献者</h3>
+      <div class="row">
+        <div class="span4">
+          <img class="img-circle pull-right" src="assets/img/about/chenhuaimu.jpg">
+          <h2>陈怀木 </h2>
+          <p>来自Union，对Web图形化、数据可视化方向有浓厚兴趣，之前从事AS图形化、视频播放器方面的开发，偶尔也弄弄PS设计，现专注于JS、JAVA开发工作。</p>
+          <p><a class="btn" href="mailto:chenhuaimu@baidu.com"><i class="icon-envelope"></i> contact &raquo;</a></p>
+        </div>
+        <div class="span4">
+          <img class="img-circle pull-right" src="assets/img/about/yangxiaojie.jpg">
+          <h2>杨晓杰</h2>
+          <p>来自北斗前端，热爱前端，喜欢研究数据展示和动画交互，期望能用最酷的方式，给用户一个最好的体验。</p>
+          <p><a class="btn" href="mailto:yangxiaojie@baidu.com"><i class="icon-envelope"></i> contact &raquo;</a></p>
+        </div>
+        <!--div class="span4">
+          <img class="img-circle pull-right" src="assets/img/about/lixuan.jpg">
+          <h2>李璇 </h2>
+          <p>来自网盟北斗，对数据可视化比较感兴趣，准备投身到这项事业中，短期立志将北斗图表全用js实现。性格开朗中略带忧郁。喜欢羽毛球、游泳、摄影，级别都是菜鸟。</p>
+          <p><a class="btn" href="mailto:lixuan02@baidu.com"><i class="icon-envelope"></i> contact &raquo;</a></p>
+        </div-->
+      </div>
+      <hr>
+
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 Ecom-FE. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap-transition.js"></script>
+    <script src="assets/js/bootstrap-alert.js"></script>
+    <script src="assets/js/bootstrap-modal.js"></script>
+    <script src="assets/js/bootstrap-dropdown.js"></script>
+    <script src="assets/js/bootstrap-scrollspy.js"></script>
+    <script src="assets/js/bootstrap-tab.js"></script>
+    <script src="assets/js/bootstrap-tooltip.js"></script>
+    <script src="assets/js/bootstrap-popover.js"></script>
+    <script src="assets/js/bootstrap-button.js"></script>
+    <script src="assets/js/bootstrap-collapse.js"></script>
+    <script src="assets/js/bootstrap-carousel.js"></script>
+    <script src="assets/js/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>

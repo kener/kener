@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>数据可视化 &middot; Data Visualization</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <style>
+    /* GLOBAL STYLES
+    -------------------------------------------------- */
+    /* Padding below the footer and lighter body text */
+    body {
+      padding-bottom: 40px;
+      color: #5a5a5a;
+      font-family: "微软雅黑";
+    }
+
+    /* CUSTOMIZE THE CAROUSEL
+    -------------------------------------------------- */
+
+    /* Carousel base class */
+    .carousel {
+      margin-bottom: 30px;
+    }
+
+    .carousel .container {
+      position: relative;
+      z-index: 9;
+    }
+
+    .carousel-control {
+      height: 80px;
+      margin-top: 0;
+      font-size: 120px;
+      text-shadow: 0 1px 1px rgba(0,0,0,.4);
+      background-color: transparent;
+      border: 0;
+      z-index: 10;
+    }
+
+    .carousel .item {
+      height: 300px;
+    }
+    .carousel img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      height: 300px;
+    }
+
+    .carousel-caption {
+      background-color: transparent;
+      position: static;
+      max-width: 550px;
+      padding: 0 20px;
+      margin-top: 80px;
+    }
+    .carousel-caption h1,
+    .carousel-caption .lead {
+      margin: 0;
+      line-height: 1.25;
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    }
+    .carousel-caption .btn {
+      margin-top: 10px;
+    }
+
+
+
+    /* MARKETING CONTENT
+    -------------------------------------------------- */
+
+    /* Center align the text within the three columns below the carousel */
+    .marketing .span4 {
+      text-align: center;
+    }
+    .marketing h2 {
+      font-weight: normal;
+    }
+    .marketing .span4 p {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+
+    /* Featurettes
+    ------------------------- */
+    .featurette-divider {
+      margin: 80px 0; /* Space out the Bootstrap <hr> more */
+    }
+    .featurette {
+      padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+      overflow: hidden; /* Vertically center images part 2: clear their floats. */
+    }
+    .featurette-image {
+      margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+    }
+
+    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+    .featurette-image.pull-left {
+      margin-right: 40px;
+    }
+    .featurette-image.pull-right {
+      margin-left: 40px;
+    }
+
+    /* Thin out the marketing headings */
+    .featurette-heading {
+      font-size: 50px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    </style>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+  </head>
+
+  <body>
+
+
+
+    <!-- NAVBAR
+    ================================================== -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="index.html"><img src="assets/ico/favicon.png" /> 数据可视化</a>
+          <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li class="active"><a href="index.html"><i class="icon-home icon-white"></i> 首页</a></li>
+                <li><a href="work.html">工作</a></li>
+                <li><a href="exhibition.html">展览</a></li>
+                <li><a href="reference.html">参考</a></li>
+                <li><a href="about.html">关于</a></li>
+                <!-- Read about Bootstrap dropdowns at http://twitter.github.com/bootstrap/javascript.html#dropdowns -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">链接 <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="http://fe.baidu.com/doc/ecom/" target="_blank">Ecom-FE</a></li>
+                    <li><a href="http://fe.baidu.com/doc/ecom/tech/topic/" target="_blank">Topic</a></li>
+                    <li class="divider"></li>
+                    <!--li class="nav-header">Library</li-->
+                    <li><a href="http://tangram.baidu.com/" target="_blank">Tangram</a></li>
+                  </ul>
+                </li>
+              </ul>
+           </div><!--/.nav-collapse -->
+        </div><!-- /.container -->
+      </div><!-- /.navbar-inner -->
+    </div><!-- /.navbar-wrapper -->
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide">
+      <div class="carousel-inner">
+        <div class="item active">
+          <img src="assets/img/home/slide-01.jpg" alt="">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>百度图表库标准</h1>
+              <p>
+                  Chart图表在商业产品线和其它产品中都有应用，图表库标准制定的目标是
+                                                     规范商业体系前端图表库的标准图表类型、接口、数据格式及样式设置，使之容易被理解、使用和维护。
+                                                     同时，希望通过这次标准化，推动创建出一套可用的标准图表库，使之能更快捷地应用到各个项目中。
+              </p>
+              <a class="btn btn-large btn-primary" href="http://fe.baidu.com/doc/ecom/std/chart.text" target="_blank">了解更多 &raquo;</a>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="assets/img/home/slide-02.jpg" alt="">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Echarts</h1>
+              <p> 基于Canvas，纯Javascript图表库，提供直观，生动，可交互，可个性化定制的数据统计图表。图表类型支持折线图（区域堆积图）、柱状图（条状图），散点图（气泡图）、饼图（环形图），雷达图（雷达面积图），同时支持多图表混合展现。</p>
+              <a class="btn btn-large btn-primary" href="http://echarts.baidu.com" target="_blank">了解更多 &raquo;</a>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img src="assets/img/home/slide-03.jpg" alt="">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>ZRender</h1>
+              <p>一个轻量级的Canvas类库，MVC封装，数据驱动，提供类Dom事件模型，让canvas绘图大不同~~</p>
+              <a class="btn btn-large btn-primary" href="http://ecomfe.github.com/zrender/" target="_blank">了解更多 &raquo;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div><!-- /.carousel -->
+
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+        
+      <!-- Three columns of text below the carousel -->
+      <div class="row">
+        <div class="span4">
+          <img class="img-circle" src="assets/img/home/求贤若渴.jpg">
+          <h2>求贤若渴</h2>
+          <p>商业体系前端技术组 - 横向数据可视化方向</p>
+          <p>欢迎感兴趣的同学参与</p>
+          <p><a class="btn" href="about.html">加入我们 &raquo;</a></p>
+        </div><!-- /.span4 -->
+        <div class="span4">
+          <img class="img-circle" src="assets/img/home/数据可视化.jpg">
+          <h2>数据可视化</h2>
+          <p>数据可视化是关于数据之视觉表现形式的研究。</p>
+          <p>旨在借助于图形化手段，清晰有效地传达与沟通信息。</p>
+          <p><a class="btn" href="http://zh.wikipedia.org/wiki/数据可视化" target="_blank">了解更多 &raquo;</a></p>
+        </div><!-- /.span4 -->
+        <div class="span4">
+          <img class="img-circle" src="assets/img/home/数据可视化之美.jpg">
+          <h2>《数据可视化之美》</h2>
+          <p>一目了然地揭示数据中的复杂信息</p>
+          <p>展现可视化所能实现的功能以及如何使用它来改变世界</p>
+          <p><a class="btn" href="http://www.amazon.cn/mn/detailApp/ref=as_li_ss_tl?_encoding=UTF8&tag=huang08-23&linkCode=as2&asin=B0053WMHLK&camp=536&creative=3132&creativeASIN=B0053WMHLK" target="_blank">了解更多 &raquo;</a></p>
+        </div><!-- /.span4 -->
+      </div><!-- /.row -->
+
+
+      <!-- START THE FEATURETTES -->
+
+      <hr>
+      <div>
+        <img class="pull-right" src="assets/img/home/trendmap.jpg">
+        <h2 class="featurette-heading"><a href="http://www.ituring.com.cn/article/9967" target="_blank">数据可视化</a></h2>
+        <p>原文：<a href="http://www.smashingmagazine.com/2007/08/02/data-visualization-modern-approaches/"  target="_blank">Data Visualization: Modern Approaches</a> 作者： Cameron Chapman 译者：西乔</p>
+        <p class="lead">前言：数据可视化是怎样创造出来的</p>
+        <blockquote>我多次被炫目的数据可视化或信息可视化震惊，在我知道这些图片背后的数据来源和创造历程后，更是为之诧异不止。它涉足制图学、图形绘制设计、计算机 视觉、数据采集、统计学、图解技术、数型结合以及动画、立体渲染、用户交互等。相关领域有影像学、视知觉。空间分析、科学建模等。</blockquote>
+        <blockquote>这是创造性设计美学和严谨的工程科学的卓越产物。用极美丽的形式呈现可能非常沉闷繁冗的数据，其表现和创作过程完全可以称之为艺术。所以我翻译了来 自SM上的3篇数据可视化和信息图形的文章，主要是鉴赏并提供一些参考资料。我尽量查找了每张数据图表背后的背景，添加了标注和说明，希望那个帮助读者更 深入地理解这些图表所呈现的含义，而不仅仅是停留于对“好看”的赞叹上。这些图片不会说话，但它们比文字和语言都更为有力。</blockquote>
+        <p><strong>数据可视化 Data Visualization</strong> 和 <strong>信息可视化 Infographics</strong> 是两个相近的专业领域名词。</p>
+        <p><strong>狭义</strong>上的数字可视化指的是讲数据用统计图表方式呈现，而信息图形（信息可视化）则是将非数字的信息进行可视化。前者用于传递信息，后者用于表现抽象或复杂的概念、技术和信息。</p>
+        <p>而<strong>广义</strong>上的数据可视化则是数据可视化、信息可视化以及科学可视化等等多个领域的统称。</p>
+        <p>...</p>
+        <a href="http://www.ituring.com.cn/article/9967" target="_blank">阅读全文 &raquo;</a>
+      </div>
+
+      <hr>
+      <!-- /END THE FEATURETTES -->
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 Ecom-FE. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap-transition.js"></script>
+    <script src="assets/js/bootstrap-alert.js"></script>
+    <script src="assets/js/bootstrap-modal.js"></script>
+    <script src="assets/js/bootstrap-dropdown.js"></script>
+    <script src="assets/js/bootstrap-scrollspy.js"></script>
+    <script src="assets/js/bootstrap-tab.js"></script>
+    <script src="assets/js/bootstrap-tooltip.js"></script>
+    <script src="assets/js/bootstrap-popover.js"></script>
+    <script src="assets/js/bootstrap-button.js"></script>
+    <script src="assets/js/bootstrap-collapse.js"></script>
+    <script src="assets/js/bootstrap-carousel.js"></script>
+    <script src="assets/js/bootstrap-typeahead.js"></script>
+    <script>
+      !function ($) {
+        $(function(){
+          // carousel demo
+          $('#myCarousel').carousel()
+        })
+      }(window.jQuery)
+    </script>
+  </body>
+</html>

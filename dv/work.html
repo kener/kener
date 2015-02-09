@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>数据可视化 &middot; Data Visualization</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+        font-family: "微软雅黑";
+      }
+    /* Featurettes
+    ------------------------- */
+    .featurette-divider {
+      margin: 30px 0; /* Space out the Bootstrap <hr> more */
+    }
+    .featurette {
+      overflow: hidden; /* Vertically center images part 2: clear their floats. */
+    }
+    .featurette ul {
+      list-style-position : inside;
+    }
+    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+    .featurette-image.pull-left {
+      margin:10px 40px 0 0;
+    }
+    .featurette-image.pull-right {
+      margin:10px 0 0 40px;
+    }
+
+    /* Thin out the marketing headings */
+    .featurette-heading {
+      font-size: 50px;
+      font-weight: 300;
+      line-height: 1;
+    }
+    .dl-horizontal dt {
+        width : 220px;
+    }
+    .dl-horizontal dd {
+        margin-left : 240px;
+    }
+    </style>
+
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+  </head>
+
+  <body>
+
+    <!-- NAVBAR
+    ================================================== -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="index.html"><img src="assets/ico/favicon.png" /> 数据可视化</a>
+          <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li><a href="index.html"><i class="icon-home icon-white"></i> 首页</a></li>
+                <li class="active"><a href="work.html">工作</a></li>
+                <li><a href="exhibition.html">展览</a></li>
+                <li><a href="reference.html">参考</a></li>
+                <li><a href="about.html">关于</a></li>
+                <!-- Read about Bootstrap dropdowns at http://twitter.github.com/bootstrap/javascript.html#dropdowns -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">链接 <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="http://fe.baidu.com/doc/ecom/" target="_blank">Ecom-FE</a></li>
+                    <li><a href="http://fe.baidu.com/doc/ecom/tech/topic/" target="_blank">Topic</a></li>
+                    <li class="divider"></li>
+                    <!--li class="nav-header">Library</li-->
+                    <li><a href="http://tangram.baidu.com/" target="_blank">Tangram</a></li>
+                  </ul>
+                </li>
+              </ul>
+           </div><!--/.nav-collapse -->
+        </div><!-- /.container -->
+      </div><!-- /.navbar-inner -->
+    </div><!-- /.navbar-wrapper -->
+
+    <div class="container">
+      <h1>项目</h1>
+      <div class="featurette">
+        <img class="featurette-image pull-left" src="assets/img/work/zrender.png">
+        <h2 class="featurette-heading">zrender</h2>
+        <p class="lead">MVC核心封装实现图形仓库、视图渲染和交互控制：</p>
+        <ul>
+            <li>Stroage(M) : shape数据CURD管理</li>
+            <li>Painter(V) : canvase元素生命周期管理，视图渲染，绘画，更新控制</li>
+            <li>Handler(C) : 事件交互处理，实现完整dom事件模拟封装</li>
+        </ul>
+        <ul>
+            <li>shape : 图形实体，分而治之的图形策略，可定义扩展</li>
+            <li>tool : 绘画扩展相关实用方法，工具及脚手架</li>
+        </ul>
+        <p>一个轻量级的Canvas类库，MVC封装，数据驱动，提供类Dom事件模型，让canvas绘图大不同~~</p>
+        <a class="btn btn-success" href="http://ecomfe.github.com/zrender/" target="_blank"><i class="icon-star icon-white"></i> 了解更多 &raquo;</a>
+      </div>
+      <hr class="featurette-divider">
+      <div class="featurette">
+        <img class="featurette-image pull-right" src="assets/img/work/echarts.jpg">
+        <h2 class="featurette-heading">echarts</h2>
+        <p class="lead">Enterprise Charts 商业产品图表库</p>
+        <p>提供商业产品常用图表库，底层基于<a href="http://ecomfe.github.com/zrender/" target="_blank">ZRender</a>，创建了坐标系，图例，提示等基础组件，并在此上构建出折线图、柱状图、散点图、饼图、雷达图以及各种混搭图表。</p>
+        <p>创新的拖拽重计算特性大大增强了用户体验，赋予了用户对数据进行挖掘、整合的能力。</p>
+        <p><strong>重新定义数据图表的时候到了！！</strong></p>
+        <a class="btn btn-success" href="http://echarts.baidu.com" target="_blank"><i class="icon-star icon-white"></i> 了解更多 &raquo;</a>
+      </div>
+      <hr class="featurette-divider">
+      <div class="featurette">
+        <h1>任务</h1>
+        <dl class="dl-horizontal">
+          <dt class="text-info"><i class="icon-repeat"></i> <strong>进行中</strong></dt><dd>攻坚研究中~</dd>
+          <dt><i class="text-error">new</i>【echarts】在线应用</dt>
+          <dd>可方便直接的编辑配置项和数据</dd>
+          <dd>负责人：杨晓杰 <strong><i>（<span class="text-success">XP</span>：<span class="text-error">30±50</span>）</i></strong></dd>
+          <dt><i class="text-error">new</i>【echarts】chord</dt>
+          <dd>和弦图，需要符合<a href="http://fe.baidu.com/doc/ecom/std/chart.text" target="_blank">百度图表库标准</a></dd>
+          <dd>负责人：沈毅 <strong><i>（<span class="text-success">XP</span>：<span class="text-error">35±25</span>）</i></strong></dd>
+         
+          <dt><i class="text-error">new</i>【echarts】状态间平滑变化</dt>
+          <dd>负责人：林峰</dd>
+          <dt><i class="text-error">new</i>【echarts】Transformers</dt>
+          <dd>下一个在交互体验上的重大跃进</dd>
+          <dd>负责人：林峰</dd>
+          <dd>.</dd>
+
+          <dt class="text-info"><i class="icon-screenshot"></i> <strong>待认领</strong></dt><dd>打怪升级啦~</dd>
+          <dt>【zrender】填充模式</dt>
+          <dd>不同填充效果支持方案<strong><i>（<span class="text-success">XP</span>：<span class="text-error">25±15</span>）</i></strong></dd>
+          <dt>【zrender】shape</dt>
+          <dd>丰富ZRender内置图形支持，参考zrender/shape/*，完整完成一个shape开发可以让你更加了解zrender的运行机制，建议都试试，很简单~，下述图形均只需要考虑正向，角度旋转会在底层统一实现。</dd>
+          <dt>-云</dt>
+          <dd>随机形状，参考word插入->形状。<strong><i>（<span class="text-success">XP</span>：<span class="text-error">10±5</span>）</i></strong></dd>
+          <dt>-旗帜</dt>
+          <dd>参考word插入->形状。<strong><i>（<span class="text-success">XP</span>：<span class="text-error">10±3</span>）</i></strong></dd>
+          <dt>-标注</dt>
+          <dd>参考word插入->形状。<strong><i>（<span class="text-success">XP</span>：<span class="text-error">15±10</span>）</i></strong></dd>
+          <dt>-箭头</dt>
+          <dd>参考word插入->形状。<strong><i>（<span class="text-success">XP</span>：<span class="text-error">20±10</span>）</i></strong></dd>
+          <dd>.</dd>
+
+          <dt class="text-info"><i class="icon-ok-circle"></i> <strong>已完成</strong></dt><dd>Will be more...</dd>
+          <dt>【zrender】shape</dt>
+          <dd>ZRender内置图形实现：</dd>
+          <dt>-椭圆</dt>
+          <dd>负责人：娄同兵 <strong><i>（2013-03-28 <span class="text-success">XP</span>：<span class="text-error">12</span>）</i></strong></dd>
+          <dt>-路径</dt>
+          <dd>负责人：陈怀木 <strong><i>（2013-04-03 <span class="text-success">XP</span>：<span class="text-error">15</span>）</i></strong></dd>
+          <dt>-心形</dt>
+          <dd>负责人：李璇<strong><i>（2013-04-17 <span class="text-success">XP</span>：<span class="text-error">5</span>）</i></strong>，林峰</dd>
+          <dt>-水滴</dt>
+          <dd>负责人：林峰</dd>
+          <dt>-图像</dt>
+          <dd>负责人：沈毅<strong><i>（2013-04-18 <span class="text-success">XP</span>：<span class="text-error">15</span>）</i></strong></dd>
+          <dt>-贝塞尔曲线</dt>
+          <dd>负责人：杨骥 <strong><i>（2013-05-02 <span class="text-success">XP</span>：<span class="text-error">13</span>）</i></strong></dd>
+          <dt>-旋轮曲线</dt>
+          <dd>负责人：杨骥 <strong><i>（2013-05-03 <span class="text-success">XP</span>：<span class="text-error">15</span>）</i></strong></dd>
+          <dt>-玫瑰线</dt>
+          <dd>负责人：杨骥 <strong><i>（2013-05-03 <span class="text-success">XP</span>：<span class="text-error">10</span>）</i></strong></dd>
+          <dt>-N角星</dt>
+          <dd>负责人： 宿爽<strong><i>（2013-05-06 <span class="text-success">XP</span>：<span class="text-error">15</span>）</i></strong></dd>
+          <dt>-正N边形</dt>
+          <dd>负责人： 宿爽<strong><i>（2013-05-06 <span class="text-success">XP</span>：<span class="text-error">15</span>）</i></strong></dd>
+          <dt>-圆角矩形</dt>
+          <dd>负责人： 姚飞飞<strong><i>（2013-06-29 <span class="text-success">XP</span>：<span class="text-error">8</span>）</i></strong></dd>
+          
+          <dt>【zrender】缓动函数辅助类</dt>
+          <dd>提供常用缓动效果支持。</dd>
+          <dd>负责人：沈毅 <strong><i>（2013-04-04 <span class="text-success">XP</span>：<span class="text-error">10</span>）</i></strong></dd>
+          
+          <dt>【zrender】变换支持</dt>
+          <dd>translate，scale，rotate，transform解决方案</dd>
+          <dd>负责人：沈毅 <strong><i>（2013-04-10 <span class="text-success">XP</span>：<span class="text-error">30</span>）</i></strong></dd>
+          
+          <dt>【zrender】动画支持</dt>
+          <dd>animation动画支持</dd>
+          <dd>负责人：沈毅 <strong><i>（2013-04-15 <span class="text-success">XP</span>：<span class="text-error">35</span>）</i></strong></dd>
+          <dt>颜色辅助类</dt>
+          <dd>颜色翻译（eg : red > rgb(255,0,0)），合并，翻转，透明度升降，渐变创建等功能。</dd>
+          <dd>负责人：陈怀木 <strong><i>（2013-04-23 <span class="text-success">XP</span>：<span class="text-error">30</span>）</i></strong></dd>
+          
+          <dt>【zrender】area</dt>
+          <dd>基于像素拾取的hover判断实现以及开发脚手架测试各种判断方法在各个浏览器下的性能表现，综合得出一个完整的hover判断方案</dd>
+          <dd>负责人：杨骥 <strong><i>（2013-04-27 <span class="text-success">XP</span>：<span class="text-error">25</span>）</i></strong></dd>
+          
+          <dt>【echarts】K线图</dt>
+          <dd>K线图（Candlestick Charts）又称蜡烛图、日本线、阴阳线、棒线等，常用说法是“K线”，起源于日本十八世纪德川幕府时代（1603～1867年）的米市交易，用来计算米价每天的涨跌。因其标画方法具有独到之处，人们把它引入股票市场价格走势的分析中，经过300多年的发展，已经广泛应用于股票、期货、外汇，期权等证券市场。
+                                          需要符合<a href="http://fe.baidu.com/doc/ecom/std/chart.text" target="_blank">百度图表库标准</a></dd>
+          <dd>负责人：林峰 <strong><i>（2013-07-01）</i></strong></dd>
+          
+          <dt>【echarts】散点图</dt>
+          <dd>散点图，支持大规模，多系列。
+                                          需要符合<a href="http://fe.baidu.com/doc/ecom/std/chart.text" target="_blank">百度图表库标准</a></dd>
+          <dd>负责人：林峰 <strong><i>（2013-07-05）</i></strong></dd>
+          
+          <dt>【echarts】力导向布局图</dt>
+          <dd>基于某种力导向布局算法（注意性能）实现力导向布局图，支持多系列。
+                                          需要符合<a href="http://fe.baidu.com/doc/ecom/std/chart.text" target="_blank">百度图表库标准</a></dd>
+          <dd>负责人：沈毅 <strong><i>（2013-07-05 <span class="text-success">XP</span>：<span class="text-error">50</span>）</i></strong></dd>
+          
+          <dt>【echarts】中国地图</dt>
+          <dd>不依赖服务器，静态数据驱动，提供省级地图控件，需要符合<a href="http://fe.baidu.com/doc/ecom/std/chart.text" target="_blank">百度图表库标准</a>。
+              <strong><i>（<span class="text-success">XP</span>：<span class="text-error">35±15</span>）</i></strong></dd>
+          <dd>负责人：林峰 <strong><i>（2013-07-10）</i></strong></dd>
+          
+          <dt>【zrender】svg2canvas</dt>
+          <dd>让canvas支持svg格式数据绘制。</dd>
+          <dd>负责人：陈怀木 <strong><i>（2013-04-23 <span class="text-success">XP</span>：<span class="text-error">30</span>）</i></strong></dd>
+        
+          <dt>Canvas图像静态化输出</dt>
+          <dd>生成可保存静态图像。</dd>
+          <dd>负责人：刘联东 <strong><i>（2013-07-23 <span class="text-success">XP</span>：<span class="text-error">10</span>）</i></strong></dd>
+          
+          <dt>【echarts】全国各省市地图</dt>
+          <dd>负责人：林峰<strong><i>（2013-08-21）</i></strong></dd>
+
+          <dt>【echarts】radar</dt>
+          <dd>雷达图，需要符合<a href="http://fe.baidu.com/doc/ecom/std/chart.text" target="_blank">百度图表库标准</a></dd>
+          <dd>负责人：杨骥 <strong><i>（2013-09-13<span class="text-success">XP</span>：<span class="text-error">50</span>）</i></strong></dd>
+          <dt>【echarts】动态数据接口</dt>
+          <dd>负责人：林峰<strong><i>（2013-09-13）</i></strong></dd>
+        </dl>
+      </div>
+      <hr>
+
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 Ecom-FE. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap-transition.js"></script>
+    <script src="assets/js/bootstrap-alert.js"></script>
+    <script src="assets/js/bootstrap-modal.js"></script>
+    <script src="assets/js/bootstrap-dropdown.js"></script>
+    <script src="assets/js/bootstrap-scrollspy.js"></script>
+    <script src="assets/js/bootstrap-tab.js"></script>
+    <script src="assets/js/bootstrap-tooltip.js"></script>
+    <script src="assets/js/bootstrap-popover.js"></script>
+    <script src="assets/js/bootstrap-button.js"></script>
+    <script src="assets/js/bootstrap-collapse.js"></script>
+    <script src="assets/js/bootstrap-carousel.js"></script>
+    <script src="assets/js/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>

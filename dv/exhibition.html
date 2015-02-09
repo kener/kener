@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>数据可视化 &middot; Data Visualization</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+        font-family: "微软雅黑";
+      }
+      /* Featurettes
+    ------------------------- */
+    .featurette-divider {
+      margin: 30px 0; /* Space out the Bootstrap <hr> more */
+    }
+    .featurette {
+      overflow: hidden; /* Vertically center images part 2: clear their floats. */
+    }
+
+    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+    .featurette-image.pull-left {
+      margin:10px 40px 0 0;
+    }
+    .featurette-image.pull-right {
+      margin:10px 0 0 40px;
+    }
+
+    /* Thin out the marketing headings */
+    .featurette-heading {
+      font-size: 50px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+    </style>
+    
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+  </head>
+
+  <body>
+
+    <!-- NAVBAR
+    ================================================== -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="index.html"><img src="assets/ico/favicon.png" /> 数据可视化</a>
+          <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li><a href="index.html"><i class="icon-home icon-white"></i> 首页</a></li>
+                <li><a href="work.html">工作</a></li>
+                <li class="active"><a href="exhibition.html">展览</a></li>
+                <li><a href="reference.html">参考</a></li>
+                <li><a href="about.html">关于</a></li>
+                <!-- Read about Bootstrap dropdowns at http://twitter.github.com/bootstrap/javascript.html#dropdowns -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">链接 <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="http://fe.baidu.com/doc/ecom/" target="_blank">Ecom-FE</a></li>
+                    <li><a href="http://fe.baidu.com/doc/ecom/tech/topic/" target="_blank">Topic</a></li>
+                    <li class="divider"></li>
+                    <!--li class="nav-header">Library</li-->
+                    <li><a href="http://tangram.baidu.com/" target="_blank">Tangram</a></li>
+                  </ul>
+                </li>
+              </ul>
+           </div><!--/.nav-collapse -->
+        </div><!-- /.container -->
+      </div><!-- /.navbar-inner -->
+    </div><!-- /.navbar-wrapper -->
+
+    <div class="container">
+      <div id="myCarousel" class="carousel slide">
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
+          <li data-target="#myCarousel" data-slide-to="3"></li>
+          <li data-target="#myCarousel" data-slide-to="4"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="item active">
+            <a href="http://ecomfe.baidu.com/qtek/tests/sponza.html">
+              <img src="assets/img/exhibition/webgl-sponza.png" alt="">
+            </a>
+            <div class="carousel-caption">
+              <h4>WebGL Sponza Demo</h4>
+              <p>WebGL场景展示，场景来自Crytek改过的<a href="http://www.crytek.com/cryengine/cryengine3/downloads">Sponza</a>, 基于<a href="https://github.com/pissang/qtek">qtek3d</a>开发</p>
+            </div>
+          </div>
+          <div class="item">
+            <a href="http://pissang.github.io/emage/example/#/">
+              <img src="assets/img/exhibition/emage.png" alt="">
+            </a>
+            <div class="carousel-caption">
+              <h4>在线的实时图片滤镜</h4>
+              <p>项目地址 <a href="https://github.com/pissang/emage">emage</a></p>
+            </div>
+          </div>
+          <div class="item">
+            <img src="assets/img/exhibition/slide0.png" alt="">
+            <div class="carousel-caption">
+              <h4>echarts</h4>
+              <p>先随便弄些东西~做事应该先做最难的部分。如果最难的部分无法做到，那还在简单的部分上浪费时间干嘛？一旦困难的地方搞定了，那你就胜利在望了。——Al Schapira，贝尔实验室</p>
+            </div>
+          </div>
+          <div class="item">
+            <img src="assets/img/exhibition/slide1.png" alt="">
+            <div class="carousel-caption">
+              <h4>多图表混合</h4>
+              <p>先随便弄些东西~做事应该先做最简单的部分。你开始所预想的简单部分，做起来可能是很有难度的。一旦你吧简单的部分都做好，你就可以全力攻克最难的部分了。——Al Schapira，贝尔实验室</p>
+            </div>
+          </div>
+          <div class="item">
+            <img src="assets/img/exhibition/slide2.png" alt="">
+            <div class="carousel-caption">
+              <h4>纯数据驱动地图</h4>
+              <p>先随便弄些东西~只有不到10%的代码用于完成这个程序表面上的目的，余下的都在处理输入输出，数据验证，数据结构维护等家务活。——Mary Shaw，卡内基-梅隆大学</p>
+            </div>
+          </div>
+        </div>
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+      </div>
+      <hr class="featurette-divider">
+      <div class="featurette">
+        <img class="featurette-image pull-right" src="assets/img/exhibition/uedc.png">
+        <h2 class="featurette-heading"><img src="assets/img/exhibition/uedclogo.png" /></h2>
+        <p class="lead"><a href="http://ecomfe.baidu.com/uedc/" target="_blank">凤巢用户体验数据中心-UEDC(User Experiment Data Center)</a>，凤巢前端用户行为监控经过2年多的不断优化和改进已经积累了很多有价值的数据，为了充分挖掘这些数据背后蕴含的意义和价值，FCFE提出并推进了UEDC的运作，以前端监控数据为基础，以用户体验为出发点，构建一个可以全面了解涅槃运行情况的可视化数据中心，为系统性能瓶颈发掘、用户行为分析和后续性能优化提供支持。</p>
+      </div>
+      <hr>
+
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 Ecom-FE. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap-transition.js"></script>
+    <script src="assets/js/bootstrap-alert.js"></script>
+    <script src="assets/js/bootstrap-modal.js"></script>
+    <script src="assets/js/bootstrap-dropdown.js"></script>
+    <script src="assets/js/bootstrap-scrollspy.js"></script>
+    <script src="assets/js/bootstrap-tab.js"></script>
+    <script src="assets/js/bootstrap-tooltip.js"></script>
+    <script src="assets/js/bootstrap-popover.js"></script>
+    <script src="assets/js/bootstrap-button.js"></script>
+    <script src="assets/js/bootstrap-collapse.js"></script>
+    <script src="assets/js/bootstrap-carousel.js"></script>
+    <script src="assets/js/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>
