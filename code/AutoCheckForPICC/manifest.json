@@ -1,0 +1,12 @@
+{
+"name": "AutoCheckForPICC",
+"version": "1.0",
+"description": "Auto Check For PICC",
+"browser_action": {"default_icon": "icon.png","default_popup": "popup.html"},
+"content_scripts": [{
+      "matches": ["*://*/*"],
+      "js": ["PICCchrome.js"],
+      "all_frames": true
+    }],
+"permissions": ["*://*/*"]
+}
