@@ -1,0 +1,333 @@
+<!doctype html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Why SupStat?</title>
+
+        <meta name="description" content="Why SupStat?">
+        <meta name="author" content="kener.linfeng@gmail.com">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <link rel="stylesheet" href="css/echarts-slide.css">
+        
+        <!-- Fav and touch icons -->
+        <link rel="shortcut icon" href="../asset/ico/favicon.png">
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+        <script src="js/esl.js"></script>
+        <style type="text/css">
+            * {
+                font-family:'微软雅黑' !important;
+            }
+            .main {
+                background-color: #fff;
+                height: 400px;
+                overflow: hidden;
+                padding : 10px !important;
+                border: 1px solid #e3e3e3;
+                -webkit-border-radius: 4px;
+                   -moz-border-radius: 4px;
+                        border-radius: 4px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+                   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+                        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            }
+            .main canvas {
+               left:0;
+               top:0;
+            }
+            .main div {
+                text-align: left !important;
+            }
+            .echarts-dataview p {
+                font-size: 16px !important;
+                color:#333;
+                text-align: left;
+            }
+            p, h4 {
+                text-align: left !important;
+                text-transform: none !important;
+            }
+            small strong{
+                color: #9acd32;
+                font-weight: normal !important;
+            }
+            td,th {
+                text-align: center !important;
+                font-size: 0.7em !important;
+            }
+            .reveal small,.reveal a.roll {
+                line-height: 1.5em;
+            }
+            .reveal blockquote {
+                width:100%;
+            }
+            .reveal blockquote small{
+                line-height: 1.5em;
+            }
+            .reveal img.echarts-icon {
+                margin:0;
+                padding:7px;
+                border:0;
+                background:none
+            }
+            .reveal .slides>section, .reveal .slides>section>section {
+                padding:0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <a href="https://www.supstat.com/en" target="_blank">
+            <!-- <img style="position:absolute;top:0;right:0;border:0;z-index:1000" src="img/SupStat_logo.png" width=300px alt="Fork me on GitHub"> -->
+        </a>
+        <div class="reveal">
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+ 
+                    <h1 style="margin:-10px 0 0 0">
+                        <img src="./img/SupStat_logo.png" style="margin:0;background:rgba(0,0,0,0);border-width: 0;box-shadow: 0 0 0px rgba(0, 0, 0, 0);"/>
+                    </h1>
+         
+                    <div>
+                        <small>Interactive Visualization Demo</small><br/> <br/> <br/>
+                        <small> Vivian S. Zhang <br/>
+                                CTO & Cofounder @ SupStat Inc <br/>
+                                (1)650-714-7952 <br/>
+                                <a href="mailto:vivian.zhang@supstat.com">vivian.zhang@supstat.com</a></small>
+                    </div>
+                </section>
+				
+
+
+                <section>
+                    <h4>[ Drag-Recompute ] Data reorganized.</h4>
+                    <p><small>
+						The default classification of chart can't always meet the needs of everyone. <br/>
+						Look at the following example: if you want to know the combined proportion that IE 6, IE 7, and IE 8 represent, what will you do? Mental arithmetic or take out a pen?
+                    </small></p>
+                    <p class="fragment"><small>
+                        try to drag the desired items on top of each other to combine them!
+                    </small></p>
+                    <div class="main" optionKey="calculable1"></div>
+                </section>
+
+                <section>
+                    <h4>[ Drag-Recompute  ] Deal with outliers.</h4>
+                    <p><small>
+						 There are often outliers in our data. Look at the following sales data in Chinese Single Day(11-11): <br/>
+						 
+						 Except the sales peak on Single Day, can you find something else?
+                    </small></p>
+                    <p class="fragment"><small>
+
+						try to drag the outlier out! <br/>
+						Oh, after dragging that out, can you find some trend which is not optimistic?
+                    </small></p>
+                    <div class="main" optionKey="calculable2"></div>
+                </section>
+
+                <section>
+                    <h4>[ Data View ] Sometimes we need to see the original data.</h4>
+                    <p><small>
+                        Sometimes we need to see the original data：<br/>
+
+                    </small></p>
+                    <p class="fragment"><small>
+                        Try to <strong>click</strong><img src="./img/iconDataView.png" class="echarts-icon"/>！<br/>
+                        
+						You can even edit your data and update the chart!
+                    </small></p>
+                    <div class="main" optionKey="dataView"></div>
+                </section>
+
+                <section>
+                    <h4>[ Magic Switch ] Try different charts at once.</h4>
+                    <p><small>
+                        
+						We can use different charts to express the same data. However it's hard to make an 
+						always-good choice since their performance depends on data, personal preference etc.
+						<br/>
+
+						For example, choose a bar graph or a line graph ? 
+                    </small></p>
+                    <p class="fragment"><small>
+                        you can switch the chart magicly !<br/>
+						
+						Try to<strong> switch the bar chart<img src="./img/iconBarChart.png" class="echarts-icon"/>to line chart</strong><img src="./img/iconLineChart.png" class="echarts-icon"/> 
+
+						You will find something interesting!
+                    </small></p>
+                    <div class="main" optionKey="magicType"></div>
+                </section>
+
+                <section>
+                    <h4>[ Scale Roaming ] Focus on the interested data.</h4>
+                    <p><small>
+						We can use different colors in Coordinate based charts (like map or scatter) to 
+						show the distribution of the data vividly.<br/>
+						
+						But how can I focus on the data that I am interesting in?
+						For example, how to look over the top 10% area? Find pen again?
+                    </small></p>
+                    <p class="fragment"><small>
+						You can do scale roaming: try to drag the color scale up or down.<br/>
+						The mean of this doesn't need more explanation.<br/>
+                    </small></p>
+                    <div class="main" optionKey="dataRange1"></div>
+                </section>
+
+                <section>
+                    <h4>[ Space Zoom ]  Focus on the interested data</h4>
+                    <p><small>
+                        Display space is always limited, so we need Space Zoom.
+                    </small></p>
+                    <p class="fragment"><small>
+                        you can zoom the space easily.<br/>
+						
+						You can use <strong>drag chooser</strong> at the bottom.	
+						You can also use <strong>block chooser</strong></strong><img src="./img/iconDataZoom.png" class="echarts-icon"/>and<strong> Back </strong><img src="./img/iconDataZoomReset.png" class="echarts-icon"/>！
+						
+						Of course, <strong>drag chooser</strong> and <strong>block chooser</strong>
+						are always in lockstep.<br/>
+                    </small></p>
+                    <div class="main" optionKey="dataZoom1"></div>
+                </section>
+
+                <section>
+                    <h4>[ Force-directed layout chart ] Elegant display of networks</h4>
+                    <p><small>
+                        
+                    </small></p>
+                    <p><small>
+                        We provide Force-directed layout to show network data. For example, social networks of <a onclick="functionMap['force']()" style="cursor:pointer">Jobs</a>, or a more complicated example: <a onclick="functionMap['force2']()" style="cursor:pointer">class depends relationship of Webkit Kernel</a>!<br/>
+                    </small></p>
+                    <div class="main" optionKey="force"></div>
+                </section>
+
+                <section>
+                    <h4>[ Add new data dynamically ] Show your realtime data.</h4>
+                    <p><small>
+						New data comes every second, we should keep up with the rhythm.<br/>
+                    </small></p>
+                    <p class="fragment"><small>
+                        We provide dynamic data interface to add new data!<br/>
+                    </small></p>
+                    <div class="main" optionKey="dynamic"></div>
+                </section>
+                
+                <section>
+                    <h4>[ Legend Switch ]  Switch to the interested data.</h4>
+                    <p><small>
+                        Multi-series data show us many things, however somtimes we are just interested in some part of them. 
+						how to do ?<br/>
+                        Yeah, We create some boxes to achieve this feature!
+                    </small></p>
+                    <p class="fragment"><small>
+                         <br/>
+						 
+						 Just click on those legends, the meaning need no explanation !
+                    </small></p>
+                    <div class="main" optionKey="legendSelected"></div>
+                </section>
+
+                <section>
+                    <h4>[ Multi-dimensional Stacking ] </h4>
+                    <p><small>
+
+						Sometimes the multi-dimensional stacking chart shows more expressively than a single stacking chart.<br/>
+						However, we know that most of the charts don't support it.
+                    </small></p>
+                    <p class="fragment"><small>
+                         Support Multi-dimensional Stacking ！<br/>
+						
+                    </small></p>
+                    <div class="main" optionKey="stack"></div>
+                </section>
+
+
+
+                <section>
+                    <h4>[  Mixed Charts  ] Bar Chart + Line Chart</h4>
+                    <p><small>
+                      <br/>
+                    </small></p>
+                    <div class="main" optionKey="mix1"></div>
+                </section>
+
+
+                <section>
+                    <h4>[  Mixed Charts  ] Map Chart + Rose Chart</h4>
+                    <p><small>
+                        
+                       Try to<strong> click </strong> some provinces, and notice the change of rose chart. 
+                    </small></p>
+                    <div class="main" optionKey="mix3"></div>
+                </section>
+
+
+
+               
+
+                <section>
+                    <h1>THE END</h1>
+                    <h5>Thank you</h5>
+                    <br/>
+                    <div>
+                        <small>Vivian Zhang</small>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                height: '100%',
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    //{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                    // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+                    // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+        
+        <script src="js/whyEcharts.js"></script>
+    </body>
+</html>

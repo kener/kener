@@ -1,4 +1,4 @@
-var developMode = false;
+var developMode = true;
 
 var webkitDepLocation = './js/webkit-dep';
 if (developMode) {
@@ -36,13 +36,16 @@ else {
             'echarts/chart/map': fileLocation,
             'echarts/chart/chord': fileLocation,
             'echarts/chart/force': fileLocation,
+            'echarts/chart/gauge': fileLocation,
+            'echarts/chart/funnel': fileLocation,
              webkitDep : webkitDepLocation
         }
     });
 }
 
 var theme = {
-     color: [
+    backgroundColor:'#fff',
+    color: [
         '#5d9cec', '#62c87f', '#f15755', '#fc863f', '#7053b6',
         '#6ed5e6','#ffce55',  '#f57bc1', '#dcb186', '#647c9d'
     ],
@@ -78,9 +81,11 @@ require(
         'echarts/chart/radar',
         'echarts/chart/force',
         'echarts/chart/chord',
-        'echarts/chart/map'
+        'echarts/chart/map',
+        'echarts/chart/gauge',
+        'echarts/chart/funnel'
     ],
-    function(ec, wd) {
+    function (ec, wd) {
         echarts = ec;
         webkitDepData = wd;
         webkitDepData.minRadius = 5;
@@ -110,14 +115,14 @@ require(
 
 var curEvent;
 var showChartTimer;
-Reveal.addEventListener( 'ready', function(event){
+Reveal.addEventListener( 'ready', function (event){
     clearTimeout(showChartTimer);
     curEvent = event;
     getCurParams();
     showChartTimer = setTimeout(showChart, 800);
 });
 
-Reveal.addEventListener( 'slidechanged', function(event){
+Reveal.addEventListener( 'slidechanged', function (event){
     clearTimeout(showChartTimer);
     curEvent = event;
     getCurParams();
@@ -132,25 +137,26 @@ var dom;
 var optionKey;
 function getCurParams(){
     clearInterval(timeTicket);
-    var len = curEvent.currentSlide.childNodes.length;
-    while(--len) {
-        dom = curEvent.currentSlide.childNodes[len];
+    var domList = $('.main',curEvent.currentSlide)
+    var len = domList.length;
+    for (var i = 0; i < len; i++) {
+        dom = domList[i];
         if (dom.className == 'main'){
-            optionKey = dom.getAttribute('optionKey');
-            if (optionKey == 'multiCharts') {
-                if (myChart2 && myChart2.dispose) {
-                    myChart2.getDom().className = 'main';
-                    myChart2.dispose();
-                    myChart2 = null;
-                }
-                if (myChart3 && myChart3.dispose) {
-                    myChart3.getDom().className = 'main';
-                    myChart3.dispose();
-                    myChart3 = null;
-                }
-            }
-            return;
-        }
+	        optionKey = dom.getAttribute('optionKey');
+	        if (optionKey == 'multiCharts') {
+	            if (myChart2 && myChart2.dispose) {
+	                myChart2.getDom().className = 'main';
+	                myChart2.dispose();
+	                myChart2 = null;
+	            }
+	            if (myChart3 && myChart3.dispose) {
+	                myChart3.getDom().className = 'main';
+	                myChart3.dispose();
+	                myChart3 = null;
+	            }
+	        }
+	        return;
+	    }
     }
     optionKey = false;
 }
@@ -161,9 +167,15 @@ function showChart() {
         myChart.dispose();
         myChart = null;
     }
+    if (optionKey == 'zrender') {
+        dom.className = 'main noLoading';
+        functionMap.zrender(dom);
+        return;
+    }
     if (optionKey) {
         myChart = echarts.init(dom, theme);
         var option = optionMap[optionKey];
+        console.log(option)
         dom.className = 'main noLoading';
         myChart.setOption(option);
         if (functionMap[optionKey]) {
@@ -285,17 +297,213 @@ var kData = [ // 开盘，收盘，最低，最高
 
 var functionMap = {};
 var optionMap = {
-    'star' : {
-        title : {
-            text: 'Github关注度'
+    'charts' : (function(){
+        functionMap.charts = function(){
+            myChart.on('legendSelected', function(params){
+                var selected = params.selected;
+                var data = [];
+                if (selected['SVG 图表']) {
+                    data.push({value:16, name:'其他'});
+                    data.push({value:7, name:'基于d3'})
+                }
+                if (selected['Canvas 图表']) {
+                    data.push({value:7, name:'不可交互Canvas图表'});
+                    data.push({value:3, name:'可交互Canvas图表'})
+                }
+                optionMap.charts.series[1].data = data;
+                myChart.setOption(optionMap.charts, true);
+            })
+        };
+        
+        return {
+            backgroundColor: 'rgba(0,0,0,0)',
+            color: [
+                '#5d9cec','#f15755',
+                'rgba(255,255,255,0.3)', '#97b552','rgba(210,210,210,0.2)', '#fc863f',  
+            ],
+            tooltip : {
+                trigger: 'item',
+                backgroundColor: 'rgba(0,0,0,0.6)',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'right',
+                data:['SVG 图表','Canvas 图表'],
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            toolbox: {
+                show : true,
+                y: 'bottom',
+                feature : {
+                    restore : {show: true}
+                }
+            },
+            calculable:true,
+            series : [
+                {
+                    name:'图表类型',
+                    type:'pie',
+                    selectedMode: 'single',
+                    calculableHolderColor: 'rgba(0,0,0,0)',
+                    clockWise:false,
+                    radius : [0, 80],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                position : 'inner',
+                                formatter: function(a,b,c,d) {
+                                  return b.replace(' 图表','\n( ') + Math.round(d) + '% )' 
+                                }
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        },
+                        emphasis : {
+                            label : {
+                                show:true,
+                                formatter: function(a,b,c,d) {
+                                  return b.replace(' 图表','\n( ') + Math.round(d) + '% )' 
+                                }
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        }
+                    },
+                    data:[
+                        {value:23, name:'SVG 图表'},
+                        {value:10, name:'Canvas 图表'}
+                    ]
+                },
+                {
+                    name:'*',
+                    type:'pie',
+                    clockWise:false,
+                    calculableHolderColor: 'rgba(0,0,0,0)',
+                    radius : [100, 140],
+                    itemStyle : {
+                        normal : {
+                            label: {
+                                formatter: function(a,b,c,d) {
+                                  
+                                  return b + ' ( ' + Math.round(d) + '% )' 
+                                }
+                            }
+                        }
+                    },
+                    data:[
+                        {value:16, name:'其他',},
+                        {value:7, name:'基于d3'},
+                        {value:7, name:'不可交互Canvas图表'},
+                        {value:3, name:'可交互Canvas图表'}
+                    ]
+                }
+            ]
+        }
+     })(),
+     svcp: {
+         color: ['#5d9cec','#f15755'],
+         title : {
+            text: 'SVG vs Canvas',
+            subtext: 'from msdn.microsoft.com'
         },
         tooltip : {
             trigger: 'axis'
         },
         legend: {
-            data:['dataV','ichartjs','echarts','highcharts'],
+            data:['SVG','Canvas']
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        grid: {
+            borderWidth:0
+        },
+        xAxis : [
+            {
+                type : 'category',
+                axisLabel: {
+                    formatter: function(v) {
+                        return v == 5 ? '图形对象数' : ''
+                    }
+                },
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: '#27727B'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    show: false
+                },
+                data : [1,2,3,4,5,6,7,8,9]
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                nameTextStyle: {
+                    color: '#27727B'
+                },
+                axisLine: {            // 坐标轴线
+                    lineStyle:{
+                        color:'rgba(0,0,0,0)'
+                    }
+                },
+                axisLabel: {
+                    formatter: function(v) {
+                        return v == 6 ? '渲染耗时' : ''
+                    }
+                },
+                splitArea : {
+                    show: false
+                },
+                splitLine: {           // 分隔线
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: ['#ccc'],
+                        type: 'dashed'
+                    }
+                }
+            }
+        ],
+        series : [
+            {
+                name:'SVG',
+                type:'line',
+                showAllSymbol:true,
+                symbol:'emptyCircle',
+                data:[0.5,1,1.5,2,3,4.5,6.5,8,9.2]
+            },
+            {
+                name:'Canvas',
+                type:'line',
+                showAllSymbol:true,
+                symbol:'emptyCircle',
+                data:[0.6,1.1,1.6,2.1,2.3,2.5,2.8,3,3.1]
+            }
+        ]
+     },
+    'star' : {
+        title : {
+            text: 'Github Stars'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['highcharts',/*'dataV',*/'echarts'/*,'ichartjs'*/],
             selected: {
-                highcharts:false
+                //highcharts:false
             }
         },
         toolbox: {
@@ -311,18 +519,28 @@ var optionMap = {
         dataZoom: {
           show:true,
           start:0,
-          end:55
+          end:45
         },
         xAxis : [
             {
                 type : 'category',
                 boundaryGap : false,
+                /*
                 data : [
                     '2012年8月','2012年9月','2012年10月','2012年11月','2012年12月',
                     '2013年1月','2013年2月','2013年3月','2013年4月','2013年5月',
                     '2013年6月','2013年7月','2013年8月','2013年9月','2013年10月',
                     '2013年11月','2013年12月','2014年1月','2014年2月','2014年3月',
-                    '2014年4月'
+                    '2014年4月','2014年5月','2014年6月','2014年7月'
+                ]
+                */
+                axisLabel: {interdval:0,formatter:function(v){return v.replace('年',' - ').replace('月','')}},
+                data : [
+                    '2012年8月','2012年9月','2012年10月','2012年11月','2012年12月',
+                    '2013年1月','2013年2月','2013年3月','2013年4月','2013年5月',
+                    '2013年6月','2013年7月','2013年8月','2013年9月','2013年10月',
+                    '2013年11月','2013年12月','2014年1月','2014年2月','2014年3月',
+                    '2014年4月','2014年5月','2014年6月','2014年7月','2014年8月','2014年9月'
                 ]
             }
         ],
@@ -333,20 +551,23 @@ var optionMap = {
             }
         ],
         series : [
+        /*
             {
                 name:'dataV',
                 type:'line',
                 showAllSymbol:true,
                 symbol:'emptyCircle',
-                data:[0,20,55,85,100,130,150,180,210,250,280,300,306,318,330,342,354,366,378,390,401]
+                data:[0,20,55,85,100,130,150,180,210,250,280,300,306,318,330,342,354,366,378,390,401,410,421,430]
             },
+            
             {
                 name:'ichartjs',
                 type:'line',
                 showAllSymbol:true,
                 symbol:'emptyCircle',
-                data:[0,3,10,17,24,31,38,45,52,59,66,73,77,81,85,89,93,97,101,105,108]
+                data:[0,3,10,17,24,31,38,45,52,59,66,73,77,81,85,89,93,97,101,105,108,119,127]
             },
+            */
             {
                 name:'echarts',
                 type:'line',
@@ -354,17 +575,38 @@ var optionMap = {
                 symbol:'emptyCircle',
                 data:[
                   '-','-','-','-','-','-','-','-','-','-',
-                  {value:0,itemStyle:{normal:{label:{show:true,formatter:'1.0.0'}}}},
-                  {value:90,itemStyle:{normal:{label:{show:true,formatter:'1.1.0'}}}},
-                  {value:316,itemStyle:{normal:{label:{show:true,formatter:'1.1.1'}}}},
-                  {value:480,itemStyle:{normal:{label:{show:true,formatter:'1.2.0'}}}},
-                  {value:620,itemStyle:{normal:{label:{show:true,formatter:'1.2.1'}}}},
-                  {value:743,itemStyle:{normal:{label:{show:true,formatter:'1.3.0'}}}},
-                  {value:904,itemStyle:{normal:{label:{show:true,formatter:'1.3.5'}}}},
-                  {value:1090,itemStyle:{normal:{label:{show:true,formatter:'1.3.6'}}}},
-                  {value:1262,itemStyle:{normal:{label:{show:true,formatter:'1.3.7'}}}},
-                  {value:1368,itemStyle:{normal:{label:{show:true,formatter:'1.3.8'}}}},
-                  {value:1530,itemStyle:{normal:{label:{show:true,formatter:'1.4.0'}}}}
+                  {value:0,itemStyle:{normal:{label:{show:true,formatter:'ECharts 1.0'}}}},
+                  {value:90,itemStyle:{normal:{label:{show:false,formatter:'1.1.0',position:'right'}}}},
+                  {value:316,itemStyle:{normal:{label:{show:false,formatter:'1.1.1',position:'right'}}}},
+                  {value:480,itemStyle:{normal:{label:{show:false,formatter:'1.2.0',position:'right'}}}},
+                  {value:620,itemStyle:{normal:{label:{show:false,formatter:'1.2.1',position:'right'}}}},
+                  {value:743,itemStyle:{normal:{label:{show:false,formatter:'1.3.0',position:'right'}}}},
+                  {value:904,itemStyle:{normal:{label:{show:false,formatter:'1.3.5',position:'right'}}}},
+                  {value:1090,itemStyle:{normal:{label:{show:false,formatter:'1.3.6',position:'right'}}}},
+                  {value:1262,itemStyle:{normal:{label:{show:false,formatter:'1.3.7',position:'right'}}}},
+                  {value:1368,itemStyle:{normal:{label:{show:false,formatter:'1.3.8',position:'right'}}}},
+                  {value:1610,itemStyle:{normal:{label:{show:false,formatter:'1.4.0',position:'right'}}}},
+                  {value:1767,itemStyle:{normal:{label:{show:false,formatter:'1.4.1',position:'right'}}}},
+                  {value:1928,itemStyle:{normal:{label:{show:true,formatter:'ECharts 2.0.0',position:'right'}}}},
+                  {value:2390,itemStyle:{normal:{label:{show:false,formatter:'2.0.1',position:'right'}}}},
+                  {value:2610,itemStyle:{normal:{label:{show:false,formatter:'2.0.2',position:'right'}}}},
+                  {value:2760,itemStyle:{normal:{label:{show:true,formatter:'2.0.3',position:'right'}}}}
+                  /*
+                  {value:0,itemStyle:{normal:{label:{show:true,formatter:'ECharts 1.0'}}}},
+                  {value:90,itemStyle:{normal:{label:{show:true,formatter:'1.1.0',position:'right'}}}},
+                  {value:316,itemStyle:{normal:{label:{show:true,formatter:'1.1.1',position:'top'}}}},
+                  {value:480,itemStyle:{normal:{label:{show:true,formatter:'1.2.0',position:'right'}}}},
+                  {value:620,itemStyle:{normal:{label:{show:true,formatter:'1.2.1',position:'right'}}}},
+                  {value:743,itemStyle:{normal:{label:{show:true,formatter:'1.3.0',position:'right'}}}},
+                  {value:904,itemStyle:{normal:{label:{show:true,formatter:'1.3.5',position:'right'}}}},
+                  {value:1090,itemStyle:{normal:{label:{show:true,formatter:'1.3.6',position:'right'}}}},
+                  {value:1262,itemStyle:{normal:{label:{show:true,formatter:'1.3.7',position:'right'}}}},
+                  {value:1368,itemStyle:{normal:{label:{show:true,formatter:'1.3.8',position:'right'}}}},
+                  {value:1610,itemStyle:{normal:{label:{show:true,formatter:'1.4.0',position:'right'}}}},
+                  {value:1767,itemStyle:{normal:{label:{show:true,formatter:'1.4.1',position:'right'}}}},
+                  {value:1928,itemStyle:{normal:{label:{show:true,formatter:'ECharts 2.0.0',position:'right'}}}},
+                  {value:2376,itemStyle:{normal:{label:{show:true,formatter:'2.0.1',position:'right'}}}},
+                  */
                 ]
             },
             {
@@ -372,9 +614,78 @@ var optionMap = {
                 showAllSymbol:true,
                 symbol:'emptyCircle',
                 type:'line',
-                data:[1320,1337,1354,1371,1388,1405,1422,1439,1456,1473,1490,1507,1524,1541,1558,1575,1592,1609,1626,1643,1652]
+                data:[
+                    880,903,925,947,968,990,1010,1030,1050,1070,
+                    {value:1090,itemStyle:{normal:{label:{show:true,formatter:'Highcharts 3'}}}},
+                    1157,1214,1271,1338,1405,1462,1519,1576,1633,
+                    {value:1712,itemStyle:{normal:{label:{show:true,formatter:'Highcharts 4'}}}},
+                    1810,2002,2255,2560,2850
+                ]
             }
         ]
+    },
+    isCover: {
+        title : {
+            text: 'isCover Benchmark',
+            subtext: 'test on Chrome'
+        },
+        tooltip : {
+            trigger: 'axis',
+            textStyle: {
+                align:'right !important'
+            }
+        },
+        legend: {
+            data:[
+              'Math method','JS isPointInPath','Native isPointInPath'
+            ]
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        grid: {y: 50, y2:30, x2: 50},
+        yAxis : [
+            {
+                type : 'category',
+                data : ['CubicBezier','Sector','Line','Rectangle','Circle']
+            }
+        ],
+        xAxis : [
+            {
+                type : 'value',
+                name: 'op / s',
+                axisLabel:{
+                  formattder: function(v) {
+                    return v + 'op/s';
+                  }
+                }
+            }
+        ],
+        series : [
+            {
+                name:'Native isPointInPath',
+                type:'bar',
+                data:[36750784,12826997,50250383,34376607,24367887]
+            },
+            {
+                name:'JS isPointInPath',
+                type:'bar',
+                data:[133860273,79807861,471070488,294270273,248994291]
+            },
+            {
+                name:'Math method',
+                type:'bar',
+                data:[172527942,499412887,763715299,1349208961,1530519979]
+            }
+         ]
     },
     'calculable1' : {
         tooltip : {
@@ -437,7 +748,7 @@ var optionMap = {
                 axisLabel : {
                     rotate: 45
                 },
-                data : function(){
+                data : function (){
                     var list = [];
                     for (var i = 1; i <= 30; i++) {
                         list.push('11 - ' + i);
@@ -655,7 +966,7 @@ var optionMap = {
     dataZoom1 : {
         tooltip : {
             trigger: 'axis',
-            formatter: function(params) {
+            formatter: function (params) {
                 var res = params[1][1];
                 res += '<br/>' + params[1][0];
                 res += '<br/>  开盘 : ' + params[1][2][0] + '  最高 : ' + params[1][2][3];
@@ -681,8 +992,8 @@ var optionMap = {
         dataZoom : {
             show : true,
             realtime: true,
-            start : 50,
-            end : 100
+            start : 0,
+            end : 50
         },
         xAxis : [
             {
@@ -707,7 +1018,7 @@ var optionMap = {
                 splitNumber: 9,
                 boundaryGap: [0.05, 0.05],
                 axisLabel: {
-                    formatter: function(v) {
+	                formatter: function (v) {
                         return Math.round(v/10000) + ' 万'
                     }
                 },
@@ -753,7 +1064,7 @@ var optionMap = {
                             label : {
                                 show:true,
                                 position:'top',
-                                formatter: function(a,b,v) {
+				                formatter: function (a,b,v) {
                                     return Math.round(v/10000) + ' 万'
                                 }
                             }
@@ -771,7 +1082,7 @@ var optionMap = {
                             color:'#1e90ff',
                             label : {
                                 show:true,
-                                formatter: function(a,b,v) {
+				                formatter: function (a,b,v) {
                                     return Math.round(v/10000) + ' 万'
                                 }
                             }
@@ -789,8 +1100,8 @@ var optionMap = {
             }
         ]
     },
-    multiCharts : (function(){
-        functionMap.multiCharts = function(){
+    multiCharts : (function (){
+        functionMap.multiCharts = function (){
             var option2 = {
                 tooltip : {
                     trigger: 'axis',
@@ -815,8 +1126,8 @@ var optionMap = {
                 dataZoom : {
                     show : true,
                     realtime: true,
-                    start : 50,
-                    end : 100
+                    start : 0,
+                    end : 50
                 },
                 grid: {
                     x: 80,
@@ -842,7 +1153,7 @@ var optionMap = {
                         splitNumber: 3,
                         boundaryGap: [0.05, 0.05],
                         axisLabel: {
-                            formatter: function(v) {
+			                formatter: function (v) {
                                 return Math.round(v/10000) + ' 万'
                             }
                         },
@@ -906,8 +1217,8 @@ var optionMap = {
                     y:200,
                     show : true,
                     realtime: true,
-                    start : 50,
-                    end : 100
+                    start : 0,
+                    end : 50
                 },
                 grid: {
                     x: 80,
@@ -932,7 +1243,7 @@ var optionMap = {
                         splitNumber:3,
                         boundaryGap: [0.05, 0.05],
                         axisLabel: {
-                            formatter: function(v) {
+			                formatter: function (v) {
                                 return Math.round(v/10000) + ' 万'
                             }
                         },
@@ -982,7 +1293,7 @@ var optionMap = {
             tooltip : {
                 trigger: 'axis',
                 showDelay: 0,             // 显示延迟，添加显示延迟可以避免频繁切换，单位ms
-                formatter: function(params) {
+                formatter: function (params) {
                     var res = params[0][1];
                     res += '<br/>' + params[0][0];
                     res += '<br/>  开盘 : ' + params[0][2][0] + '  最高 : ' + params[0][2][3];
@@ -1007,8 +1318,8 @@ var optionMap = {
                 y: 250,
                 show : true,
                 realtime: true,
-                start : 50,
-                end : 100
+                start : 0,
+                end : 50
             },
             grid: {
                 x: 80,
@@ -1094,7 +1405,7 @@ var optionMap = {
                 type:'scatter',
                 large: true,
                 symbol:'circle',
-                data: (function() {
+                data: (function () {
                     var d = [];
                     var len = 25000;
                     var x = 0;
@@ -1114,7 +1425,7 @@ var optionMap = {
                 type:'scatter',
                 large: true,
                 symbol:'circle',
-                data: (function() {
+                data: (function () {
                     var d = [];
                     var len = 25000;
                     var x = 0;
@@ -1249,7 +1560,7 @@ var optionMap = {
         functionMap.dynamic = function() {
             var lastData = 11;
             var axisData;            
-            timeTicket = setInterval(function(){
+            timeTicket = setInterval(function (){
                 lastData += Math.random() * ((Math.round(Math.random() * 10) % 2) == 0 ? 1 : -1);
                 lastData = lastData.toFixed(1) - 0;
                 axisData = (new Date()).toLocaleTimeString().replace(/^\D*/,'');
@@ -1293,17 +1604,19 @@ var optionMap = {
                     saveAsImage : {show: true}
                 }
             },
-            dataZoom : {
+            AAdataZoom : {
                 show : false,
                 realtime: true,
-                start : 50,
-                end : 100
+                start : 0,
+                end : 50
             },
+            grid:{y2:30,y:70},
             xAxis : [
                 {
                     type : 'category',
                     boundaryGap : true,
-                    data : (function(){
+                    axisLine: {onZero: false},
+                    data : (function (){
                         var now = new Date();
                         var res = [];
                         var len = 10;
@@ -1318,7 +1631,8 @@ var optionMap = {
                     type : 'category',
                     boundaryGap : true,
                     splitline : {show : false},
-                    data : (function(){
+                    axisLine: {onZero: false},
+                    data : (function (){
                         var res = [];
                         var len = 10;
                         while (len--) {
@@ -1356,7 +1670,7 @@ var optionMap = {
                             color : 'rgba(85,206,85,0.4)'
                         }
                     },
-                    data:(function(){
+                    data:(function (){
                         var res = [];
                         var len = 10;
                         while (len--) {
@@ -1376,7 +1690,7 @@ var optionMap = {
                             }
                         }
                     },
-                    data:(function(){
+                    data:(function (){
                         var res = [];
                         var len = 10;
                         while (len--) {
@@ -1404,7 +1718,7 @@ var optionMap = {
         },
         tooltip : {
             trigger: 'item',
-            formatter : function(params) {
+            formatter : function (params) {
                 var g1 = params[1];
                 var serie = params[0];
                 var g2 = params[3];
@@ -1658,6 +1972,148 @@ var optionMap = {
             }
         ]
     },
+    gf : {
+        color : [
+            'rgba(255, 69, 0, 0.5)',
+            'rgba(255, 150, 0, 0.5)',
+            'rgba(255, 200, 0, 0.5)',
+            'rgba(155, 200, 50, 0.5)',
+            'rgba(55, 200, 100, 0.5)'
+        ],
+        title : {
+            text: '商业BI图表',
+            subtext: '纯属虚构'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c}%"
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        legend: {
+            data : ['展现','点击','访问','咨询','订单']
+        },
+        series : [
+            {
+                name:'业务指标',
+                type:'gauge',
+                center: ['25%','50%'],
+                splitNumber: 10,       // 分割段数，默认为5
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: [[0.2, '#228b22'],[0.8, '#48b'],[1, 'rgb(255, 80, 20)']], 
+                        width: 8
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    splitNumber: 10,   // 每份split细分多少段
+                    length :12,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        color: 'auto'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    show: true,        // 默认显示，属性show控制显示与否
+                    length :30,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                pointer : {
+                    width : 5
+                },
+                title : {
+                    show : true,
+                    offsetCenter: [0, '-40%'],       // x, y，单位px
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontWeight: 'bolder'
+                    }
+                },
+                detail : {
+                    formatter:'{value}%',
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        color: 'auto',
+                        fontWeight: 'bolder'
+                    }
+                },
+                data:[{value: 85, name: '完成率'}]
+            },
+            {
+                name:'预期',
+                type:'funnel',
+                x: '45%',
+                width: '45%',
+                itemStyle: {
+                    normal: {
+                        label: {
+                            formatter: '{b}预期'
+                        },
+                        labelLine: {
+                            show : false
+                        }
+                    },
+                    emphasis: {
+                        label: {
+                            position:'inside',
+                            formatter: '{b}预期 : {c}%'
+                        }
+                    }
+                },
+                data:[
+                    {value:60, name:'访问'},
+                    {value:40, name:'咨询'},
+                    {value:20, name:'订单'},
+                    {value:80, name:'点击'},
+                    {value:100, name:'展现'}
+                ]
+            },
+            {
+                name:'实际',
+                type:'funnel',
+                x: '45%',
+                width: '45%',
+                maxSize: '80%',
+                itemStyle: {
+                    normal: {
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        label: {
+                            position: 'inside',
+                            formatter: '{c}%',
+                            textStyle: {
+                                color: '#fff'
+                            }
+                        }
+                    },
+                    emphasis: {
+                        label: {
+                            position:'inside',
+                            formatter: '{b}实际 : {c}%'
+                        }
+                    }
+                },
+                data:[
+                    {value:30, name:'访问'},
+                    {value:10, name:'咨询'},
+                    {value:5, name:'订单'},
+                    {value:50, name:'点击'},
+                    {value:80, name:'展现'}
+                ]
+            }
+        ]
+    },
     mix1 : {
         color: ['#ff7f50','#87cefa','#da70d6','#ff69b4','#ba55d3','#32cd32','#6495ed'],
         tooltip : {
@@ -1700,6 +2156,10 @@ var optionMap = {
                 splitLine : {show : false}
             }
         ],
+        dataZoom : {
+            show : true,
+            realtime: true
+        },
         series : [
             {
                 name:'总和',
@@ -1742,8 +2202,8 @@ var optionMap = {
             }
         ]
     },
-    mix2 : (function(){
-        var sData1 = (function() {
+    mix2 : (function (){
+    	var sData1 = (function () {
             var d = [];
             var len = 40;
             var value;
@@ -1756,7 +2216,7 @@ var optionMap = {
             }
             return d;
         })();
-        var sData2 = (function() {
+		var sData2 = (function () {
             var d = [];
             var len = sData1.length;
             for (var i = 0; i < len; i++) {
@@ -1775,6 +2235,9 @@ var optionMap = {
             var len = sData1.length;
             var option = myChart.getOption();
             option.series = option.series.slice(0,2);
+            option.legend = {
+                data : ['系列1', '系列2']
+            };
             while (len--) {
                 option.series.push({
                     type: 'pie',
@@ -1813,9 +2276,6 @@ var optionMap = {
             tooltip : {
                 trigger: 'item',
                  formatter: "{b} : {c} ({d}%)"
-            },
-            legend : {
-                data : ['系列1', '系列2']
             },
             toolbox: {
                 show : true,
@@ -1861,6 +2321,10 @@ var optionMap = {
         
     })(),
     mix3 : {
+        title : {
+            text: '2011全国GDP（亿元）',
+            subtext: '数据来自国家统计局'
+        },
         tooltip : {
             trigger: 'item'
         },
@@ -1888,7 +2352,7 @@ var optionMap = {
         },
         series : [
             {
-                name: 'iphone销量',
+                name: '2011全国GDP分布',
                 type: 'map',
                 mapType: 'china',
                 mapLocation: {
@@ -1934,7 +2398,7 @@ var optionMap = {
                 ]
             },
             {
-                name:'各省销量',
+                name:'2011全国GDP对比',
                 type:'pie',
                 roseType : 'area',
                 tooltip: {
@@ -1950,10 +2414,10 @@ var optionMap = {
                 ]
             }
         ],
-        animation: (function() {
-            functionMap.mix3 = function() {
+        animation: (function () {
+            functionMap.mix3 = function () {
                 var ecConfig = require('echarts/config');
-                myChart.on(ecConfig.EVENT.MAP_SELECTED, function(param){
+                myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                     var selected = param.selected;
                     var option = optionMap.mix3;
                     var mapSeries = option.series[0];
@@ -1979,8 +2443,8 @@ var optionMap = {
             return false;
         })()
     },
-    lasagna : (function() {
-         functionMap.lasagna = function() {
+    lasagna : (function () {
+         functionMap.lasagna = function () {
             myChart.setOption({
                 tooltip : {
                     trigger: 'item',
@@ -2000,7 +2464,7 @@ var optionMap = {
                         saveAsImage : {show: true}
                     }
                 },
-                series : (function(){
+                series : (function (){
                     var series = [];
                     for (var i = 0; i < 30; i++) {
                         series.push({
@@ -2028,15 +2492,15 @@ var optionMap = {
                     };
                     return series;
                 })(),
-                calculable : (function(){
-                    setTimeout(function(){
+                calculable : (function (){
+                    setTimeout(function (){
                         if (!myChart) {
                             return;
                         }
                         var _ZR = myChart.getZrender();
+                        var TextShape = require('zrender/shape/Text');
                         // 补充千层饼
-                        _ZR.addShape({
-                            shape : 'text',
+                        _ZR.addShape(new TextShape({
                             style : {
                                 x : _ZR.getWidth() / 2,
                                 y : _ZR.getHeight() / 2,
@@ -2044,9 +2508,8 @@ var optionMap = {
                                 text : '恶梦的过去',
                                 textAlign : 'center'
                             }
-                        });
-                        _ZR.addShape({
-                            shape : 'text',
+                        }));
+                        _ZR.addShape(new TextShape({
                             style : {
                                 x : _ZR.getWidth() / 2 + 200,
                                 y : _ZR.getHeight() / 2,
@@ -2056,7 +2519,7 @@ var optionMap = {
                                 textAlign : 'left',
                                 textFont:'normal 20px 微软雅黑'
                             }
-                        });
+                        }));
                         _ZR.refresh();
                     }, 2000);
                     return false;
@@ -2064,6 +2527,8 @@ var optionMap = {
             }, true);
         }
         functionMap.wormhole = function() {
+            myChart.clear();
+            myChart.getZrender().clear();
             myChart.setOption({
                 color : (function(){
                     var zrColor = require('zrender/tool/color');
@@ -2156,11 +2621,11 @@ var optionMap = {
     effect1 : (function() {
         var effect = {
             show: true,
-            scaleSize: 1,
-            period: 10,             // 运动周期，无单位，值越大越慢
+            scaleSize: 1,//require('zrender/tool/env').canvasSupported ? 1 : 2,
+            period: 30,             // 运动周期，无单位，值越大越慢
             color: '#fff',
-            shadowColor: 'rgba(220,220,220,0.8)',
-            shadowBlur : 15 
+            shadowColor: 'rgba(220,220,220,0.4)',
+            shadowBlur : 5 
         };
         function itemStyle(idx) {
             return {
@@ -2169,17 +2634,18 @@ var optionMap = {
                     borderWidth:1,
                     borderColor:['rgba(30,144,255,1)','lime'][idx],
                     lineStyle: {
-                        type: 'solid',
-                        shadowColor : ['rgba(30,144,255,1)','lime'][idx], //默认透明
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowOffsetY: 0
+                        //shadowColor : ['rgba(30,144,255,1)','lime'][idx], //默认透明
+                        //shadowBlur: 10,
+                        //shadowOffsetX: 0,
+                        //shadowOffsetY: 0,
+                        type: 'solid'
                     }
                 }
             }
         };
         functionMap.effect1 = function() {
             myChart.setOption({
+		    backgroundColor: 'rgba(0,0,0,0)',
                 color: ['rgba(30,144,255,1)','lime'],
                 title : {
                     text: '中国铁路运输主干线',
@@ -2187,7 +2653,7 @@ var optionMap = {
                     sublink: 'http://zh.wikipedia.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E9%93%81%E8%B7%AF%E8%BF%90%E8%BE%93',
                     x:'center',
                     textStyle : {
-                        //color: '#fff'
+                        color: '#fff'
                     }
                 },
                 tooltip : {
@@ -2202,7 +2668,7 @@ var optionMap = {
                     selectedMode:'single',
                     data:['八纵通道', '八横通道'],
                     textStyle : {
-                        //color: '#fff'
+                        color: '#fff'
                     }
                 },
                 toolbox: {
@@ -2239,7 +2705,7 @@ var optionMap = {
                             symbolSize : 1,
                             effect : effect,
                             itemStyle : itemStyle(0),
-                            smooth:false,
+                            smooth:true,
                             data : [
                                 [{name:'北京'}, {name:'哈尔滨'}],
                                 [{name:'哈尔滨'}, {name:'满洲里'}],
@@ -2297,7 +2763,7 @@ var optionMap = {
                             symbolSize : 1,
                             effect : effect,
                             itemStyle : itemStyle(1),
-                            smooth:false,
+                            smooth:true,
                             data : [
                                 [{name:'北京'}, {name:'兰州'}],
                                 [{name:'兰州'}, {name:'拉萨'}],
@@ -2432,13 +2898,14 @@ var optionMap = {
         return {};
     })(),
     effect2 : {
+        backgroundColor: 'rgba(0,0,0,0)',
         color: ['gold','aqua','lime'],
         title : {
             text: '模拟迁徙',
             subtext:'数据纯属虚构',
             x:'center',
             textStyle : {
-                //color: '#fff'
+                color: '#fff'
             }
         },
         tooltip : {
@@ -2457,7 +2924,7 @@ var optionMap = {
                 '广州 Top10' : false
             },
             textStyle : {
-                //color: '#fff'
+                color: '#fff'
             }
         },
         toolbox: {
@@ -2476,9 +2943,9 @@ var optionMap = {
             min : 0,
             max : 100,
             calculable : true,
-            color: ['red','orange','yellow','lightgreen'],
+            color: ['#ff3333', 'orange', 'yellow','lime','aqua'],
             textStyle:{
-                //color:'#fff'
+                color:'#fff'
             }
         },
         series : [
@@ -2788,12 +3255,18 @@ var optionMap = {
                     smooth:true,
                     effect : {
                         show: true,
-                        size: 3,
-                        shadowColor: 'yellow'
+                        scaleSize: 1,
+                        period: 30,
+                        color: '#fff',
+                        shadowBlur: 10
                     },
                     itemStyle : {
                         normal: {
-                            borderWidth:1
+                            borderWidth:1,
+                            lineStyle: {
+                                type: 'solid',
+                                shadowBlur: 10
+                            }
                         }
                     },
                     data : [
@@ -2846,12 +3319,18 @@ var optionMap = {
                     smooth:true,
                     effect : {
                         show: true,
-                        size: 3,
-                        shadowColor: 'aqua'
+                        scaleSize: 1,
+                        period: 30,
+                        color: '#fff',
+                        shadowBlur: 10
                     },
                     itemStyle : {
                         normal: {
-                            borderWidth:1
+                            borderWidth:1,
+                            lineStyle: {
+                                type: 'solid',
+                                shadowBlur: 10
+                            }
                         }
                     },
                     data : [
@@ -2904,12 +3383,18 @@ var optionMap = {
                     smooth:true,
                     effect : {
                         show: true,
-                        size: 3,
-                        shadowColor: 'lime'
+                        scaleSize: 1,
+                        period: 30,
+                        color: '#fff',
+                        shadowBlur: 10
                     },
                     itemStyle : {
                         normal: {
-                            borderWidth:1
+                            borderWidth:1,
+                            lineStyle: {
+                                type: 'solid',
+                                shadowBlur: 10
+                            }
                         }
                     },
                     data : [
@@ -2954,5 +3439,336 @@ var optionMap = {
                 }
             }
         ]
-    }
+    },
+    effect3 : (function(){
+        var placeList = [
+            {name:'海门', geoCoord:[121.15, 31.89]},
+            {name:'鄂尔多斯', geoCoord:[109.781327, 39.608266]},
+            {name:'招远', geoCoord:[120.38, 37.35]},
+            {name:'舟山', geoCoord:[122.207216, 29.985295]},
+            {name:'齐齐哈尔', geoCoord:[123.97, 47.33]},
+            {name:'盐城', geoCoord:[120.13, 33.38]},
+            {name:'赤峰', geoCoord:[118.87, 42.28]},
+            {name:'青岛', geoCoord:[120.33, 36.07]},
+            {name:'乳山', geoCoord:[121.52, 36.89]},
+            {name:'金昌', geoCoord:[102.188043, 38.520089]},
+            {name:'泉州', geoCoord:[118.58, 24.93]},
+            {name:'莱西', geoCoord:[120.53, 36.86]},
+            {name:'日照', geoCoord:[119.46, 35.42]},
+            {name:'胶南', geoCoord:[119.97, 35.88]},
+            {name:'南通', geoCoord:[121.05, 32.08]},
+            {name:'拉萨', geoCoord:[91.11, 29.97]},
+            {name:'云浮', geoCoord:[112.02, 22.93]},
+            {name:'梅州', geoCoord:[116.1, 24.55]},
+            {name:'文登', geoCoord:[122.05, 37.2]},
+            {name:'上海', geoCoord:[121.48, 31.22]},
+            {name:'攀枝花', geoCoord:[101.718637, 26.582347]},
+            {name:'威海', geoCoord:[122.1, 37.5]},
+            {name:'承德', geoCoord:[117.93, 40.97]},
+            {name:'厦门', geoCoord:[118.1, 24.46]},
+            {name:'汕尾', geoCoord:[115.375279, 22.786211]},
+            {name:'潮州', geoCoord:[116.63, 23.68]},
+            {name:'丹东', geoCoord:[124.37, 40.13]},
+            {name:'太仓', geoCoord:[121.1, 31.45]},
+            {name:'曲靖', geoCoord:[103.79, 25.51]},
+            {name:'烟台', geoCoord:[121.39, 37.52]},
+            {name:'福州', geoCoord:[119.3, 26.08]},
+            {name:'瓦房店', geoCoord:[121.979603, 39.627114]},
+            {name:'即墨', geoCoord:[120.45, 36.38]},
+            {name:'抚顺', geoCoord:[123.97, 41.97]},
+            {name:'玉溪', geoCoord:[102.52, 24.35]},
+            {name:'张家口', geoCoord:[114.87, 40.82]},
+            {name:'阳泉', geoCoord:[113.57, 37.85]},
+            {name:'莱州', geoCoord:[119.942327, 37.177017]},
+            {name:'湖州', geoCoord:[120.1, 30.86]},
+            {name:'汕头', geoCoord:[116.69, 23.39]},
+            {name:'昆山', geoCoord:[120.95, 31.39]},
+            {name:'宁波', geoCoord:[121.56, 29.86]},
+            {name:'湛江', geoCoord:[110.359377, 21.270708]},
+            {name:'揭阳', geoCoord:[116.35, 23.55]},
+            {name:'荣成', geoCoord:[122.41, 37.16]},
+            {name:'连云港', geoCoord:[119.16, 34.59]},
+            {name:'葫芦岛', geoCoord:[120.836932, 40.711052]},
+            {name:'常熟', geoCoord:[120.74, 31.64]},
+            {name:'东莞', geoCoord:[113.75, 23.04]},
+            {name:'河源', geoCoord:[114.68, 23.73]},
+            {name:'淮安', geoCoord:[119.15, 33.5]},
+            {name:'泰州', geoCoord:[119.9, 32.49]},
+            {name:'南宁', geoCoord:[108.33, 22.84]},
+            {name:'营口', geoCoord:[122.18, 40.65]},
+            {name:'惠州', geoCoord:[114.4, 23.09]},
+            {name:'江阴', geoCoord:[120.26, 31.91]},
+            {name:'蓬莱', geoCoord:[120.75, 37.8]},
+            {name:'韶关', geoCoord:[113.62, 24.84]},
+            {name:'嘉峪关', geoCoord:[98.289152, 39.77313]},
+            {name:'广州', geoCoord:[113.23, 23.16]},
+            {name:'延安', geoCoord:[109.47, 36.6]},
+            {name:'太原', geoCoord:[112.53, 37.87]},
+            {name:'清远', geoCoord:[113.01, 23.7]},
+            {name:'中山', geoCoord:[113.38, 22.52]},
+            {name:'昆明', geoCoord:[102.73, 25.04]},
+            {name:'寿光', geoCoord:[118.73, 36.86]},
+            {name:'盘锦', geoCoord:[122.070714, 41.119997]},
+            {name:'长治', geoCoord:[113.08, 36.18]},
+            {name:'深圳', geoCoord:[114.07, 22.62]},
+            {name:'珠海', geoCoord:[113.52, 22.3]},
+            {name:'宿迁', geoCoord:[118.3, 33.96]},
+            {name:'咸阳', geoCoord:[108.72, 34.36]},
+            {name:'铜川', geoCoord:[109.11, 35.09]},
+            {name:'平度', geoCoord:[119.97, 36.77]},
+            {name:'佛山', geoCoord:[113.11, 23.05]},
+            {name:'海口', geoCoord:[110.35, 20.02]},
+            {name:'江门', geoCoord:[113.06, 22.61]},
+            {name:'章丘', geoCoord:[117.53, 36.72]},
+            {name:'肇庆', geoCoord:[112.44, 23.05]},
+            {name:'大连', geoCoord:[121.62, 38.92]},
+            {name:'临汾', geoCoord:[111.5, 36.08]},
+            {name:'吴江', geoCoord:[120.63, 31.16]},
+            {name:'石嘴山', geoCoord:[106.39, 39.04]},
+            {name:'沈阳', geoCoord:[123.38, 41.8]},
+            {name:'苏州', geoCoord:[120.62, 31.32]},
+            {name:'茂名', geoCoord:[110.88, 21.68]},
+            {name:'嘉兴', geoCoord:[120.76, 30.77]},
+            {name:'长春', geoCoord:[125.35, 43.88]},
+            {name:'胶州', geoCoord:[120.03336, 36.264622]},
+            {name:'银川', geoCoord:[106.27, 38.47]},
+            {name:'张家港', geoCoord:[120.555821, 31.875428]},
+            {name:'三门峡', geoCoord:[111.19, 34.76]},
+            {name:'锦州', geoCoord:[121.15, 41.13]},
+            {name:'南昌', geoCoord:[115.89, 28.68]},
+            {name:'柳州', geoCoord:[109.4, 24.33]},
+            {name:'三亚', geoCoord:[109.511909, 18.252847]},
+            {name:'自贡', geoCoord:[104.778442, 29.33903]},
+            {name:'吉林', geoCoord:[126.57, 43.87]},
+            {name:'阳江', geoCoord:[111.95, 21.85]},
+            {name:'泸州', geoCoord:[105.39, 28.91]},
+            {name:'西宁', geoCoord:[101.74, 36.56]},
+            {name:'宜宾', geoCoord:[104.56, 29.77]},
+            {name:'呼和浩特', geoCoord:[111.65, 40.82]},
+            {name:'成都', geoCoord:[104.06, 30.67]},
+            {name:'大同', geoCoord:[113.3, 40.12]},
+            {name:'镇江', geoCoord:[119.44, 32.2]},
+            {name:'桂林', geoCoord:[110.28, 25.29]},
+            {name:'张家界', geoCoord:[110.479191, 29.117096]},
+            {name:'宜兴', geoCoord:[119.82, 31.36]},
+            {name:'北海', geoCoord:[109.12, 21.49]},
+            {name:'西安', geoCoord:[108.95, 34.27]},
+            {name:'金坛', geoCoord:[119.56, 31.74]},
+            {name:'东营', geoCoord:[118.49, 37.46]},
+            {name:'牡丹江', geoCoord:[129.58, 44.6]},
+            {name:'遵义', geoCoord:[106.9, 27.7]},
+            {name:'绍兴', geoCoord:[120.58, 30.01]},
+            {name:'扬州', geoCoord:[119.42, 32.39]},
+            {name:'常州', geoCoord:[119.95, 31.79]},
+            {name:'潍坊', geoCoord:[119.1, 36.62]},
+            {name:'重庆', geoCoord:[106.54, 29.59]},
+            {name:'台州', geoCoord:[121.420757, 28.656386]},
+            {name:'南京', geoCoord:[118.78, 32.04]},
+            {name:'滨州', geoCoord:[118.03, 37.36]},
+            {name:'贵阳', geoCoord:[106.71, 26.57]},
+            {name:'无锡', geoCoord:[120.29, 31.59]},
+            {name:'本溪', geoCoord:[123.73, 41.3]},
+            {name:'克拉玛依', geoCoord:[84.77, 45.59]},
+            {name:'渭南', geoCoord:[109.5, 34.52]},
+            {name:'马鞍山', geoCoord:[118.48, 31.56]},
+            {name:'宝鸡', geoCoord:[107.15, 34.38]},
+            {name:'焦作', geoCoord:[113.21, 35.24]},
+            {name:'句容', geoCoord:[119.16, 31.95]},
+            {name:'北京', geoCoord:[116.46, 39.92]},
+            {name:'徐州', geoCoord:[117.2, 34.26]},
+            {name:'衡水', geoCoord:[115.72, 37.72]},
+            {name:'包头', geoCoord:[110, 40.58]},
+            {name:'绵阳', geoCoord:[104.73, 31.48]},
+            {name:'乌鲁木齐', geoCoord:[87.68, 43.77]},
+            {name:'枣庄', geoCoord:[117.57, 34.86]},
+            {name:'杭州', geoCoord:[120.19, 30.26]},
+            {name:'淄博', geoCoord:[118.05, 36.78]},
+            {name:'鞍山', geoCoord:[122.85, 41.12]},
+            {name:'溧阳', geoCoord:[119.48, 31.43]},
+            {name:'库尔勒', geoCoord:[86.06, 41.68]},
+            {name:'安阳', geoCoord:[114.35, 36.1]},
+            {name:'开封', geoCoord:[114.35, 34.79]},
+            {name:'济南', geoCoord:[117, 36.65]},
+            {name:'德阳', geoCoord:[104.37, 31.13]},
+            {name:'温州', geoCoord:[120.65, 28.01]},
+            {name:'九江', geoCoord:[115.97, 29.71]},
+            {name:'邯郸', geoCoord:[114.47, 36.6]},
+            {name:'临安', geoCoord:[119.72, 30.23]},
+            {name:'兰州', geoCoord:[103.73, 36.03]},
+            {name:'沧州', geoCoord:[116.83, 38.33]},
+            {name:'临沂', geoCoord:[118.35, 35.05]},
+            {name:'南充', geoCoord:[106.110698, 30.837793]},
+            {name:'天津', geoCoord:[117.2, 39.13]},
+            {name:'富阳', geoCoord:[119.95, 30.07]},
+            {name:'泰安', geoCoord:[117.13, 36.18]},
+            {name:'诸暨', geoCoord:[120.23, 29.71]},
+            {name:'郑州', geoCoord:[113.65, 34.76]},
+            {name:'哈尔滨', geoCoord:[126.63, 45.75]},
+            {name:'聊城', geoCoord:[115.97, 36.45]},
+            {name:'芜湖', geoCoord:[118.38, 31.33]},
+            {name:'唐山', geoCoord:[118.02, 39.63]},
+            {name:'平顶山', geoCoord:[113.29, 33.75]},
+            {name:'邢台', geoCoord:[114.48, 37.05]},
+            {name:'德州', geoCoord:[116.29, 37.45]},
+            {name:'济宁', geoCoord:[116.59, 35.38]},
+            {name:'荆州', geoCoord:[112.239741, 30.335165]},
+            {name:'宜昌', geoCoord:[111.3, 30.7]},
+            {name:'义乌', geoCoord:[120.06, 29.32]},
+            {name:'丽水', geoCoord:[119.92, 28.45]},
+            {name:'洛阳', geoCoord:[112.44, 34.7]},
+            {name:'秦皇岛', geoCoord:[119.57, 39.95]},
+            {name:'株洲', geoCoord:[113.16, 27.83]},
+            {name:'石家庄', geoCoord:[114.48, 38.03]},
+            {name:'莱芜', geoCoord:[117.67, 36.19]},
+            {name:'常德', geoCoord:[111.69, 29.05]},
+            {name:'保定', geoCoord:[115.48, 38.85]},
+            {name:'湘潭', geoCoord:[112.91, 27.87]},
+            {name:'金华', geoCoord:[119.64, 29.12]},
+            {name:'岳阳', geoCoord:[113.09, 29.37]},
+            {name:'长沙', geoCoord:[113, 28.21]},
+            {name:'衢州', geoCoord:[118.88, 28.97]},
+            {name:'廊坊', geoCoord:[116.7, 39.53]},
+            {name:'菏泽', geoCoord:[115.480656, 35.23375]},
+            {name:'合肥', geoCoord:[117.27, 31.86]},
+            {name:'武汉', geoCoord:[114.31, 30.52]},
+            {name:'大庆', geoCoord:[125.03, 46.58]}
+        ]
+        return {
+            backgroundColor: 'rgba(0,0,0,0)',
+            color: [
+                'rgba(255, 255, 255, 0.8)',
+                'rgba(14, 241, 242, 0.8)',
+                'rgba(37, 140, 249, 0.8)'
+            ],
+            title : {
+                text: '百度人气',
+                link: 'http://renqi.baidu.com',
+                subtext: '纯属虚构',
+                x: 'center',
+                textStyle : {
+                    color: '#fff'
+                }
+            },
+            legend: {
+                orient: 'vertical',
+                x:'left',
+                data:['强','中','弱'],
+                textStyle : {
+                    color: '#fff'
+                }
+            },
+            toolbox: {
+                show : true,
+                orient : 'vertical',
+                x: 'right',
+                y: 'center',
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            series : [
+                {
+                    name: '弱',
+                    type: 'map',
+                    mapType: 'china',
+                    itemStyle:{
+                        normal:{
+                            borderColor:'rgba(100,149,237,1)',
+                            borderWidth:0.5,
+                            areaStyle:{
+                                color: '#333'
+                            }
+                        }
+                    },
+                    data : [],
+                    markPoint : {
+                        symbolSize: 2,
+                        large: true,
+                        effect : {
+                            show: true
+                        },
+                        data : (function(){
+                            var data = [];
+                            var len = 3000;
+                            var geoCoord
+                            while(len--) {
+                                geoCoord = placeList[len % placeList.length].geoCoord;
+                                data.push({
+                                    name : placeList[len % placeList.length].name + len,
+                                    value : 10,
+                                    geoCoord : [
+                                        geoCoord[0] + Math.random() * 5 * -1,
+                                        geoCoord[1] + Math.random() * 3 * -1
+                                    ]
+                                })
+                            }
+                            return data;
+                        })()
+                    }
+                },
+                {
+                    name: '中',
+                    type: 'map',
+                    mapType: 'china',
+                    data : [],
+                    markPoint : {
+                        symbolSize: 3,
+                        large: true,
+                        effect : {
+                            show: true
+                        },
+                        data : (function(){
+                            var data = [];
+                            var len = 1000;
+                            var geoCoord
+                            while(len--) {
+                                geoCoord = placeList[len % placeList.length].geoCoord;
+                                data.push({
+                                    name : placeList[len % placeList.length].name + len,
+                                    value : 50,
+                                    geoCoord : [
+                                        geoCoord[0] + Math.random() * 3 * -1,
+                                        geoCoord[1] + Math.random() * 3 * -1
+                                    ]
+                                })
+                            }
+                            return data;
+                        })()
+                    }
+                },
+                {
+                    name: '强',
+                    type: 'map',
+                    mapType: 'china',
+                    hoverable: false,
+                    roam:true,
+                    data : [],
+                    markPoint : {
+                        symbol : 'diamond',
+                        symbolSize: 6,
+                        large: true,
+                        effect : {
+                            show: true
+                        },
+                        data : (function(){
+                            var data = [];
+                            var len = placeList.length;
+                            while(len--) {
+                                data.push({
+                                    name : placeList[len].name,
+                                    value : 90,
+                                    geoCoord : placeList[len].geoCoord
+                                })
+                            }
+                            return data;
+                        })()
+                    }
+                }
+            ]
+        };
+    })(),
+    adddddd : {}
 }

@@ -1,0 +1,749 @@
+<!doctype html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>从ZRender到ECharts · 一个Canvas图表的设计与实现</title>
+
+        <meta name="description" content="从ZRender到ECharts · 一个Canvas图表的设计与实现">
+        <meta name="author" content="kener.linfeng@gmail.com">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <link rel="stylesheet" href="css/echarts-slide.css">
+        
+        <!-- Fav and touch icons -->
+        <link rel="shortcut icon" href="../asset/ico/favicon.png">
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+        <script src="../asset/js/esl.js"></script>
+        <style type="text/css">
+            * {
+                font-family:'微软雅黑' !important;
+            }
+            .main, .main2 {
+                background-color: #fff;
+                background: url('./img/big_load.gif') #fff no-repeat 50% 50%;
+                height: 400px;
+                overflow: hidden;
+                padding : 10px !important;
+                border: 1px solid #e3e3e3;
+                -webkit-border-radius: 4px;
+                   -moz-border-radius: 4px;
+                        border-radius: 4px;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+                   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+                        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            }
+            .noLoading {
+                background: #fff;
+            }
+            .main canvas {
+               left:0;
+               top:0;
+            }
+            .main div {
+                text-align: left !important;
+            }
+            .echarts-dataview p {
+                font-size: 16px !important;
+                color:#333;
+                text-align: left;
+            }
+            p, h4 {
+                text-align: left !important;
+                text-transform: none !important;
+            }
+            h5 strong, small strong{
+                color: #9acd32;
+                font-weight: normal !important;
+            }
+            td,th {
+                text-align: center !important;
+                vertical-align: middle !important;
+                font-size: 0.7em !important;
+                text-shadow: none !important;
+            }
+            .list-table td{
+                padding-right: 20px !important;
+                text-align: left !important;
+                font-size:12px !important;
+                line-height:15px;
+            }
+            .list-table td strong {
+                font-size: 15px !important;
+                line-height:20px;
+                color:#9ACD32;
+            }
+            .list-table tr.emphasis {
+                color:#e6b600;
+                font-weight: bolder;
+            }
+            .reveal small,.reveal a.roll {
+                line-height: 1.5em;
+            }
+            .reveal blockquote {
+                width:100%;
+            }
+            .reveal blockquote small{
+                line-height: 1.5em;
+            }
+            .reveal img.echarts-icon {
+                margin:0;
+                padding:7px;
+                border:0;
+                background:none
+            }
+            .reveal img {
+                max-width:100%;
+                max-height:100%;
+            }
+            .reveal .slides>section, .reveal .slides>section>section {
+                padding:0;
+            }
+            .reveal ul ul li {
+                font-size:20px;
+                color:#78B9E6
+            }
+            
+        </style>
+    </head>
+
+    <body>
+        <a href="https://github.com/ecomfe/echarts" target="_blank">
+            <img style="position:absolute;top:0;right:0;border:0;z-index:1000" src="img/fork.png" alt="Fork me on GitHub">
+        </a>
+        <div class="reveal">
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+                    <h4>从<span style="color:#9acd32">ZRender</span>到<span style="color:#9acd32">ECharts</span></h4>
+                    <div style="text-align:right;">
+                        <hr style="margin:50px 0"/>
+                        <span>一个<span style="color:#9acd32">Canvas图表</span>的设计与实现</span>
+                    </div>
+                </section>
+                
+                <section>
+                    <h4>About Me</h4>
+                    <div style="margin-left:160px;padding-left:30px;text-align: left;border-left:5px solid #9acd32">
+                        <img src="./img/kener.jpg" style="width:120px;position:absolute;left:0;margin:0;"/>
+                        <p><a href="http://weibo.com/kenerlinfeng" target="_blank">@Kener-林峰</a></p>
+                        <p><small>百度&nbsp;&nbsp;web前端研发攻城狮 &nbsp;&nbsp;商业前端<strong>数据可视化方向</strong>负责人</small></p>
+                        <small>
+                            <ul>
+                                <li>商业产品图表库： <a href="http://echarts.baidu.com/" target="_blank">ECharts</a>（2013.3~）</li>
+                                <li>轻量级Canvas类库： <a href="http://ecomfe.github.io/zrender/index.html" target="_blank">ZRender</a>（2012.12~）</li>
+                                <li><a href="http://uedc.baidu.com/fc" target="_blank">凤巢系统用户体验数据监控中心（UEDC）</a>创造者（~2012）</li>
+                                <li><a href="fengchao.baidu.com" target="_blank">百度推广业务系统（凤巢）</a>前端技术负责人（~2011）</li>
+                                <li>...</li>
+                                <li><small style="vertical-align:middle"><i>北邮 - 计科 - 国重网研 - 交换与智能控制研究中心 - 下一代网络</i></small></li>
+                                <li><small style="vertical-align:middle"><i><a href="http://www.oschina.net/question/947559_144622" target="_blank">http://www.oschina.net/question/947559_144622</a></i></small></li>
+                            </ul>
+                        </small>
+                    </div>
+                </section>
+                
+                <section>
+                    <h4>About Us</h4>
+                    <div style="margin-left:160px;padding-left:30px;text-align: left;border-left:5px solid #9acd32">
+                        <img src="./img/EFE.png" style="width:120px;position:absolute;left:0;margin:0;background:#fff;"/>
+                        <p><a href="http://fe.baidu.com/doc/ecom/tech/topic/dv/index.html" target="_blank">百度商业前端数据可视化团队</a></p>
+                        <small>
+                            <ul>
+                                <li>制定并维护商业产品各类数据可视化项目标准：</li>
+                                <ul>
+                                    <li>百度图表库标准 <a href="http://fe.baidu.com/doc/ecom/std/chart.text" target="_blank">1.0.0</a></li>
+                                </ul>
+                                <li>推动并实现商业级数据可视化产品：</li>
+                                <ul>
+                                <li>商业产品图表库： <a href="http://echarts.baidu.com/" target="_blank">ECharts</a></li>
+                                <li>轻量级Canvas类库： <a href="http://ecomfe.github.io/zrender/index.html" target="_blank">ZRender</a></li>
+                                <li>3D Webgl绘图引擎： <a href="https://github.com/pissang/qtek" target="_blank">Qtek</a></li>
+                                </ul>
+                                <li>百度商业体系数据可视化相关项目支持：</li>
+                                <ul>
+                                    <li>凤巢、广告管家、鸿媒体、一站式、百度推广开发者中心、知心业务系统、百度站长平台、指挥官等数十个项目</li>
+                                </ul>
+                                <li>数据可视化相关技术研究及布道：</li>
+                                <ul>
+                                    <li>Hackathon、ecomfe北京 | 上海、searchfe、搜素营销研究院、OPFE、KA等</li>
+                                    <li>2014中国数据库大会、统计之都技术沙龙、华媒基金会 · 数据新闻工作坊、数据科学家联盟技术沙龙、HackHacker北京等</li>
+                                </ul>
+                            </ul>
+                        </small>
+                    </div>
+                </section>
+                
+                <section>
+                    <h3>Keyword</h3>
+                    <div style="color:#9acd32;text-align:center;">
+                        <hr style="margin:50px 0"/>
+                        <span>Canvas图表</span>
+                        <span style="margin:0 50px;">ZRender</span>
+                        <span>ECharts</span>
+                    </div>
+                </section>
+                
+                <section>
+                        <h4>业界都有哪些前端图表库？</h4>
+                        <hr/>
+                        <table>
+                            <tr>
+                                <td style="vertical-align: middle;">
+                                    <table class="list-table" style="width:300px;">
+                                        <tr><td><strong>name</strong></td><td><strong>type</strong></td><td><strong>*</strong></td></tr>
+                                        <tr><td>Awesome Chart JS</td><td>Canvas</td><td></td></tr>
+                                        <tr><td>CanvasJS Charts</td><td>Canvas</td><td>可交互</td></tr>
+                                        <tr><td>Canvas Xpress </td><td>Canvas</td><td></td></tr>
+                                        <tr><td>Chart.js</td><td>Canvas</td><td>可交互</td></tr>
+                                        <tr><td>Envision</td><td>Canvas</td><td></td></tr>
+                                        <tr><td>Flot </td><td>Canvas</td><td></td></tr>
+                                        <tr><td>JavaScript InfoVis Toolkit</td><td>Canvas</td><td>可交互</td></tr>
+                                        <tr><td>JS Charts </td><td>Canvas</td><td></td></tr>
+                                        <tr><td>Sigma</td><td>Canvas</td><td></td></tr>
+                                        <tr class="emphasis"><td>AmCharts </td><td>SVG</td><td></td></tr>
+                                        <tr><td>Chartist.js</td><td>SVG</td><td></td></tr>
+                                        <tr><td>Chartkick</td><td>SVG</td><td></td></tr>
+                                        <tr><td>D3.js</td><td>SVG</td><td>d3</td></tr>
+                                        <tr><td>DataV</td><td>SVG</td><td>d3</td></tr>
+                                        <tr><td>dc.js</td><td>SVG</td><td>d3</td></tr>
+                                        <tr><td>Elycharts</td><td>SVG</td><td></td></tr>
+                                        <tr><td>Ember Charts</td><td>SVG</td><td>d3</td></tr>
+                                        <tr><td>Epoch</td><td>SVG</td><td>d3</td></tr>
+                                        <tr class="emphasis"><td>FusionCharts</td><td>SVG</td><td></td></tr>
+                                        <tr><td>Google Charts</td><td>SVG</td><td></td></tr>
+                                        <tr class="emphasis"><td>Highcharts</td><td>SVG</td><td></td></tr>
+                                        <tr><td>JsDraw2DX</td><td>SVG</td><td></td></tr>
+                                        <tr><td>JSXGraph</td><td>SVG</td><td></td></tr>
+                                        <tr><td>Kartograph.js</td><td>SVG</td><td></td></tr>
+                                        <tr><td>Peity</td><td>SVG</td><td>jq</td></tr>
+                                        <tr><td>Pizza Pie Charts</td><td>SVG</td><td>jq</td></tr>
+                                        <tr><td>Polychart</td><td>SVG</td><td></td></tr>
+                                        <tr><td>pygal</td><td>SVG</td><td></td></tr>
+                                        <tr><td>Raphaël</td><td>SVG</td><td></td></tr>
+                                        <tr><td>RAW</td><td>SVG</td><td>d3</td></tr>
+                                        <tr><td>xCharts</td><td>SVG</td><td>d3</td></tr>
+                                        <tr><td>Vega</td><td>both</td><td></td></tr>
+                                    </table>
+                                </td>
+                                <td style="width:100%;vertical-align: middle;">
+                                    <div class="main" optionKey="charts" style="height:500px;"></div>
+                                </td>
+                            </tr>
+                        </table>
+                </section>
+                
+                <section>
+                    <h4>SVG vs Canvas</h4>
+                    <div>
+                        <div>
+                            <div style="width:50%;float:left;">
+                                <small><strong>矢量</strong>图像　<strong>保留</strong>模式</small>
+                            </div>
+                            <div style="width:50%;float:right;">
+                                <small><strong>光栅</strong>图像　 <strong>即时</strong>模式</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="./img/svc1.png" width="100%" style="border-width:0"/>
+                    </div>
+                </section>
+                
+                <section>
+                    <h4>SVG vs Canvas · 可编程性</h4>
+                    <div>
+                        <div style="width:50%;float:left;">
+                            <small>SVG 基于 <strong>dom</strong>，使用 css，无数 js 类库</small>
+                        </div>
+                        <div style="width:50%;float:right;">
+                            <small>Canvas 是个<strong>黑盒子</strong>，刀耕火种的绘图命令</small>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="./img/svc2.png" width="100%" style="border-width:0"/>
+                    </div>
+                </section>
+                
+                <section>
+                    <h4>SVG vs Canvas · 可交互性</h4>
+                    <div>
+                        <div style="width:50%;float:left;">
+                            <small>SVG 基于 <strong>dom</strong>，与生俱来的<strong>事件模型</strong></small>
+                        </div>
+                        <div style="width:50%;float:right;">
+                            <small>想多了吧？它自己都已经<strong>忘记</strong>画了什么！</small>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="./img/svc3.png" width="100%" style="border-width:0"/>
+                    </div>
+                </section>
+                
+                <section>
+                    <p>
+                        <small><strong>可编程性</strong>差异回答了为什么绝大多数的图表都是基于 SVG 实现的！</small><br/>
+                        <small><strong>可交互性</strong>差异回答了为什么绝大多数基于 Canvas 的图表都是无交互的！</small>
+                    </p>
+                    <div class="fragment" style="text-align:right;">
+                        <hr/>为什么我们技术选型用的是 <strong style="color:#9acd32">Canvas</strong> ?
+                    </div>
+                </section>
+                
+                <section>
+                    <h4>SVG vs Canvas · 性能</h4>
+                    <p>
+                        <small>SVG 基于 <strong>dom</strong>，保留模式下随着图形对象数目的增多，SVG的渲染以及宿主环境的性能都将急剧下降。</small><br/>
+                        <small>即时模式下的Canvas<strong>绘后即忘</strong>使得它对于图形对象数量的增加并不敏感。</small>
+                    </p>
+                    <div class="main" optionKey="svcp"></div>
+                </section>
+                
+                <section>
+                    <h4>SVG vs Canvas · 像素处理能力</h4>
+                    <p>
+                        <small>SVG 是<strong>矢量图形</strong>，可以无失真的放大缩小图形元素，但完全没有像素处理能力。</small><br/>
+                        <small>Canvas 是<strong>光栅图形</strong>，与生俱来的擅长如滤镜、筛选、光影变换，粒子效果等等。</small>
+                    </p>
+                    <div>
+                        <img src="./img/effect.png" width="100%" style="border-width:0;background-color:rgba(0,0,0,0);box-shadow: none;"/>
+                    </div>
+                </section>
+                
+                <section>
+                    <section>
+                        <h4>SVG vs Canvas · 3D（WebGL）</h4>
+                        <p>
+                            <small>Canvas还拥有强大的3D能力，这让Canvas拥有比SVG更广阔的舞台和想象空间。</small>
+                        </p>
+                        <div>
+                            <img src="./img/3d1.png" width="100%" style="border-width:0;"/>
+                        </div>
+                    </section>
+                    <section>
+                        <h4>SVG vs Canvas · 3D（WebGL）</h4>
+                        <p>
+                            <small>Canvas还拥有强大的3D能力，这让Canvas拥有比SVG更广阔的舞台和想象空间。</small>
+                        </p>
+                        <div>
+                            <img src="./img/3d2.png" width="100%" style="border-width:0;"/>
+                        </div>
+                    </section>
+                    <section>
+                        <h4>SVG vs Canvas · 3D（WebGL）</h4>
+                        <p>
+                            <small>Canvas还拥有强大的3D能力，这让Canvas拥有比SVG更广阔的舞台和想象空间。</small>
+                        </p>
+                        <div>
+                            <img src="./img/3d3.png" width="100%" style="border-width:0;"/>
+                        </div>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h4>SVG和Canvas的技术选型是个艰难的选择</h4>
+                        <hr/>
+                        <p style="text-align:right !important;">
+                            <small class="fragment" >SVG 的<strong>可编程性</strong>远高于canvas，技术难度和实现代价更低。</small><br/>
+                            <small class="fragment" >业界成功的商业图表库清一色选择基于SVG实现！</small><br/>
+                            <small class="fragment" ><strong>可交互性</strong>缺失的Canvas是条前途未卜的崎岖道路，我们可能要为此付出更多的代价。</small><br/>
+                            <small class="fragment" >但，也许，可能 ... 这是通往更广阔的空间的道路！</small>
+                        </p>
+                    </section>
+                    
+                    <section>
+                        <p>
+                            <small>幸运的是，我做这个决定的时候毫无包袱</small>
+                        </p>
+                        <hr/>
+                        <h4 class="fragment" style="text-align:right !important;">年轻不都爱冒险吗？是吧！</h4>
+                    </section>
+                </section>
+                
+                
+                <section>
+                    <div class="main" optionKey="zrender" style="background-color: transparent;height:600px;"></div>
+                </section>
+                
+                <section>
+                    <section>
+                        <h1 style="margin:-10px 0 0 0">
+                            <img src="./img/echarts_logo.png" style="margin:0;background:rgba(0,0,0,0);border-width: 0;box-shadow: 0 0 0px rgba(0, 0, 0, 0);"/>
+                        </h1>
+                        <h5>大数据时代，重新定义数据图表的时候到了！</h5><br/>
+                        <div>
+                            <small>开源来自百度商业前端数据可视化团队</small><br/>
+                            <small>Created by <a href="http://weibo.com/kenerlinfeng" target="_blank">@Kener-林峰</a></small>
+                        </div>
+                    </section>
+                    <section>
+                        <h1 style="margin:-10px 0 0 0">
+                            <img src="./img/echarts-logo.png" style="margin:0;background:rgba(0,0,0,0);border-width: 0;box-shadow: 0 0 0px rgba(0, 0, 0, 0);"/>
+                        </h1>
+                        <div>
+                            <br/>
+                            <h5>小鲸鱼，大数据，ECharts助你遨游数据的海洋！</h5>
+                            <small>开源来自百度商业前端数据可视化团队</small><br/>
+                        </div>
+                    </section>
+                </section>
+                
+                <section>
+                    <h4>ZRender · Architecture</h4>
+                    <p>
+                        <small>一个轻量级的 Canvas 类库，MVC 封装，数据驱动，提供类 dom 事件模型，让 Canvas 绘图大不同！</small>
+                    </p>
+                    <div>
+                        <img src="./img/zrArchitecture.png" width="100%" style="border-width:0"/>
+                    </div>
+                </section>
+                
+                <section>
+                   <section>
+                        <h4>ZRender · 可编程性</h4>
+                        <p>
+                            <small>改变 Canvas 这种刀耕火种式的使用原始绘图命令去绘制图形的编程方式。</small>
+                        </p>
+                        <div>
+                            <div style="width:50%;float:left;">
+                                <small><strong>Canvas API</strong></small>
+                            </div>
+                            <div style="width:50%;float:right;">
+                                <small><strong>图形对象封装</strong></small>
+                            </div>
+                        </div>
+                        <div>
+                            <img src="./img/zrCode.png" width="100%" style="border-width:0"/>
+                        </div>
+                        <div class="fragment">
+                            <small>“用你再熟悉不过的 dom 模型去操作 Canvas 里的图形元素是件很 cool 的事情~”</small>
+                            <small>css style 的样式定义，层叠，MVC 框架，promise 式的动画接口，一切都是前端工程师熟悉的方式。</small>
+                        </div>
+                    </section>
+                    
+                    <section>
+                        <h4>ZRender · 可编程性</h4>
+                        <p>
+                            <small>实现了19种常见图形对象，支持继承，扩展，甚至运行时的动态扩展和 Mixin。</small><br/>
+                            <small class="fragment">用远小于 dom 对象的内存开销，让 Canvas 从即时模式“转变”为<strong>保留模式</strong>。</small>
+                        </p>
+                        <div>
+                            <a href="http://localhost/zrender/doc/example/demo.html" target="_blank">
+                                <img src="./img/zrShape.png" width="100%" style="border-width:0"/>
+                            </a>
+                        </div>
+                    </section>
+                    
+                    <section>
+                        <h4>ZRender · 可编程性</h4>
+                        <p>
+                            <small>z &amp; zlevel，视觉上的上下层叠，Dirty Flag分层刷新。</small><br/>
+                            <small>z &amp; a ~ z，svg渲染，这意味着什么？</small>
+                        </p>
+                        <div>
+                            <img src="./img/zrZ.png" width="100%" style="border-width:0"/>
+                        </div>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h4>ZRender · 可交互性</h4>
+                        <div class="main" optionKey="zrender" style="background-color: transparent;height:500px;"></div>
+                    </section>
+                    
+                   <section>
+                        <h4>ZRender · 可交互性</h4>
+                        <p>
+                            <small>让 Canvas 绘制的图形可被捕获，具备交互能力。</small>
+                        </p>
+                        <table class="fragment table table-striped table-bordered table-hover" style="font-size: 0.8em;">
+                        <thead>
+                            <tr><th>方法</th><th>原理</th><th>优点</th><th>不足</th><th>excanvas<br/>是否支持</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>getImageData</td><td>通过像素拾取判断着色从而判断cover</td><td>原生支持<br/>万能</td><td>重绘路径</td><td class='error'>No</td></tr>
+                                <tr><td>Native isPointInPath</td><td>判断点是否被闭合路径包含的原生方法</td><td>原生支持</td><td>重绘路径<br/>不支持非闭合路径</td><td class='error'>No</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="fragment" style="margin-top:40px;"><small>为了支持万恶的 IE8-，我们硬着头皮的自己写个补丁。<strong class="fragment">结果意外的发现，快，太快了！</strong></small></p>
+                        <table class="fragment table table-striped table-bordered table-hover" style="font-size: 0.8em;">
+                        <thead>
+                            <tr><th>方法</th><th>原理</th><th>优点</th><th>不足</th><th>excanvas<br/>是否支持</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>JS isPointInPath</td><td>根据非零环绕规则用js实现isPointInPath</td><td>不需重绘路径<br/>快</td><td>算法复杂</td><td>Yes</td></tr>
+                                <tr><td>Math method</td><td>针对图形定义数学计算判断点与图形关系</td><td>不需重绘路径<br/>很快</td><td>仅对规则图形有效</td><td>Yes</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    
+                    <section>
+                        <h4>ZRender · 可交互性</h4>
+                        <p>
+                            <small>让 Canvas 绘制的图形可被捕获，具备交互能力</small>
+                        </p>
+                        <div class="main" optionKey="isCover"></div>
+                    </section>
+                </section>
+                
+                <section>
+                    <h4>ECharts</h4>
+                    <p>
+                        <small>基于ZRender构建可交互，可高度个性化定制的数据可视化图表ECharts。</small>
+                    </p>
+                    <img src="../asset/img/architecture.png" style="width:100%;max-width:100%;margin:0;background-color:#fff;">
+                </section>
+                
+                <section>
+                    <section>
+                        <h4>ECharts VS Highcharts (1)</h4>
+                        <p>
+                            <small>业界有无数js图表库，不乏优秀的代表，如chartjs，FusionCharts，amCharts，flot，RGraph，jqPlot，gRaphaël等等。有的是免费甚至开源的，有的则是商业的，百度一下就能找到他们。</small>
+                        </p>
+                        <p>
+                            <small>无法跟他们一一对比，在这选择了知名度很高的<a href="http://www.highcharts.com/" target="_blank">Highcharts</a>，一个优秀，成熟的商业图表库。
+                                <br/>先看看ECharts和Highcharts都支持哪些图表类型？
+                            </small>
+                        </p>    
+                        <table class="fragment table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr><th>#</th><th>ECharts</th><th>Highcharts</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>柱状图（条形图）</td><td>Yes</td><td>Yes</td></tr>
+                                <tr><td>折线图（面积图）</td><td>Yes</td><td>Yes</td></tr>
+                                <tr><td>饼图（环形图）</td><td>Yes</td><td>Yes</td></tr>
+                                <tr><td>散点图（气泡图）</td><td>Yes</td><td>Yes</td></tr>
+                                <tr><td>雷达图</td><td>Yes</td><td>Yes</td></tr>
+                                <tr><td>K线图</td><td>Yes</td><td class='success'>Highstock</td></tr>
+                                <tr><td>力导布局图</td><td>Yes</td><td class='error'>No</td></tr>
+                                <tr><td>和弦图</td><td>Yes</td><td class='error'>No</td></tr>
+                                <tr><td>地图</td><td>Yes</td><td class='success'>Highmap</td></tr>
+                                <tr><td>特色图表（如仪表盘）</td><td>Yes</td><td>Yes</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+                
+                    <section>
+                        <h4>ECharts VS Highcharts (2)</h4>
+                        <p>
+                            <small>再来看看ECharts和Highcharts都有哪些特性？</small>
+                        </p>    
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr><th>#</th><th>ECharts</th><th>Highcharts</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>拖拽重计算</td><td>Yes</td><td class='error'>No</td></tr>
+                                <tr><td>数据视图</td><td>Yes</td><td class='error'>No</td></tr>
+                                <tr><td>动态类型切换</td><td>Yes</td><td class='error'>No</td></tr>
+                                <tr><td>值域漫游</td><td>Yes</td><td class='error'>No</td></tr>
+                                <tr><td>大规模散点</td><td>Yes</td><td class='error'>No</td></tr>
+                                <tr><td>炫光特效</td><td>Yes</td><td class='error'>No</td></tr>
+                                <tr><td>多图联动</td><td>Yes</td><td class='error'>No</td></tr>
+                                <tr><td>数据区域缩放</td><td>Yes</td><td>Yes</td></tr>
+                                <tr><td>图例开关</td><td>Yes</td><td>Yes</td></tr>
+                                <tr><td>多维度堆积</td><td>Yes</td><td>Yes</td></tr>
+                                <tr><td>混搭</td><td>Yes</td><td>Yes</td></tr>
+                                <tr><td>图片导出</td><td>Yes</td><td>Yes</td></tr>
+                                <tr>
+                                    <td><br/>License &amp; Pricing</td>
+                                    <td class='success'>Free<br/><a href="https://github.com/ecomfe/echarts/blob/master/LICENSE.txt" target="_blank">Baidu BSD</a></td>
+                                    <td class='success'>Non-commercial free under CC3.0<br/><br/>Commercial licenses $90~$3600</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h4>ECharts</h4>
+                        <p>
+                            <small>这是<a href="http://ecomfe.github.io/echarts/" target="_blank">ECharts</a>，支持拖拽重计算，数据视图，动态类型切换，数据区域缩放，图例开关，混搭：<br/></small>
+                        </p>
+                        <div class="main" optionKey="mix1"></div>
+                    </section>
+                    
+                    <section>
+                        <h4>ECharts</h4>
+                        <p>
+                            <small>这是<a href="http://ecomfe.github.io/echarts/" target="_blank">ECharts</a>，我们提供了多图联动的能力（connect），能做的可不仅仅是鼠标划过的详情显示。</small>
+                        </p>
+                        <div class="main" optionKey="multiCharts" style='height:210px;padding-bottom:0;border-bottom-width:0'></div>
+                        <div id="mcMain2" class="main2" style='height:140px;padding:1px 10px;border-width:0 1px;'></div>
+                        <div id="mcMain3" class="main2" style='height:100px;padding-top:1px;border-top-width:0'></div>
+                    </section>
+                    
+                    <section>
+                        <h4>ECharts</h4>
+                        <p>
+                            <small>这是<a href="http://ecomfe.github.io/echarts/" target="_blank">ECharts</a>，支持拖值域漫游，炫光特效：<br/></small>
+                        </p>
+                        <div class="main" style="height:500px;background-color:transparent" optionKey="effect2"></div>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h4>ECharts · 数据驱动</h4>
+                        <p>
+                            <small>驱动图形实现</small><br/>
+                            <small>(ECharts) series data &lt; charts &lt; shape data (ZRender)</small>
+                        </p>
+                        <div>
+                            <div class="fragment" style="width:29%;float:left;">
+                                <img src="./img/ecdr1.png" width="100%" style="box-shadow:none;height:440px;"/>
+                            </div>
+                            <div class="fragment" style="width:32%;height:460px;float:left;">
+                                <img src="./img/ecdr2.png" width="100%" style="box-shadow:none;height:440px;"/>
+                            </div>
+                            <div class="fragment" style="width:38%;height:460px;float:left;">
+                                <img src="./img/ecdr3.png" width="100%" style="box-shadow:none;height:440px;"/>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section>
+                        <h4>ECharts · 数据驱动</h4>
+                        <p>
+                            <small>驱动控件集成与交互实现</small>
+                        </p>
+                        <div style="position:relative;">
+                            <div class="fragment">
+                                <img src="./img/ecdi1.png" width="100%" style="box-shadow:none;"/>
+                            </div>
+                            <div class="fragment" style="position:absolute;top:0;">
+                                <img src="./img/ecdi2.png" width="100%" style="box-shadow:none;"/>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+                
+                <section>
+                    <h4>ECharts · 基于消息的耦合剥离</h4>
+                    <div style="position:relative;">
+                        <div class="fragment">
+                            <img src="./img/ecdc1.png" width="100%" style="box-shadow:none;"/>
+                        </div>
+                        <div class="fragment" style="position:absolute;top:0;">
+                            <img src="./img/ecdc2.png" width="100%" style="box-shadow:none;"/>
+                        </div>
+                        <div class="fragment" style="position:absolute;top:0;">
+                            <img src="./img/ecdc3.png" width="100%" style="box-shadow:none;"/>
+                        </div>
+                        <div class="fragment" style="position:absolute;top:0;">
+                            <img src="./img/ecdc4.png" width="100%" style="box-shadow:none;"/>
+                        </div>
+                        <div class="fragment" style="position:absolute;top:0;">
+                            <img src="./img/ecdc5.png" width="100%" style="box-shadow:none;"/>
+                        </div>
+                    </div>
+                </section>
+                
+                <section>
+                    <section>
+                        <h4>ECharts · 多级控制</h4>
+                        <p>
+                            <small><a href="http://ecomfe.github.io/echarts/" target="_blank">ECharts</a>拥有超过<strong>600</strong>项的配置选项，配合<strong>多级控制</strong>让它具备了高度个性化能力。 </small>
+                        </p>
+                        <div style="position:relative;">
+                            <img src="./img/multiControl.jpg" style="width:100%;max-width:100%;margin:0;">
+                            <div class="fragment" style="position:absolute;top:0;">
+                                <img src="../asset/img/creativity.jpg" style="width:100%;max-width:100%;margin:0;">
+                            </div>
+                        </div>
+                    </section>
+                
+                    <section>
+                        <h4>ECharts · 高度个性化定制</h4>
+                        <img src="./img/haha.gif" style="width:100%;max-width:100%;margin:0;">
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h4>项目应用-百度</h4>
+                        <div>
+                            <img src="./img/usage1.png" width="100%"/>
+                        </div>
+                    </section>
+                    <section>
+                        <h4>项目应用-外部</h4>
+                        <div>
+                            <img src="./img/usage2.png" width="100%"/>
+                        </div>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h4>期待你的关注</h4>
+                        <div class="main" optionKey="star"></div>
+                    </section>
+                </section>
+                
+                <section>
+                    <h1>THE END</h1>
+                    <h5>Thank you</h5>
+                    <br/>
+                    <div>
+                        <small>Created by <a href="http://weibo.com/kenerlinfeng" target="_blank">@Kener-林峰</a></small>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                height: '100%',
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    //{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                    // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+                    // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/idv.js"></script>
+        <script src="js/timelineOption.js"></script>
+        <script src="js/zrenderLogo.js"></script>
+    </body>
+</html>
