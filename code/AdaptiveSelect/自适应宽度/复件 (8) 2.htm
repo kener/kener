@@ -1,0 +1,424 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style>
+body,table,input,span,select,p,a{
+	font-size:12px;
+	font-family: Tahoma, SimSun, sans-serif;
+}
+.awSelect {
+	display:inline-block;
+	*display:inline;
+	position:relative;
+	zoom:1;
+	border:1px solid #7f9db9;	
+	vertical-align:top;
+}
+.awSelect .inputText {
+	zoom:1;
+	height:16px;
+	line-height:16px;
+	margin:1px 2px;
+	padding:0;
+	border:0;
+	cursor:pointer;
+	vertical-align:top;
+	background:#fff;
+	color:#000;
+}
+.awSelect input.inputTextFocus {
+	zoom:1;
+	height:16px;
+	line-height:16px;
+	margin:1px 2px;
+	padding:0;
+	border:0;
+	cursor:pointer;
+	vertical-align:top;
+	background-color:#49e;	
+	color:#fff;
+}
+.awSelect .awArrow {
+	display:inline-block;	
+	*display: inline;
+	zoom:1;
+	width:15px;
+	height:16px;
+	margin:1px;
+	padding:0;
+	border:0;
+	position:relative;
+	background:#fff url('arrow.gif') no-repeat center center;
+}
+.awSelect .awArrow:hover {
+	background:#fff url('arrow_over.gif') no-repeat center center;
+}
+.optGroup p{margin:0;}
+iframe.optIframe{
+	position:absolute;
+	z-index:-1;
+	top:19px;
+	left:-1px;
+	scrolling:no;
+	border:0;
+}
+div.optGroup{
+	position:absolute;
+	z-index:666;
+	left:-1px;
+	top:19px;
+	background:white;
+	border: 1px solid #7f9db9;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+.optGroup a,.optGroup a:visited{
+	text-decoration:none;
+	display:block;
+	white-space: nowrap;
+	height:18px;
+	line-height:18px;
+	color:#000;
+	cursor:default;
+}
+.optGroup a.selected,.optGroup a:visited.selected,.optGroup a:focus{
+	color: #fff;
+	text-decoration:none;
+	background:#49e;
+}
+</style>
+<script>
+/**
+ * 自适应宽度Select类。
+ * 参数列表：
+ *   MonitorInterval：监控时间间隔；
+ *   MaxRow：下拉列表最大显示条数；
+ * @author linzhifeng@baidu.com
+ */
+function AutoWidthSelect(MonitorInterval,MaxRow)
+{
+	//私有成员变量
+	this.awSelectValue = new Array();
+	this.lineHeight=18;							//默认行高
+	this.focusSelectNum=-1;						//当前选中的Select,-1未选中
+	this.focusLineNum=0;						//当前选中的项
+	this.tMonitor=0;							//轮询Timer控制器
+	this.isInside=0;							//鼠标是否在控件内
+	//外部配置参数
+	this.awMonitorInterval=MonitorInterval?MonitorInterval:500;			//间隔时间
+	this.awMaxHeight=(MaxRow?MaxRow:10)*this.lineHeight;				//默认下拉选项最大高度
+	//选项：点击，显示下拉选项
+	this.onClick=function(e){
+		var id=e.srcElement==null?e:e.srcElement.id.substring(12,e.srcElement.id.length);
+		if(id==this.focusSelectNum)
+		{
+			hideOptions();					//删除自己
+			var mySelectText = document.getElementById("awSelectText"+id);
+			mySelectText.className = "inputTextFocus";
+			mySelectText.focus();		
+		}
+		else{
+			hideOptions();					//删除其他
+			showOptions(id);
+		}
+	};
+	//选项：键盘输入，上下
+	this.onKeyDown=function(e)
+	{		
+		var keynum=e.keyCode;		
+		if (keynum != 40 && keynum != 38) {
+			if (keynum==13) {//回车											
+				hideOptions();
+				document.getElementById(e.srcElement.id).className = "inputTextFocus";	
+			}
+			return;
+		}
+		//改变原生select的值和模拟select的选项的显示
+		var selectNum=e.srcElement.id.substring(12,e.srcElement.id.length);					//原生select的id
+		var optGroup = document.getElementById("optGroup");
+		var linkNum=(optGroup==null?selects[selectNum].selectedIndex:this.focusLineNum);	//定位当前选项
+		var mySelectText = document.getElementById(e.srcElement.id);						//模拟的select；
+		var optLinks;	
+		switch (keynum){
+			case 40://Down
+				if (linkNum < selects[selectNum].length-1) {
+					linkNum++;
+					this.focusLineNum++;					
+					selects[selectNum].options[linkNum - 1].selected = "";					
+				}
+				if (optGroup != null) {
+					optLinks= optGroup.getElementsByTagName("a");
+					optGroup.scrollTop+=(linkNum+1)*this.lineHeight>(this.awMaxHeight+optGroup.scrollTop)?this.lineHeight:0;					
+					optLinks[linkNum - 1].className = "";
+					optLinks[linkNum].className = "selected";
+				}				
+				break;
+			case 38://Up
+				if (linkNum > 0) {
+					linkNum--;
+					this.focusLineNum--;
+					selects[selectNum].options[linkNum + 1].selected = "";
+				}
+				if (optGroup != null) {
+					optLinks= optGroup.getElementsByTagName("a");
+					optGroup.scrollTop-=linkNum*this.lineHeight<optGroup.scrollTop?this.lineHeight:0;
+					optLinks[linkNum + 1].className = "";
+					optLinks[linkNum].className = "selected";
+				}	
+				break;
+			default:
+			    return;
+		}
+		selects[selectNum].options[linkNum].selected = "selected";
+		this.awSelectValue[selectNum]=selects[selectNum].options[linkNum].text;
+		mySelectText.value = this.awSelectValue[selectNum];
+	}
+	//选项：鼠标移动，改变样式
+	this.onMouseOver=function(e){
+		var id=e.srcElement.id.replace("awSelectText","awArrow");
+		document.getElementById(id).style.background="#fff url('arrow_over.gif') no-repeat center center";
+		this.isInside=1;
+	};	
+	this.onMouseOut=function(e){
+		var id=e.srcElement.id.replace("awSelectText","awArrow");
+		document.getElementById(id).style.background="#fff url('arrow.gif') no-repeat center center";
+		this.isInside=0;
+	};	
+	//选项：失去焦点，恢复样式
+	this.onBlur=function(e){	
+		document.getElementById(e.srcElement.id).className = "inputText";
+		if (!this.isInside){
+			hideOptions();
+			this.isInside=0;
+		}		
+	}
+	//选项Group：移动鼠标，改变样式
+	this.onOptMouseOver=function(e){
+		this.isInside=1;
+	};
+	//选项Group：移出鼠标，改变位置状态位
+	this.onOptMouseOut=function(e){
+		this.isInside=0;			
+	}
+	//选项Link：移动鼠标，改变样式
+	this.onOptLinkMouseOver=function(e){
+		var ss=e.srcElement+" ";
+		var linkNum=ss.substring(ss.indexOf('(')+1,ss.indexOf(','));
+		var selectNum=ss.substring(ss.indexOf(',')+1,ss.indexOf(')'));
+		var optLinks = document.getElementById("optGroup").getElementsByTagName("a");
+		for (var k = 0; k < optLinks.length; k++) {
+			optLinks[k].className = "";
+		}
+		optLinks[linkNum].className="selected";
+		this.focusLineNum=linkNum;
+		this.isInside=1;
+	};	
+	//下拉列表:显示
+	this.showOptions=function (g) {		
+		this.focusSelectNum=g;
+		//绘制覆盖层
+		var optIframe=document.createElement('iframe');
+		optIframe.src='about:blank';	
+		optIframe.id='optIframe';
+		optIframe.className='optIframe';
+		//绘制列表层，每次触发是重绘列表以保证异步加载数据后列表的数据一致			
+		var optGroup = document.createElement('div');
+		optGroup.id = "optGroup";		
+		optGroup.className = "optGroup";
+		optGroup.attachEvent('onmouseover',function(event){aws.onOptMouseOver(event)});			//绑定列表鼠标移动响应
+		optGroup.attachEvent('onmouseout',function(event){aws.onOptMouseOut(event)});			//绑定列表鼠标移出响应
+		for(var j=0; j < selects[g].options.length; j++) {
+			var optHolder = document.createElement('p');
+			var optLink = document.createElement('a');
+			var optText = document.createTextNode(selects[g].options[j].text);
+			optLink.href = "javascript:aws.selectMe("+j+","+g+");";	           					//绑定列表鼠标点击响应
+			optLink.appendChild(optText);
+			optHolder.appendChild(optLink);
+			optGroup.appendChild(optHolder);
+			optLink.attachEvent('onmouseover',function(event){aws.onOptLinkMouseOver(event)});	//绑定列表鼠标移动响应							
+		}
+		var mySelectText = document.getElementById("awSelectText"+g);
+		mySelectText.className = "inputText";
+		mySelectText.focus();		
+		//装载进入
+		var selectArea=document.getElementById("awSelect"+g);
+		selectArea.appendChild(optIframe);
+		selectArea.appendChild(optGroup);	
+		//调整宽高和显示
+		selects[g].style.display='block';	
+		selects[g].style.width='auto';	
+		var autoWidth=selects[g].offsetWidth;													//自适应宽度	
+		selects[g].style.display='none';
+		var autoHeight=optGroup.offsetHeight;													//自适应高度	
+		var linkNum=selects[g].selectedIndex;													//原生Select选项
+		optGroup.getElementsByTagName("a")[linkNum].className='selected';						//高亮显示
+		this.focusLineNum=linkNum;
+		if (autoHeight>this.awMaxHeight){
+			optGroup.style.width=autoWidth+"px";			
+			optGroup.style.height=this.awMaxHeight+"px";
+			optIframe.style.width=autoWidth+2+"px";
+			optIframe.style.height=this.awMaxHeight+"px";
+			setTimeout("javascript:var optGroup = document.getElementById('optGroup');optGroup.scrollTop='"+
+			(linkNum*this.lineHeight-Math.floor(this.awMaxHeight/this.lineHeight/2)*this.lineHeight)+"'",10);
+		}
+		else{
+			optGroup.style.width=autoWidth-20+"px";
+			optIframe.style.width=autoWidth-18+"px";
+			optIframe.style.height=optGroup.offsetHeight+"px"
+		}
+		this.isInside=0;
+    }
+	//下拉列表:隐藏
+    this.hideOptions=function()
+	{
+		this.focusSelectNum=-1;
+		var optGroup = document.getElementById("optGroup");
+		var optIframe = document.getElementById("optIframe");
+		if (optGroup!=null){
+            optGroup.parentNode.removeChild(optGroup);
+			optIframe.parentNode.removeChild(optIframe);
+		}		
+	}
+	//下拉列表：选中第selectNum个awSelect的第linkNum个下拉选项
+	this.selectMe=function (linkNum,selectNum) {	
+		hideOptions();
+		for(var k = 0; k < selects[selectNum].options.length; k++) {
+			if(k==linkNum) {
+				selects[selectNum].options[k].selected = "selected";
+			}
+			else {
+				selects[selectNum].options[k].selected = "";
+			}
+		}
+		var mySelectText = document.getElementById("awSelectText"+selectNum);
+		this.awSelectValue[selectNum]=selects[selectNum].options[linkNum].text;
+		mySelectText.value=this.awSelectValue[selectNum];
+		mySelectText.className = "inputTextFocus";
+		mySelectText.focus();
+    }
+	//监控被替换的select状态
+	this.startMonitor=function(){
+		var mySelectText;
+		var SelectTextValue;
+		for (var i=0;i<selects.length;i++){		    
+			SelectTextValue=selects[i].options[selects[i].selectedIndex].text;
+			if(this.awSelectValue[i]!=SelectTextValue)	{
+				mySelectText = document.getElementById("awSelectText"+i);
+				mySelectText.value=SelectTextValue;
+			}
+		}
+		this.tMonitor=setTimeout("startMonitor()",this.awMonitorInterval);
+	}
+	this.stopMonitor=function()	{
+		clearTimeout(this.tMonitor);
+	}	
+	return this;
+}
+function replaceSelects(SelectorClassName,MonitorTime,MaxRow) {
+	var ua = navigator.userAgent.toLowerCase();
+    if (!ua.match(/msie ([\d.]+)/)) return;	//非IE浏览器直接返回
+	aws=AutoWidthSelect(MonitorTime,MaxRow);
+	//alert(MonitorTime+" "+MaxRow);
+    selects = document.getElementsByName(SelectorClassName);	
+    for(var i=0; i < selects.length; i++) {
+		//模仿顶部选择框
+		var selectArea = document.createElement('span');
+		var textInput = document.createElement('input');
+		var button = document.createElement('a');
+		selectArea.id = "awSelect"+i;
+		selectArea.className = "awSelect";
+		textInput.type = "text";
+		textInput.id = "awSelectText"+i;
+		textInput.className = "inputText";
+		textInput.readOnly='true';
+		textInput.style.width="50px";													//固定宽度
+		textInput.attachEvent('onclick',function(event){aws.onClick(event)});			//绑定表项鼠标点击响应
+		textInput.attachEvent('onmouseover',function(event){aws.onMouseOver(event)});	//绑定表项鼠标移进响应
+		textInput.attachEvent('onmouseout',function(event){aws.onMouseOut(event)});		//绑定表项鼠标移出响应
+		textInput.attachEvent('onblur',function(event){aws.onBlur(event)});				//绑定表项焦点离开响应
+		textInput.attachEvent('onkeydown',function(event){aws.onKeyDown(event)});		//绑定表项键盘按下响应
+		button.id='awArrow'+i;
+		button.className = "awArrow";
+		button.href="javascript:aws.onClick("+i+");aws.onOptMouseOver();";
+		button.hideFocus='true';
+		button.attachEvent('onmouseover',function(event){aws.onMouseOver(event)});		//绑定表项鼠标移进响应
+		button.attachEvent('onmouseout',function(event){aws.onMouseOut(event)});		//绑定表项鼠标移出响应
+		selectArea.appendChild(textInput);
+		selectArea.appendChild(button);		
+        selects[i].style.display='none';		
+		selects[i].parentNode.insertBefore(selectArea, selects[i]);		
+	}
+	aws.startMonitor();
+}
+window.onload = function(){
+	replaceSelects("awSelect",500,5)
+};
+</script>
+</head>
+<body>
+<div style="padding:100px 50px;">
+</div>
+<div>
+统计对象范围:
+<select name="awSelect" class="setWidth">
+  <option value="1">1</option>
+  <option value="2">222222222222</option>
+  <option value="3">3333</option>
+   <option value="3">3333</option>
+</select> 
+<select name="awSelect" class="setWidth">
+  <option value="14">1</option>
+  <option value="15">2</option>
+  <option value="16">33366666666666666666</option>
+  <option value="5a">4444445</option>
+  <option value="6sd">5555666666666666</option>
+  <option value="4a">66666444</option>
+  <option value="5asdf">77775</option>
+  <option value="6aa">8888866666666666666666</option>
+  <option value="4g">999999444</option>
+  <option value="5g">10</option>
+  <option value="6fh">111111166666666666666666</option>
+  <option value="4fgh">12121212444</option>
+  <option value="5rt">131313135</option>
+  <option value="6sdfg">14146666666666666</option>
+</select> 
+<select name="">
+  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+  <option value="4">444</option>  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+  <option value="4">444</option>  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+  <option value="4">444</option>  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+  <option value="4">444</option>  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+  <option value="4">444</option>  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+  <option value="4">444</option>  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+  <option value="4">444</option>  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+  <option value="4">444</option>
+</select> 
+<select name="awSelect"  style='width:100px;'>
+  <option value="7">1234567890123456789aaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbc</option>
+  <option value="8">8888888</option>
+  <option value="9">9</option>
+</select> 
+</div>
+<p><select><option value="7">1234567890123456789aaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbc</option></select> </p>
+<p><select><option value="7">1234567890123456789aaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbc</option></select> </p>
+<p><select><option value="7">1234567890123456789aaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbc</option></select> </p>
+<p><select><option value="7">1234567890123456789aaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbc</option></select> </p>
+<p><select><option value="7">1234567890123456789aaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbc</option></select> </p>
+</body>
+</html>

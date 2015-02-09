@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<script type='text/javascript' src='core.js'></script>	
+	<script type='text/javascript' src='ui/AdaptiveSelect_v1.0.js'></script>	
+	<link type="text/css" href="css/global.css" rel="stylesheet" />
+	<title>Adaptive Select v1.0(online)</title>
+</head>
+<body>
+	<p style="margin:50px 0 0 10px;">Adaptive Select v1.0 (online搜索词报告)：</p>
+	<table cellspacing='10' style='table-layout:fixed;'>
+		<tr>
+			<th style='width:400px;text-align:left;border-bottom:2px solid blue'>类型说明</th>
+			<th style='width:300px;text-align:left;border-bottom:2px solid blue'>事例</th>
+		</tr>
+		<tr>
+			<td><strong>原生Select (无定宽)：</strong><div>显示框宽度由下拉选项中最宽项决定</div></td>
+			<td><select><option value="14">1</option><option value="15">2</option><option value="16">33366666666666666666</option><option value="5a">4444445</option><option value="6sd">5555666666666666</option><option value="4a">66666444</option><option value="5asdf">77775</option><option value="6aa">8888866666666666666666</option><option value="4g">999999444</option><option value="5g">10</option><option value="6fh">111111166666666666666666</option><option value="4fgh">12121212444</option><option value="5rt">131313135</option><option value="6sdfg">14146666666666666</option></select></td>	
+		</tr>
+		<tr>
+			<td><strong>原生Select (定宽)：</strong><div>显示框定宽后，如果下拉选项长度大于显示框宽度时，IE6/7/8下select的下拉选项都无法完整</div></td>
+			<td><select style='width:125px;'><option value="14">1</option><option value="15">2</option><option value="16">33366666666666666666</option><option value="5a">4444445</option><option value="6sd">5555666666666666</option><option value="4a">66666444</option><option value="5asdf">77775</option><option value="6aa">8888866666666666666666</option><option value="4g">999999444</option><option value="5g">10</option><option value="6fh">111111166666666666666666</option><option value="4fgh">12121212444</option><option value="5rt">131313135</option><option value="6sdfg">14146666666666666</option></select></td>
+		</tr>
+		<tr>
+			<td><strong>Adaptive Select：</strong><div>自适应下拉框，不改变原有html代码及JS业务逻辑，通过隐藏原select并用input和div在原位置替换并模拟select行为，实现显示框定宽下完整显示下拉选项的功能。</div></td>
+			<td>
+				<select id="reginSelect"><option value="14">1</option><option value="15">2</option><option value="16">33366666666666666666</option><option value="5a">4444445</option><option value="6sd">5555666666666666</option><option value="4a">66666444</option><option value="5asdf">77775</option><option value="6aa">8888866666666666666666</option><option value="4g">999999444</option><option value="5g">10</option><option value="6fh">111111166666666666666666</option><option value="4fgh">12121212444</option><option value="5rt">131313135</option><option value="6sdfg">14146666666666666</option></select>
+				<p><select name="awSelect"><option value="7">- - 检查是否能遮挡原生Select - -</option></select></p>
+			</td>
+		</tr>
+	</table>
+
+	<script type='text/javascript'>
+		//原有代码里已经实例化SelectBox对象了
+		window.rs1 = new SelectBox("reginSelect");
+		
+		//唯一需要添加的代码
+		new AdaptiveSelect(rs1,10,123,300);		//对象，下拉列最大条数，定宽，监控时间
+	</script>		
+</body>
+</html>

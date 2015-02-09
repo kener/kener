@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style>
+body,table,input,span,select,p,a{
+	font-size:12px;
+	font-family: Tahoma, SimSun, sans-serif;
+}
+.awSelect {
+	display:inline-block;
+	*display:inline;
+	position:relative;
+	zoom:1;
+	border:1px solid #7f9db9;	
+	vertical-align:top;
+}
+.awSelect .inputText {
+	zoom:1;
+	height:16px;
+	*height:15px;
+	line-height:16px;
+	margin:1px 2px;
+	padding:0;
+	border:0;
+	cursor:pointer;
+	vertical-align:top;
+}
+.awSelect .arrow {
+	display:inline-block;	
+	*display: inline;
+	zoom:1;
+	width:15px;
+	height:16px;
+	margin:1px;
+	padding:0;
+	border:0;
+	position:relative;
+	cursor:pointer;	
+	background:#fff url('arrow.gif') no-repeat center center;
+}
+.awSelect .arrow:hover {
+	background:#fff url('arrow_over.gif') no-repeat center center;
+}
+.optgroup {
+	position:absolute;
+	z-index:666;
+	left:-1px;
+	top:19px;
+	background:white;
+}
+.optgroup p{margin:0;}
+.optgroup div.optionsDiv{
+	max-height:100px;
+	border: 1px solid #7f9db9;
+	z-index:888;
+}
+.optgroup a,.optgroup a:visited{
+	text-decoration:none;
+	display:block;
+	white-space: nowrap;
+	height:18px;
+	line-height:18px;
+	color:#000;
+}
+.optgroup a:hover,.optgroup a.selected:hover{
+	color: #fff;
+	text-decoration:none;
+	background:red;
+}
+.optgroup a.selected,.optgroup a:visited.selected,.optgroup a:focus{
+	color: #fff;
+	text-decoration:none;
+	background:#49e;
+}
+</style>
+<script>
+function AutoWidthSelect()
+{
+	this.onClick=function(e){
+		var id=e.srcElement.id.substring(12,e.srcElement.id.length);
+	    showOptions(id);
+	};
+	this.onMouseOver=function(e){
+		//alert(e.srcElement.id+"onmouseover")
+	};
+	
+	this.onOptClick=function(e){
+		//alert(e.srcElement.id+"onclick");
+		var id=e.srcElement.id.substring(12,e.srcElement.id.length);
+	    showOptions(id);
+	};
+	this.onOptMouseOver=function(e){};
+	
+	this.showOptions=function (g) {
+		//模仿下拉列表
+		alert(g);
+		var optgroup = document.createElement('div');
+		optgroup.className = "optgroup";
+		optgroup.style.width=selectWidth-20+"px";						//自适应宽度
+		optgroup.style.display = "none";
+		optgroup.id = "optgroup"+i;		
+		var optionsDiv = document.createElement('div');
+		optionsDiv.className = "optionsDiv";
+		optionsDiv.id = "optionsDiv"+i;		
+		optgroup.appendChild(optionsDiv);
+		var selectArea=document.getElementById("mySelect"+g);
+		alert(selectArea);
+		selectArea.appendChild(optgroup);		
+		for(var j=0; j < selects[i].options.length; j++) {
+			var optionHolder = document.createElement('p');
+			var optionLink = document.createElement('a');
+			var optionTxt = document.createTextNode(selects[i].options[j].text);
+			optionLink.href = "javascript:aws.showOptions("+i+"); aws.selectMe('"+selects[i].id+"',"+j+","+i+");";
+			optionLink.appendChild(optionTxt);
+			optionHolder.appendChild(optionLink);
+			optionsDiv.appendChild(optionHolder);
+			if(selects[i].options[j].selected){aws.selectMe(selects[i].id,j,i);}
+		}			
+		var elem = document.getElementById("optgroup"+g);
+		elem.style.display=elem.style.display=='none'?'block':'none';
+    }
+	
+    this.selectMe=function (selectFieldId,linkNum,selectNum) {
+		optionLinks = document.getElementById("optionsDiv"+selectNum).getElementsByTagName("a");
+		for(var k = 0; k < optionLinks.length; k++) {
+			if(k==linkNum) {
+				optionLinks[k].className = "selected";
+			}
+			else {
+				optionLinks[k].className = "";
+			}
+		}
+		selectField = document.getElementById(selectFieldId);
+		for(var k = 0; k < selectField.options.length; k++) {
+			if(k==linkNum) {
+				selectField.options[k].selected = "selected";
+			}
+			else {
+				selectField.options[k].selected = "";
+			}
+		}
+		var newText = selectField.options[linkNum].text;
+		document.getElementById("mySelectText"+selectNum).value=newText;
+		//document.getElementById("mySelectText"+selectNum).style.background="blue"
+    }
+	
+	return this;
+}
+function replaceSelects() {
+	aws=AutoWidthSelect();
+    selects = document.getElementsByName('awSelect');	
+    for(var i=0; i < selects.length; i++) {
+		//模仿顶部选择框
+		var selectWidth=selects[i].offsetWidth;
+		var selectArea = document.createElement('span');
+		var textInput = document.createElement('input');
+		var button = document.createElement('a');
+		selectArea.id = "mySelect"+i;
+		selectArea.className = "awSelect";
+		textInput.type = "text";
+		textInput.className = "inputText";
+		textInput.readOnly=true;
+		textInput.style.width="50px";								//固定宽度
+		textInput.id = "mySelectText"+i;
+		textInput.value = selects[i].options[0].text;
+		textInput.attachEvent('onclick',function(event){aws.onClick(event)});
+		textInput.attachEvent('onmouseover',function(event){aws.onMouseOver(event)});
+		button.className = "arrow";
+		button.href="javascript:aws.showOptions("+i+")";
+		button.hideFocus=true;
+		selectArea.appendChild(textInput);
+		selectArea.appendChild(button);		
+        selects[i].style.display='none';		
+		selects[i].parentNode.insertBefore(selectArea, selects[i]);		
+		if (selects[i].id == "") {
+			selects[i].id = "select" + i;
+		}
+		//模仿下拉列表
+		/*
+		var optgroup = document.createElement('div');
+		optgroup.className = "optgroup";
+		optgroup.style.width=selectWidth-20+"px";						//自适应宽度
+		optgroup.style.display = "none";
+		optgroup.id = "optgroup"+i;		
+		var optionsDiv = document.createElement('div');
+		optionsDiv.className = "optionsDiv";
+		optionsDiv.id = "optionsDiv"+i;		
+		optgroup.appendChild(optionsDiv);
+		if (selects[i].id == "") {
+			selects[i].id = "select" + i;
+		}
+		selectArea.appendChild(optgroup);		
+		for(var j=0; j < selects[i].options.length; j++) {
+			var optionHolder = document.createElement('p');
+			var optionLink = document.createElement('a');
+			var optionTxt = document.createTextNode(selects[i].options[j].text);
+			optionLink.href = "javascript:aws.showOptions("+i+"); aws.selectMe('"+selects[i].id+"',"+j+","+i+");";
+			optionLink.appendChild(optionTxt);
+			optionHolder.appendChild(optionLink);
+			optionsDiv.appendChild(optionHolder);
+			if(selects[i].options[j].selected){aws.selectMe(selects[i].id,j,i);}
+		}
+		*/		
+	}
+}
+
+window.onload=replaceSelects;
+</script>
+</head>
+<body>
+<span class='awSelect' >slasdfsdf</span>
+<div style="padding:100px 50px;">
+</div>
+<div>
+统计对象范围:
+<select name="awSelect">
+  <option value="1">1</option>
+  <option value="2">222222222222</option>
+  <option value="3">3333</option>
+</select> 
+<select name="awSelect">
+  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+</select> 
+<select name="">
+  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+</select> 
+<select name="awSelect">
+  <option value="7">1234567890123456789aaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbc</option>
+  <option value="8">8888888</option>
+  <option value="9">9</option>
+</select> 
+</div>
+
+<a href="javascript:alert('df')">sdfasdf</a>
+</body>
+</html>

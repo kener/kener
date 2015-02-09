@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style>
+body,table,input,span,select,p,a{
+	font-size:12px;
+	font-family: Tahoma, SimSun, sans-serif;
+}
+.awSelect {
+	display:inline-block;
+	*display:inline;
+	position:relative;
+	zoom:1;
+	border:1px solid #7f9db9;	
+	vertical-align:top;
+}
+.awSelect .inputText {
+	zoom:1;
+	height:16px;
+	*height:15px;
+	line-height:16px;
+	margin:1px 2px;
+	padding:0;
+	border:0;
+	cursor:pointer;
+	vertical-align:top;
+}
+.awSelect .arrow {
+	display:inline-block;	
+	*display: inline;
+	zoom:1;
+	width:15px;
+	height:16px;
+	margin:1px;
+	padding:0;
+	border:0;
+	position:relative;
+	cursor:pointer;	
+	background:#fff url('arrow.gif') no-repeat center center;
+}
+.awSelect .arrow:hover {
+	background:#fff url('arrow_over.gif') no-repeat center center;
+}
+.optgroup {
+	position:absolute;
+	z-index:666;
+	left:-1px;
+	top:19px;
+	background:white;
+}
+.optgroup p{margin:0;}
+.optgroup div.optionsDiv{
+	max-height:100px;
+	border: 1px solid #7f9db9;
+	z-index:888;
+}
+.optgroup a,.optgroup a:visited{
+	text-decoration:none;
+	display:block;
+	white-space: nowrap;
+	height:18px;
+	line-height:18px;
+	color:#000;
+}
+.optgroup a:hover,.optgroup a.selected:hover{
+	color: #fff;
+	text-decoration:none;
+	background:#49e;
+}
+.optgroup a.selected,.optgroup a:visited.selected,.optgroup a:focus{
+	color: #fff;
+	text-decoration:none;
+	background:#49e;
+}
+</style>
+<script>
+function AutoWidthSelect()
+{
+	this.t=0;
+	this.state=0;
+	//选项上点击
+	this.onClick=function(e){
+		var id=e.srcElement.id.substring(12,e.srcElement.id.length);
+	    showOptions(id);
+	};
+	//选项上鼠标移动
+	this.onMouseOver=function(e){
+		//alert(e.srcElement.id+"onmouseover")
+	};	
+	//选项失去焦点
+	this.onBlur=function(e){
+		var id=e.srcElement.id.substring(12,e.srcElement.id.length);
+		var mySelectText = document.getElementById("mySelectText"+id);
+		mySelectText.style.background="#fff";
+		mySelectText.style.color="#000";		
+	}
+	this.onOptClick=function(e){
+		//alert(e.srcElement.id+"onclick");
+		var id=e.srcElement.id.substring(12,e.srcElement.id.length);
+	    showOptions(id);
+	};
+	//下拉列表上鼠标移动
+	this.onOptMouseOver=function(e){
+		var ss=e.srcElement+" ";
+		var linkNum=ss.substring(ss.indexOf('(')+1,ss.indexOf(','));
+		var optionLinks = document.getElementById("optionsDiv").getElementsByTagName("a")
+		for (var k = 0; k < optionLinks.length; k++) {
+			optionLinks[k].className = "";
+		}
+		optionLinks[linkNum].className="selected";
+	};
+	//失去焦点后删除下拉列表
+	this.onOptBlur=function(){
+		hideOptions();
+	}
+	//模仿下拉列表
+	this.showOptions=function (g) {		
+		//保证唯一性	
+		hideOptions();
+		//每次触发是重绘列表以保证异步加载数据后列表的数据一致			
+		var optgroup = document.createElement('div');
+		optgroup.className = "optgroup";
+		optgroup.id = "optgroup";	
+		selects[g].style.display='block';		
+		optgroup.style.width=selects[g].offsetWidth-20+"px";	       								//自适应宽度					
+		var optionsDiv = document.createElement('div');
+		optionsDiv.className = "optionsDiv";	
+		optionsDiv.id = "optionsDiv";
+		optgroup.appendChild(optionsDiv);
+		var selectArea=document.getElementById("mySelect"+g);
+		selectArea.appendChild(optgroup);	
+		for(var j=0; j < selects[g].options.length; j++) {
+			var optionHolder = document.createElement('p');
+			var optionLink = document.createElement('a');
+			var optionTxt = document.createTextNode(selects[g].options[j].text);
+			optionLink.href = "javascript:aws.selectMe("+j+","+g+");";	           					//绑定列表鼠标点击响应
+			optionLink.appendChild(optionTxt);
+			optionHolder.appendChild(optionLink);
+			optionsDiv.appendChild(optionHolder);
+			if(selects[g].options[j].selected){optionLink.className='selected';}
+			optionLink.attachEvent('onmouseover',function(event){aws.onOptMouseOver(event)});		//绑定列表鼠标移动响应
+		}
+		selects[g].style.display='none';	
+    }
+	//选中第selectNum个awSelect的第linkNum个下拉选项
+    this.hideOptions=function()
+	{
+		var isExist = document.getElementById("optgroup");
+		if (isExist!=null){
+			isExist.style.display='none';
+            isExist.parentNode.removeChild(isExist);
+		}
+	}
+	this.selectMe=function (linkNum,selectNum) {		
+		var optgroup = document.getElementById("optgroup");
+		optgroup.style.display='none';
+        optgroup.parentNode.removeChild(optgroup);
+		for(var k = 0; k < selects[selectNum].options.length; k++) {
+			if(k==linkNum) {
+				selects[selectNum].options[k].selected = "selected";
+			}
+			else {
+				selects[selectNum].options[k].selected = "";
+			}
+		}
+		var mySelectText = document.getElementById("mySelectText"+selectNum);
+		mySelectText.value=selects[selectNum].options[linkNum].text;
+		mySelectText.style.background="#49e";
+		mySelectText.style.color="#fff";
+		this.state=1;
+		mySelectText.focus();
+    }
+	//监控被替换的select状态
+	this.startMonitor=function(){
+		for (var i=0;i<selects.length;i++){
+		    var mySelectText = document.getElementById("mySelectText"+i);
+		    mySelectText.value=selects[i].options[selects[i].selectedIndex].text;
+		}
+		this.t=setTimeout("startMonitor()",500);
+	}
+	this.stopMonitor=function()	{
+		clearTimeout(this.t);
+	}	
+	return this;
+}
+function replaceSelects() {
+	aws=AutoWidthSelect();
+    selects = document.getElementsByName('awSelect');	
+    for(var i=0; i < selects.length; i++) {
+		//模仿顶部选择框
+		var selectArea = document.createElement('span');
+		var textInput = document.createElement('input');
+		var button = document.createElement('a');
+		selectArea.id = "mySelect"+i;
+		selectArea.className = "awSelect";
+		textInput.type = "text";
+		textInput.className = "inputText";
+		textInput.readOnly='true';
+		textInput.style.width="50px";													//固定宽度
+		textInput.id = "mySelectText"+i;
+		textInput.attachEvent('onclick',function(event){aws.onClick(event)});			//绑定表项鼠标点击响应
+		textInput.attachEvent('onmouseover',function(event){aws.onMouseOver(event)});	//绑定表项鼠标移动响应
+		textInput.attachEvent('onblur',function(event){aws.onBlur(event)});				//绑定表项鼠标离开响应
+		button.className = "arrow";
+		button.href="javascript:aws.showOptions("+i+")";
+		button.hideFocus=true;
+		selectArea.appendChild(textInput);
+		selectArea.appendChild(button);		
+        selects[i].style.display='none';		
+		selects[i].parentNode.insertBefore(selectArea, selects[i]);		
+		//模仿下拉列表	
+	}
+	aws.startMonitor();
+}
+window.onload=replaceSelects;
+</script>
+</head>
+<body>
+<span class='awSelect' >slasdfsdf</span>
+<div style="padding:100px 50px;">
+</div>
+<div>
+统计对象范围:
+<select name="awSelect">
+  <option value="1">1</option>
+  <option value="2">222222222222</option>
+  <option value="3">3333</option>
+</select> 
+<select name="awSelect">
+  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+</select> 
+<select name="">
+  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+</select> 
+<select name="awSelect">
+  <option value="7">1234567890123456789aaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbc</option>
+  <option value="8">8888888</option>
+  <option value="9">9</option>
+</select> 
+</div>
+<input type='button' value="ok" onClick="aws.stopMonitor()"></input>
+<a href="javascript:alert('df')">sdfasdf</a>
+<input value="dls" class='tryinput'></input>
+</body>
+</html>

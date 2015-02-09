@@ -1,0 +1,58 @@
+<html>
+<head>
+<style type='text/css'>
+#continer{
+	width:400px;
+	height:800px;
+	margin:10px;padding:10px;
+	border:1px solid #000;
+	background-color:#49e;
+	position:relative;
+	top:100px;
+}
+img{
+	position:absolute;
+	left:0;
+}
+#div1{
+	z-index:10;position:relative;width:100;height:18;border:1px solid blue;
+}
+#iframe1{
+	position:absolute;z-index:-1;width:100%;height:100px;
+	top:19px;left:0;scrolling:no;display:none;
+}
+#div2{
+	top:19px;position:absolute;background-color:red;display:none;
+}
+</style>
+<script type='text/jscript'>
+function show(){
+	document.getElementById('iframe1').style.display='block';
+	document.getElementById('div2').style.display='block';
+}
+function hide(){
+	document.getElementById('iframe1').style.display='none';
+	document.getElementById('div2').style.display='none';
+}
+</script>
+</head>
+<body>
+<div id='div1' onmouseover="show();" onmouseout="hide();">
+<iframe id='iframe1' frameborder="0" src="about:blank"></iframe>
+<div id='div2'>aaaaaaa<br>bbbbbbb<br>ccccccc<br>ccccccc<br>ccccccc<br>ccccccc</div>
+</div>
+<br/>
+<select style="width:200" ><option>test0<option>test1<option>test2<option>test3</select>
+<br>
+<p>
+div直接盖不住select,但是div可以盖iframe，而iframe可以盖select,所以，把一个iframe来当作div的底，这个div就可以盖住select了.
+</p>
+<div id='continer'>
+	<h3>dkflas</h3>
+	<div class="image_float"><img src="arrow.gif"/></div>
+	<p>slasdjf asld asdk fasd asldf asd fasldf asd falsdf asd flasd fasd asldf asdlfajsdf </p>
+</div>
+
+
+</body>
+</html>

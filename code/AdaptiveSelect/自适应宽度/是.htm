@@ -1,0 +1,509 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> simulate combox control - http://www.never-online.net </TITLE>
+<META NAME="Generator" CONTENT="EditPlus">
+<META NAME="Author" CONTENT="">
+<META NAME="Keywords" CONTENT="">
+<META NAME="Description" CONTENT="">
+<style>
+body, input
+{
+	font-family: verdana;
+	font-size: 9pt;
+}
+h1
+{
+	font-family: tahoma;
+	font-size: 22pt;
+	text-align: left;
+}
+pre
+{
+	font-size: 9pt;
+	font-family: verdana;
+	border: 1px solid #006600;
+	width: 400px;
+	padding: 10px;
+	background: #ffffff;
+	color: #006600;
+}
+.CtlSelect
+{
+	border: 1px solid #006600;
+	font-family: verdana;
+	height: 20px;
+	color: #006600;
+	background: #ffffff;
+	/*background:url({E5066804-650D-4757-9BA4-A92DB8817A18}0.jpg);*/
+}
+.selected
+{
+	background: #006600;
+	color: #ffffff;
+	height: 20px;
+}
+.unselected
+{
+	height: 20px;
+	color: #006600;
+	line-height: 120%;
+	border-bottom: 1px solid #006600;
+}
+.CtlSelect1
+{
+	border: 1px solid #003399;
+	font-family: verdana;
+	height: 20px;
+	color: #003399;
+	background: #ffffff;
+	/*background:url({E5066804-650D-4757-9BA4-A92DB8817A18}0.jpg);*/
+}
+.selected1
+{
+	background: #003399;
+	color: #ffffff;
+	height: 20px;
+}
+.unselected1
+{
+	height: 20px;
+	color: #003399;
+	line-height: 120%;
+	border-bottom: 1px solid #003399;
+}
+.CtlSelect2
+{
+	border: 1px solid #990000;
+	font-family: verdana;
+	height: 20px;
+	color: #990000;
+	background: #ffffff;
+	/*background:url({E5066804-650D-4757-9BA4-A92DB8817A18}0.jpg);*/
+}
+.selected2
+{
+	background: #990000;
+	color: #ffffff;
+	height: 20px;
+}
+.unselected2
+{
+	height: 20px;
+	color: #990000;
+	line-height: 120%;
+	border-bottom: 1px solid #990000;
+}
+.copyright
+{
+	margin-top: 10px;
+	font-size: 9pt;
+	text-align: center;
+	color: #333;
+	font-weight: bold;
+}
+</style>
+</HEAD>
+
+<BODY>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+//-------------------------------------------------------------
+//  @ Module: simulate select control, IE only.
+//  @ Debug in: IE 6.0
+//  @ Script by: blueDestiny, never-online
+//  @ Updated: 2006-3-22
+//  @ Version: 1.0 apha
+//  @ Email: blueDestiny [at] 126.com
+//  @ Website: http://www.never-online.net
+//  @ Please Hold this item please.
+//
+//  API
+//  @ class: simulateSelect()
+//
+//  @ object.style(ctlStyle[,selStyle][,unselStyle])
+//    ctlStyle: main control combox css class name
+//    selStyle: when mouseover or option focus css class name
+//    unselStyle: options blur's css class name
+//
+//  @ object.width=(widthPX)
+//    widthPX must be a digit number.
+//
+//  @ object.height=(heightPX)
+//    heightPX must be a digit number.
+//
+//  @ object.getValue(ctlSelID)
+//    ctlSelID is the unique select control ID
+//
+//  -------------- for the next Version ----------
+//  @ object.readOnly = (blnReadOnly)
+//    blnReadOnly must be a boolean type or a number type.
+//  @ object.addEvent(w, h)
+//    w: fire handler's event.
+//    h: handler function.
+//-------------------------------------------------------------
+
+function $(objID)
+{
+	return document.getElementById(objID);
+};
+function Offset(e)
+{
+	var t = e.offsetTop;
+	var l = e.offsetLeft;
+	var w = e.offsetWidth;
+	var h = e.offsetHeight-2;
+
+	while(e=e.offsetParent)
+	{
+		t+=e.offsetTop;
+		l+=e.offsetLeft;
+	}
+	return {
+		top : t,
+		left : l,
+		width : w,
+		height : h
+	}
+}
+//-----------------------------------------------
+function simulateSelect(handlerFunction) { with(this)
+{
+	this.IDs = [];
+	this.name = this;
+	this.value = null;
+	this.onchangeArgs = [];
+	this.onchange = handlerFunction;
+	this.height = 20;
+	this.width = null;
+	this.number = null;
+	this.ctlStyle = "CtlSelect";
+	this.selStyle = "selected";
+	this.unselStyle = "unselected";
+	this.elementPrefix = "e__";
+	this.inputPrefix = "i__";
+	this.containerPrefix = "c__";
+	this.buttonPrefix = "b__";
+	//  property for beta Version
+	//  can editable combox
+	this.readonly = true;
+	if( arguments.length>0 )
+	for(var i=0; i<arguments.length; i++)
+	onchangeArgs[i-1] = arguments[i];
+	return this;
+}};
+simulateSelect.prototype.init = function(ctlSelIDs) { with(this)
+{
+	eval(name).append(ctlSelIDs);
+	eval(name).simulates();
+}};
+
+simulateSelect.prototype.style = function() { with(this)
+{
+	ctlStyle = arguments[0];
+	selStyle = arguments[1];
+	unselStyle = arguments[2];
+}};
+//-----------------------------------------------
+simulateSelect.prototype.append = function(ctlSelIDs) { with(this)
+{
+	if( ctlSelIDs.indexOf(",")>0 )
+	{
+		var arrCtlSel = ctlSelIDs.split(",");
+		for(var i=0; i<arrCtlSel.length; i++)
+		{
+			IDs.push(arrCtlSel[i]);
+		}
+	}
+	else
+	IDs.push(ctlSelIDs);
+}};
+simulateSelect.prototype.checkupOnMouseDown = function(e) { with(this)
+{
+	// here compatible mf.
+	var el = e ? e.srcElement : e.target;
+	if( el.id.indexOf(elementPrefix)>-1 || 
+	el.id.indexOf(inputPrefix)>-1 || 
+	el.id.indexOf(containerPrefix)>-1 || 
+	el.id.indexOf(buttonPrefix)>-1 )
+	{
+		return;
+	}
+	else
+	{
+		for(var i=0; i<eval(name).IDs.length; i++)
+		if( $(containerPrefix + IDs[i]) )
+		$(containerPrefix + IDs[i]).style.display = "none";
+	}
+
+}};
+simulateSelect.prototype.simulates = function() { with(this)
+{
+	for(var i=0; i<IDs.length; i++)
+	eval(name).simulate(IDs[i]);
+}};
+simulateSelect.prototype.simulate = function(ctlSelID) { with (this)
+{
+	var input;
+	var button;
+	var object;
+	var offset;
+
+	object = $(ctlSelID);
+	offset = Offset(object);
+	input = document.createElement("INPUT");
+	button = document.createElement("BUTTON");
+	button.setAttribute("id", buttonPrefix + ctlSelID);
+	//button.value = "¨S";
+	button.value = "6";
+	button.style.fontFamily = "Webdings, Marlett";
+	button.style.background = "";
+	button.onclick = input.onclick = function()
+	{
+		this.blur();
+		eval(name).expand(ctlSelID, offset);
+	};
+	input.onselectstart = function()
+	{
+		eval(name).expand(ctlSelID, offset);
+		event.returnValue = false; 
+	};
+
+	input.setAttribute("id", inputPrefix + ctlSelID);
+	input.title = button.title = "click expand options";
+	input.style.cursor = button.style.cursor = "default";
+	input.className = button.className = ctlStyle;
+	input.style.width = (width>0 ? width : object.offsetWidth);
+	height ? input.style.height=button.style.height=height : "";
+	input.value = value = object[0].text;
+	if( readonly==true ) input.readOnly=true;
+
+	// this method is only IE.
+	object.insertAdjacentElement("afterEnd",button);
+	object.insertAdjacentElement("afterEnd",input);
+	object.style.display = 'none';
+}};
+simulateSelect.prototype.expand = function(ctlSelID, offset) { with(this)
+{
+	var div;
+	var object = $(ctlSelID);
+
+	if( !$(containerPrefix + ctlSelID) )
+	{
+		div = document.createElement("DIV");
+		div.style.position = "absolute";
+		div.style.display = "block";
+		div.setAttribute("id", containerPrefix + ctlSelID);
+		div.className = ctlStyle;
+		div.style.left = offset.left;
+		div.style.top = offset.top + offset.height;
+		div.style.width = (width ? width : offset.width) + 20;
+		if( number )
+		{
+			div.style.height = height * number;
+			div.style.overflow = "auto";
+		}
+		document.body.appendChild(div);
+
+		for(var i=0; i<object.length; i++)
+		{
+			div = document.createElement("DIV");
+			div.setAttribute("id", div.id = elementPrefix + ctlSelID + i);
+			div.style.cursor = "default";
+
+			if( object[i].text==$(inputPrefix + ctlSelID).value )
+			div.className = selStyle;
+			else
+			div.className = unselStyle;
+
+			div.innerText = div.title = object[i].text;
+			div.style.height = height;
+			div.setAttribute("value", object[i].value);
+
+			div.onmouseover = function()
+			{
+				for(var j=0; j<$(containerPrefix + ctlSelID).childNodes.length; j++)
+				{
+					if($(containerPrefix + ctlSelID).childNodes[j]==this)
+					$(containerPrefix + ctlSelID).childNodes[j].className = selStyle;
+					else
+					$(containerPrefix + ctlSelID).childNodes[j].className = unselStyle;
+				}						
+			};
+			div.onclick = function()
+			{
+				$(inputPrefix + ctlSelID).value = this.innerText;
+				$(containerPrefix + ctlSelID).style.display = "none";
+				if( onchange && value!=$(inputPrefix + ctlSelID).value )
+				{
+					onchange.apply(this,onchangeArgs);
+					value = $(inputPrefix + ctlSelID).value;
+				}
+			};
+			$(containerPrefix + ctlSelID).appendChild(div);
+		}
+		return;
+	}
+
+	if( $(containerPrefix + ctlSelID).style.display=="none" )
+	{
+		for(var i=0; i<object.length; i++)
+		{
+			if( object[i].text==$(inputPrefix + ctlSelID).value )
+			$(elementPrefix + ctlSelID + i).className = selStyle;
+			else
+			$(elementPrefix + ctlSelID + i).className = unselStyle;
+		}
+		$(containerPrefix + ctlSelID).style.display="block";
+		return;
+	}
+
+	if( $(containerPrefix + ctlSelID).style.display=="block" )
+	{
+		$(containerPrefix + ctlSelID).style.display="none";
+		return;
+	}
+}};
+simulateSelect.prototype.getValue = function(ctlSelID) { with(this)
+{
+	if( $(inputPrefix + ctlSelID) )
+	return $(inputPrefix + ctlSelID).value;
+	else
+	return null;
+}};
+simulateSelect.prototype.addEvent = function(w, h) { with(this)
+{
+}};
+//-----------------------------------------------
+//window.onerror = Function("return true;");
+//  IE only.
+document.attachEvent("onmousedown", function() {
+	a.checkupOnMouseDown(event);
+	b.checkupOnMouseDown(event);
+	c.checkupOnMouseDown(event)
+});
+window.attachEvent("onload", function() {
+	window.a = new simulateSelect();
+	a.style("CtlSelect", "selected", "unselected");
+	a.init("s1");
+	//-------------------------------------------
+	window.b = new simulateSelect();
+	b.style("CtlSelect1", "selected1", "unselected1");
+	b.width = 300;
+	b.number = 9;
+	b.init("s2");
+	//-------------------------------------------
+	window.c = new simulateSelect(s1onchange, "never-online", a.getValue('s1'));
+	c.style("CtlSelect2", "selected2", "unselected2");
+	c.width = 320;
+	c.init("s3");
+});
+function s1onchange(para, s)
+{
+	alert("onchage handler fire " + para + s);
+}
+//-->
+</SCRIPT>
+<h1> simulate combox control </h1>
+<h4> demonstrate </h4>
+
+<p>
+normal select: <select id="s0">
+<option value="- please select your options -"> - please select your options -</option>
+<option value="1">option1</option>
+<option value="2">option2</option>
+<option value="3">option3</option>
+<option value="4">option4</option>
+<option value="5">option5</option>
+</select>
+</p>
+
+<p>
+simulate select: <select id="s1">
+<option value="- please select your options -"> - please select your options -</option>
+<option value="1">1option1</option>
+<option value="2">1option2</option>
+<option value="3">1option3</option>
+<option value="4">1option4</option>
+<option value="5">1option5</option>
+</select>
+</p>
+
+<p>
+scroll simulate select: <select id="s2">
+<option value="- please select your options -"> - please select your options -</option>
+<option value="1">2option1</option>
+<option value="2">2option2</option>
+<option value="3">2option3</option>
+<option value="4">2option4</option>
+<option value="5">2option6</option>
+<option value="5">2option7</option>
+<option value="5">2option8</option>
+<option value="5">2option9</option>
+<option value="5">2option10</option>
+<option value="5">2option11</option>
+<option value="5">2option12</option>
+<option value="5">2option13</option>
+<option value="5">2option14</option>
+</select>
+</p>
+
+<p>
+onchange handler fire: <select id="s3">
+<option value="- please select your options -"> - please select your options -</option>
+<option value="1">3option1</option>
+<option value="2">3option2</option>
+<option value="3">3option3</option>
+<option value="4">3option4</option>
+<option value="5">3option5</option>
+</select>
+</p>
+
+<button onclick="alert(a.getValue('s1') + '\n\n' + b.getValue('s2') + '\n\n' + c.getValue('s3'))" class="CtlSelect"> Get value </button>
+<button onclick="alert('next version')"  class="CtlSelect">append item</button>
+<button onclick="alert('next version')"  class="CtlSelect">remove item</button>
+
+<h4> description </h4>
+<pre>
+//-------------------------------------------------------------
+//  @ Module: simulate select control, IE only.
+//  @ Debug in: IE 6.0
+//  @ Script by: blueDestiny, never-online
+//  @ Updated: 2006-3-22
+//  @ Version: 1.0 apha
+//  @ Email: blueDestiny [at] 126.com
+//  @ Website: http://www.never-online.net
+//  @ Please Hold this item please.
+//
+//  API
+//  @ class: simulateSelect()
+//
+//  @ object.style(ctlStyle[,selStyle][,unselStyle])
+//    ctlStyle: main control combox css class name
+//    selStyle: when mouseover or option focus css class name
+//    unselStyle: options blur's css class name
+//
+//  @ object.width=(widthPX)
+//    widthPX must be a digit number.
+//
+//  @ object.height=(heightPX)
+//    heightPX must be a digit number.
+//
+//  @ object.getValue(ctlSelID)
+//    ctlSelID is the unique select control ID
+//
+//  -------------- for the next Version ----------
+//  @ object.readOnly = (blnReadOnly)
+//    blnReadOnly must be a boolean type or a number type.
+//  @ object.addEvent(w, h)
+//    w: fire handler's event.
+//    h: handler function.
+//-------------------------------------------------------------
+</pre>
+
+<div class="copyright">
+Power By blueDestiny, never-online
+http://www.never-online.net
+</div>
+</BODY>
+</HTML> 

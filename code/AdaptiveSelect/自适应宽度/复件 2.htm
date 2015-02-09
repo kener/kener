@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style>
+body,table,input,textarea,select{
+	margin: 0;
+	font-size: 12px;
+	line-height:1.5;
+	font-family: Tahoma, SimSun, sans-serif;
+}
+.zSelect {
+	display:inline-block;
+	*zoom: 1;
+	*display: inline;
+	position:relative;
+	height:20px;
+	vertical-align:middle;
+}
+.zSelect .inputText {
+	line-height: 17px;
+	font-size:12px;
+	background: #f7fafc;
+	padding: 1px 17px 0 1px;
+	border: 1px solid #68a;
+	vertical-align: top;
+	cursor:default;
+	height: 17px;
+	margin:0;
+}
+.zSelect .arrowimg {
+	display:inline-block;
+	*zoom: 1;
+	*display: inline;
+	position:relative;
+	cursor:pointer;
+	width:18px;
+	height:20px;
+	left:-18px;
+	margin-right:-18px;
+	vertical-align: top;
+	outline:none;
+	background: url(http://www.wangzhaohui.com/wp-content/uploads/2009/06/arrow.gif);
+}
+.zSelect .arrowimg:hover {
+	background: url(http://www.wangzhaohui.com/wp-content/uploads/2009/06/arrow_over.gif);
+}
+.optgroup {
+	position:absolute;
+	z-index:666;
+	left:0;
+	top:19px;
+	color: #369;
+}
+.optgroup p{ margin:0;}
+.optgroup div.optionsDiv{
+	padding:1px;
+	overflow: auto;
+	overflow-x: hidden;
+	max-height:300px;
+	color: #369;
+	border: 1px solid #678;
+	background: #f7fafc;
+	width:auto;
+	z-index:888;
+	filter: Alpha(Opacity=90); opacity: 0.9;
+}
+.optgroup a, .optgroup a:visited{
+	font-size:12px;
+	text-decoration:none;
+	cursor:default;
+	display:block;
+	color: #369;
+	white-space: nowrap;
+	padding:1px 3px 2px 6px;
+	_padding:0 3px 0 6px;
+	height:18px;
+	min-width:2em;
+}
+.optgroup a:hover,.optgroup a.selected:hover{
+	color: #dff;
+	text-decoration:none;
+	background:#38d;
+}
+.optgroup a.selected,.optgroup a:focus{
+	color: #eff;
+	text-decoration:none;
+	background:#49e;
+}
+</style>
+<script>
+function replaceSelects() {
+    selects = document.getElementsByTagName('select');
+	
+    for(var i=0; i < selects.length; i++) {
+		var selectWidth=selects[i].clientWidth;
+		var selectArea = document.createElement('span');
+		var textInput = document.createElement('input');
+		var button = document.createElement('a');
+		selectArea.id = "mySelect"+i;
+		selectArea.className = "zSelect";
+		textInput.type = "text";
+		textInput.className = "inputText";
+		textInput.readOnly=true;
+		textInput.style.width=selectWidth+"px";                         //固定宽度
+		textInput.id = "mySelectText"+i;
+		textInput.value = selects[i].options[0].text;
+		button.className = "arrowimg";
+		button.href="javascript:showOptions("+i+")";
+		button.hideFocus=true;
+		selectArea.appendChild(textInput);
+		selectArea.appendChild(button);
+		
+        selects[i].style.display='none'; 
+		
+		selects[i].parentNode.insertBefore(selectArea, selects[i]);
+		
+		var optgroup = document.createElement('div');
+		optgroup.className = "optgroup";
+		optgroup.style.width=selectWidth+20+"px";
+		optgroup.style.display = "none";
+		optgroup.id = "optgroup"+i;
+		var optionsDiv = document.createElement('div');
+		optionsDiv.className = "optionsDiv";
+		optionsDiv.id = "optionsDiv"+i;
+		
+		optgroup.appendChild(optionsDiv);
+		if(selects[i].id=="")selects[i].id="select"+i;
+		
+		selectArea.appendChild(optgroup);
+		for(var j=0; j < selects[i].options.length; j++) {
+			var optionHolder = document.createElement('p');
+			var optionLink = document.createElement('a');
+			var optionTxt = document.createTextNode(selects[i].options[j].text);
+			optionLink.href = "javascript:showOptions("+i+"); selectMe('"+selects[i].id+"',"+j+","+i+");";
+			optionLink.appendChild(optionTxt);
+			optionHolder.appendChild(optionLink);
+			optionsDiv.appendChild(optionHolder);
+			if(selects[i].options[j].selected){selectMe(selects[i].id,j,i);}
+		}
+	}
+}
+function showOptions(g) {
+	var elem = document.getElementById("optgroup"+g);
+	elem.style.display=elem.style.display=='none'?'block':'none';
+}
+function selectMe(selectFieldId,linkNo,selectNo) {
+	optionLinks = document.getElementById("optionsDiv"+selectNo).getElementsByTagName("a");
+	for(var k = 0; k < optionLinks.length; k++) {
+		if(k==linkNo) {
+			optionLinks[k].className = "selected";
+		}
+		else {
+			optionLinks[k].className = "";
+		}
+	}
+	selectField = document.getElementById(selectFieldId);
+	for(var k = 0; k < selectField.options.length; k++) {
+		if(k==linkNo) {
+			selectField.options[k].selected = "selected";
+		}
+		else {
+			selectField.options[k].selected = "";
+		}
+	}
+	var newText = selectField.options[linkNo].text;
+	document.getElementById("mySelectText"+selectNo).value=newText;
+}
+window.onload=replaceSelects;
+</script>
+</head>
+<body>
+
+<div style="padding:100px 50px;">
+统计对象范围:
+<select name="select">
+  <option value="1">1</option>
+  <option value="2">222222222222</option>
+  <option value="3">3333</option>
+</select> 
+<select name="select2">
+  <option value="4">444</option>
+  <option value="5">5</option>
+  <option value="6">66666666666666666</option>
+</select> 
+<select name="select3">
+  <option value="7">77777777777777</option>
+  <option value="8">8888888</option>
+  <option value="9">9</option>
+</select> 
+</div>
+</body>
+</html>

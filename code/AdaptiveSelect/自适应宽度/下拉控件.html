@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <script languge=javascript>
+function fullDropDownList()
+ {
+   var sel = event.srcElement;
+   function select_onchange()
+   {
+      sel.fireEvent('onchange');
+   }       
+   function collapseDropPanel()
+   {
+      div1.parentElement.removeChild(div1);
+      iframe1.parentElement.removeChild(iframe1); 
+   }
+   var tr1,td1;
+   var divWidth = sel.offsetWidth;
+   var fColor = 'highlight';          
+   var cntTool = document.getElementById('p1');     
+   var iframe1 = document.createElement('iframe');   
+   var div1 = document.createElement('div');
+   var table1 = document.createElement('table'); 
+   var tbody1 = document.createElement('tbody');
+   table1.appendChild(tbody1);
+   div1.appendChild(table1);
+   for(var i=0;i<sel.options.length;i++)
+   {
+      tr1 = document.createElement('tr');
+      td1 = document.createElement('td');
+      td1.innerText = sel.options(i).innerText;
+      cntTool.innerText = td1.innerText;      
+      if (divWidth < cntTool.offsetWidth)
+      {          
+          divWidth = cntTool.offsetWidth+3;
+      }
+      td1.id = 'forRemove';
+      td1.tag = i;
+      if(i == sel.selectedIndex)
+      {
+         tr1.style.backgroundColor = fColor;
+         table1.tag = tr1;
+      }
+      tr1.onmouseover = function(){                                         
+                                         var tp = this.parentElement;
+                                         for(var i = 0;i<tp.childNodes.length;i++)
+                                         {                                              
+                                              tp.childNodes[i].style.backgroundColor = '';
+                                         }
+                                         this.style.backgroundColor = fColor;
+                                         table1.tag = this;
+                                       };
+      td1.onclick = function(){                               
+                               sel.selectedIndex =  this.tag;
+                               //div1.parentElement.removeChild(div1);
+                                //iframe1.parentElement.removeChild(iframe1); 
+                               collapseDropPanel();
+                               select_onchange();                                  
+                             };
+      tr1.appendChild(td1);
+      tbody1.appendChild(tr1); 
+   }
+   div1.style.position = 'absolute';
+   div1.style.cursor = 'default';
+   div1.style.zIndex = 120;
+   div1.style.width = divWidth;
+   div1.style.borderStyle = 'solid';
+   div1.style.borderWidth = '1';
+   /*div1.style.top = sel.style.bottom;
+   div1.style.left = sel.offsetLeft;*/
+   div1.style.top = getElementPos(sel.id).y+19;
+   div1.style.left = getElementPos(sel.id).x-2;
+   div1.ondeactivate = function(){                        
+                               var actEnt = document.activeElement;
+                               if ( !(actEnt.tagName == 'TD' && actEnt.id == 'forRemove'))
+                               {
+                               //div1.parentElement.removeChild(div1);
+                                //iframe1.parentElement.removeChild(iframe1); 
+                              collapseDropPanel();             
+                               }
+                          };
+   table1.style.backgroundColor = 'white';   
+   table1.style.fontStyle = sel.style.fontStyle;
+   table1.style.fontVariant = sel.style.fontVariant;
+   table1.style.fontWeight = sel.style.fontWeight;
+   table1.style.fontFamily = sel.style.fontFamily;
+   table1.style.fontSize = sel.style.fontSize;
+   table1.style.width = '100%';
+   table1.cellPadding = 0;
+   table1.cellSpacing = 0;
+   table1.onkeydown = function(){
+                                             var tempTr = this.tag;
+                                             var  siblingTr = null;
+                                             if(event.keyCode == 40)//dow arrow
+                                             {                                                 
+                                                 siblingTr= tempTr.nextSibling;                                                                                                
+                                             }
+                                             if(event.keyCode == 38)//up arrow
+                                             {                                                 
+                                                 siblingTr = tempTr.previousSibling;                                                
+                                             }
+                                             if(siblingTr != null)
+                                             {
+                                                siblingTr.style.backgroundColor = fColor;
+                                                this.tag = siblingTr;
+                                                tempTr.style.backgroundColor = ''; 
+                                             }
+                                        };
+   table1.onkeypress = function(){
+                                         if(event.keyCode == 13)
+                                         {
+                                             sel.selectedIndex = this.tag.firstChild.tag;
+                                            //div1.parentElement.removeChild(div1);
+                                           //iframe1.parentElement.removeChild(iframe1); 
+                                            collapseDropPanel();
+                                            select_onchange();
+                                         }
+                                       };                               
+   iframe1.style.position = 'absolute';
+   iframe1.zIndex = 199;  
+   iframe1.style.borderStyle = 'none';
+   iframe1.width = divWidth;
+   iframe1.height = 18*tbody1.childNodes.length;
+   iframe1.style.top = getElementPos(sel.id).y+19;
+   iframe1.style.left = getElementPos(sel.id).x-2;
+   document.body.appendChild(iframe1);
+   //iframe1.document.body.appendChild(div1);
+   document.body.appendChild(div1);     
+   table1.focus();
+ }
+function getElementPos(elementId) {
+      var ua = navigator.userAgent.toLowerCase();
+     var isOpera = (ua.indexOf('opera') != -1);
+     var isIE = (ua.indexOf('msie') != -1 && !isOpera); // not opera spoof
+      var el = document.getElementById(elementId);
+      if(el.parentNode === null || el.style.display == 'none')
+      {
+         return false;
+     }
+      var parent = null;
+     var pos = [];
+     var box;
+      if(el.getBoundingClientRect)    //IE
+     {
+         box = el.getBoundingClientRect();
+         var scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+         var scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+          return {x:box.left + scrollLeft, y:box.top + scrollTop};
+     }
+     else if(document.getBoxObjectFor)    // gecko
+     {
+         box = document.getBoxObjectFor(el);
+         var borderLeft = (el.style.borderLeftWidth)?parseInt(el.style.borderLeftWidth):0;
+         var borderTop = (el.style.borderTopWidth)?parseInt(el.style.borderTopWidth):0;
+          pos = [box.x - borderLeft, box.y - borderTop];
+     }
+     else    // safari & opera
+     {
+         pos = [el.offsetLeft, el.offsetTop];
+         parent = el.offsetParent;
+         if (parent != el) {
+             while (parent) {
+                 pos[0] += parent.offsetLeft;
+                 pos[1] += parent.offsetTop;
+                 parent = parent.offsetParent;
+             }
+         }
+         if (ua.indexOf('opera') != -1
+              || ( ua.indexOf('safari') != -1 && el.style.position == 'absolute' ))
+          {
+                 pos[0] -= document.body.offsetLeft;
+                 pos[1] -= document.body.offsetTop;
+         }
+      }
+              if (el.parentNode)
+      {
+          parent = el.parentNode;
+       }
+     else 
+     {
+        parent = null;
+     }
+        while (parent && parent.tagName != 'BODY' && parent.tagName != 'HTML')
+      { // account for any scrolled ancestors
+         pos[0] -= parent.scrollLeft; 
+        pos[1] -= parent.scrollTop;
+            if (parent.parentNode)
+    {
+        parent = parent.parentNode;
+    }
+          else {
+           parent = null;
+     }
+     }
+     return {x:pos[0], y:pos[1]};
+     }
+  </script>
+</head>
+<body>
+	<div>lskjdflksa</div>
+  <select id='s1' style='width:100px;' onclick='javascript:fullDropDownList();'>
+      <option>1</option>
+      <option>2</option>
+      <option>33333333333333333333333333333333</option>
+      <option>4</option>                 
+      <option>5</option>
+      <option>kener.linfeng!</option>
+  </select>   
+  <span  id='p1'  style='visibility:hidden'></span>
+  <select id='s21' style='width:100px;' onclick='javascript:fullDropDownList();'>
+      <option>1</option>
+      <option>2</option>
+      <option>33333333333333333333333333333333</option>
+      <option>4</option>                 
+      <option>5</option>
+      <option>kener.linfeng!</option>
+  </select> 
+</body>
+</html>

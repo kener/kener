@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<style>
+body,
+table,
+input,
+textarea,
+select{
+	margin: 0;
+	font-size: 12px;
+	line-height:1.5;
+	font-family: Tahoma, SimSun, sans-serif;
+}
+.zSelect {
+	display:inline-block;
+	*zoom: 1;
+	*display: inline;
+	position:relative;
+	height:20px;
+	vertical-align:middle;
+}
+.zSelect .inputText {
+	line-height: 17px;
+	font-size:12px;
+	background: #f7fafc;
+	padding: 1px 17px 0 1px;
+	border: 1px solid #68a;
+	vertical-align: top;
+	cursor:default;
+	height: 17px;
+	margin:0;
+}
+.zSelect .arrowimg {
+	display:inline-block;
+	*zoom: 1;
+	*display: inline;
+	position:relative;
+	cursor:pointer;
+	width:18px;
+	height:20px;
+	left:-18px;
+	margin-right:-18px;
+	vertical-align: top;
+	outline:none;
+	background: url(arrow.gif);
+}
+.zSelect .arrowimg:hover {
+	background: url(arrow_over.gif);
+}
+.optgroup {
+	position:absolute;
+	z-index:666;
+	left:0;
+	top:19px;
+	color: #369;
+}
+.optgroup div.optionsDiv{
+	padding:1px;
+	overflow: auto;
+	overflow-x: hidden;
+	max-height:300px;
+	color: #369;
+	border: 1px solid #678;
+	background: #f7fafc;
+	width:auto;
+	z-index:888;
+	filter: Alpha(Opacity=90); opacity: 0.9;
+}
+.optgroup a, .optgroup a:visited{
+	font-size:12px;
+	text-decoration:none;
+	cursor:default;
+	display:block;
+	color: #369;
+	white-space: nowrap;
+	padding:1px 3px 2px 6px;
+	_padding:0 3px 0 6px;
+	height:18px;
+	min-width:2em;
+}
+.optgroup a:hover,.optgroup a.selected:hover{
+	color: #dff;
+	text-decoration:none;
+	background:#38d;
+}
+.optgroup a.selected,.optgroup a:focus{
+	color: #eff;
+	text-decoration:none;
+	background:#49e;
+}
+</style>
+<script>
+function switchOptions(ele){
+	var optgroup=ele.parentNode.getElementsByTagName('div')[0];
+	if(optgroup.className=="optgroup")optgroup.style.display=optgroup.style.display=='none'?'block':'none';
+}
+</script>
+<div>当前站点:
+<span id="_SiteSelector" class="zSelect">
+    <input type="text" class="inputText" value="请选择演示站点" style="width:100px;" unselectable="On"/><img height="20" width="18" class="arrowimg" src="http://www.wangzhaohui.com/wp-content/uploads/2009/06/arrow.gif" onClick="switchOptions(this)"/>
+    <div class="optgroup" style="width:120px;">
+	<div class="optionsDiv">
+        <a href="javascript:retureValur(this);">政府门户类演示站</a>
+        <a href="javascript:retureValur(this);">新闻门户类演示站</a>
+        <a href="javascript:retureValur(this);">企业形象类演示站</a>
+    </div>
+	</div>
+  </span>   
+</div>
+klsjdfl
+saldkfj

@@ -1,0 +1,16 @@
+document.write('<script type="text/javascript" src="base/array.js"></script>');
+document.write('<script type="text/javascript" src="base/browser.js"></script>');
+document.write('<script type="text/javascript" src="base/date.js"></script>');
+document.write('<script type="text/javascript" src="base/dom.js"></script>');
+document.write('<script type="text/javascript" src="base/event.js"></script>');
+document.write('<script type="text/javascript" src="base/json.js"></script>');
+document.write('<script type="text/javascript" src="base/math.js"></script>');
+document.write('<script type="text/javascript" src="base/storage.js"></script>');
+document.write('<script type="text/javascript" src="base/string.js"></script>');
+document.write('<script type="text/javascript" src="base/util.js"></script>');
+document.write('<script type="text/javascript" src="base/flash.js"></script>');
+document.write('<script type="text/javascript" src="base/dwr.js"></script>');
+document.write('<script type="text/javascript" src="base/log.js"></script>');
+document.write('<script type="text/javascript" src="base/fclog.js"></script>');
+document.write('<script type="text/javascript" src="base/cookie.js"></script>');
+document.write('<script type="text/javascript" src="ui/SelectBox.js"></script>');

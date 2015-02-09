@@ -1,0 +1,30 @@
+/******************* 自适应宽度Select1.4**************
+.awSelect {font-size:12px; font-family:"Arial", "宋体";}
+span.awSelect {display:inline-block;*display:inline;zoom:1;border:1px solid #7f9db9;padding:1px;vertical-align:baseline;cursor:default;}
+span.awSelectHover {position:relative;z-index:100;}
+.awSelect input{display:inline-block;*display:inline;zoom:1;height:14px;line-height:14px;margin:0;padding:0;border:0;cursor:default;}
+.awSelect input.awSelectText {background-color:#fff;color:#000;}
+.awSelect input.awSelectTextFocus {background-color:#316ac5;color:#fff;}
+.awSelect .awArrow {display:inline-block;*display: inline;zoom:1;width:15px;height:15px;margin:0 0 0 2px;padding:0;border:0;vertical-align:text-top;cursor:default;background:#000 url('http://eiv.baidu.com/fcimg/img/arrow.gif') no-repeat left center;}
+.awSelect .awArrowHover {background-position:right center;}
+iframe.awOptIframe{position:absolute;z-index:-1;top:18px;left:-1px;scrolling:no;border:0; border:none;}
+div.awOptGroup{position:absolute;z-index:666;left:-1px;top:18px;background:white;border: 1px solid #7f9db9;overflow-y:auto;overflow-x:hidden;padding:0;margin:0;}
+.awOptGroup a,.awOptGroup a:visited{text-decoration:none;display:block;white-space: nowrap;color:#000;padding:0 2px;height:15px;line-height:15px;cursor:default;text-align:left;}
+.awOptGroup a.awOptSelected,.awOptGroup a:visited.awOptSelected,.awOptGroup a:focus{color: #fff;text-decoration:none;background:#316ac5;font-weight:normal;text-align:left;}
+****************END 自适应宽度Select**************/
+/******************* 自适应宽度Select**************/
+.awSelect {font-size:11px; font-family:"Arial", "宋体";}
+span.awSelect {display:inline-block;*display:inline;zoom:1;border:1px solid #7f9db9;padding:1px;vertical-align:baseline;cursor:default;}
+span.awSelect input{display:inline-block;*display:inline;zoom:1;height:14px;line-height:14px;margin:0;padding:0;border:0;cursor:default;}
+.awSelect input.awSelectText {background-color:#fff;color:#000;}
+.awSelect input.awSelectTextFocus {background-color:#316ac5;color:#fff;}
+.awSelect .awArrow {display:inline-block;*display: inline;zoom:1;width:15px;height:15px;margin:0 0 0 2px;padding:0;border:0;vertical-align:text-top;cursor:default;background:#000 url('http://eiv.baidu.com/fcimg/img/arrow.gif') no-repeat left center;}
+.awSelect .awArrowHover {background-position:right center;}
+div.awOptGroup{visibility:hidden;position:absolute;z-index:666;background:white;border: 1px solid #7f9db9;overflow-y:auto;overflow-x:hidden;padding:0;margin:0;}
+div.awOptGroup a,div.awOptGroup a:visited{text-decoration:none;display:block;white-space: nowrap;color:#000;padding:0 2px;overflow-x:hidden;height:15px;line-height:15px;cursor:default;text-align:left;}
+div.awOptGroup a.awOptSelected,div.awOptGroup a:visited.awOptSelected,div.awOptGroup a:focus{color: #fff;text-decoration:none;background:#316ac5;font-weight:normal;text-align:left;}
+.awMaskFrame{ position:absolute; width:0px; height:0px; top:0px; left:0px; display:none; border:none;z-index:20002;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0)
+}
+/****************END 自适应宽度Select**************/
+iframe.awOptIframe{position:absolute;scrolling:no;}
+.maskFrame { position:absolute; width:0px; height:0px; top:0px; left:0px; display:none; border:none;}

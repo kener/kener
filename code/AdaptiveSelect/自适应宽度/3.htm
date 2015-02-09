@@ -1,0 +1,597 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<style>
+body,table,input,textarea,select{
+	margin: 0;
+	font-size: 12px;
+	line-height:1.5;
+	font-family: Tahoma, SimSun, sans-serif;
+}
+.zSelect {
+	display:inline-block;
+	*zoom: 1;
+	*display: inline;
+	position:relative;
+	height:20px;
+	*height:21px;
+	vertical-align:middle;
+}
+.zSelect .inputText {
+	color:#369;
+	line-height: 17px;
+	font-size:12px;
+	background: #f7fafc;
+	padding: 1px 17px 0 1px;
+	border: 1px solid #68a;
+	vertical-align: middle;
+	cursor:default;
+	height: 17px;
+	margin:0;
+}
+.zSelect .arrowimg {
+	display:inline-block;
+	*zoom: 1;
+	*display: inline;
+	position:relative;
+	cursor:pointer;
+	width:18px;
+	height:20px;
+	left:-18px;
+	margin-right:-18px;
+	vertical-align: middle;
+	outline:none;
+	background: url(http://www.wangzhaohui.com/wp-content/uploads/2009/06/arrow.gif);
+}
+.zSelect .arrowimg:hover {
+	background: url(http://www.wangzhaohui.com/wp-content/uploads/2009/06/arrow_over.gif);
+}
+.zSelectDisabled .inputText{border: 1px solid #999;color:#aaa;background: #eee;}
+.zSelectDisabled .arrowimg,.zSelectDisabled .arrowimg:hover{background: url(http://www.wangzhaohui.com/wp-content/uploads/2009/06/arrow_disab.gif);}
+.optgroup {
+	position:absolute;
+	z-index:666;
+	left:0;
+	top:19px;
+	_top:21px;
+	color: #369;
+}
+.optgroup p{ margin:0;}
+.optgroup div.optionsDiv{
+	padding:1px;
+	overflow: auto;
+	overflow-x: hidden;
+	max-height:300px;
+	color: #369;
+	border: 1px solid #678;
+	background: #f7fafc;
+	width:auto;
+	z-index:888;
+}
+.optgroup a, .optgroup a:visited{
+	font-size:12px;
+	text-decoration:none;
+	cursor:default;
+	display:block;
+	color: #369;
+	white-space: nowrap;
+	padding:1px 3px 2px 6px;
+	_padding:0 3px 0 6px;
+	height:18px;
+	min-width:2em;
+}
+.optgroup a:hover,.optgroup a.selected:hover{
+	color: #dff;
+	text-decoration:none;
+	background:#38d;
+}
+.optgroup a.selected,.optgroup a.selected:visited,.optgroup a:focus{
+	color: #eff;
+	text-decoration:none;
+	background:#49e;
+}
+</style>
+<script>
+var isIE = navigator.userAgent.toLowerCase().indexOf("msie") != -1;
+var isGecko = navigator.userAgent.toLowerCase().indexOf("gecko") != -1;
+function $(ele) {
+  if (typeof(ele) == 'string'){
+    ele = document.getElementById(ele)
+    if(!ele){
+  		return null;
+    }
+  }
+  return ele;
+}
+function getEvent(evt){
+	return window.event||evt;
+}
+function stopEvent(evt){//阻止一切事件执行,包括浏览器默认的事件
+	evt = getEvent(evt);
+	if(!evt){
+		return;
+	}
+	if(isGecko){
+		evt.preventDefault();
+		evt.stopPropagation();
+	}
+	evt.cancelBubble = true
+	evt.returnValue = false;
+}
+function addEvent(w, e, f) {
+  if (document.attachEvent) {
+    w.attachEvent(('on'+e), f);
+  } else {
+    w.addEventListener(e, f, false);
+  }
+}
+if(window.Event){//给FF添加IE专有的属性和方法
+    Event.prototype.__defineSetter__("returnValue",function(b){// 
+        if(!b)this.preventDefault();
+        return b;
+        });
+    Event.prototype.__defineSetter__("cancelBubble",function(b){// 设置或者检索当前事件句柄的层次冒泡
+        if(b)this.stopPropagation();
+        return b;
+        });
+    Event.prototype.__defineGetter__("srcElement",function(){
+        var node=this.target;
+        while(node.nodeType!=1)node=node.parentNode;
+        return node;
+        });
+}
+if(window.HTMLElement){//给FF添加IE专有的属性和方法
+    HTMLElement.prototype.__defineGetter__("parentElement",function(){
+        if(this.parentNode==this.ownerDocument)return null;
+        return this.parentNode;
+        });
+	HTMLElement.prototype.__defineSetter__("outerHTML",function(sHTML){
+        var r=this.ownerDocument.createRange();
+        r.setStartBefore(this);
+        var df=r.createContextualFragment(sHTML);
+        this.parentNode.replaceChild(df,this);
+        return sHTML;
+        });
+    HTMLElement.prototype.__defineGetter__("outerHTML",function(){
+        var attr;
+        var attrs=this.attributes;
+        var str="<"+this.tagName;
+        for(var i=0;i<attrs.length;i++){
+            attr=attrs[i];
+            if(attr.specified)
+                str+=" "+attr.name+'="'+attr.value+'"';
+            }
+        if(!this.canHaveChildren)
+            return str+">";
+        return str+">"+this.innerHTML+"</"+this.tagName+">";
+        });
+    HTMLElement.prototype.__defineGetter__("canHaveChildren",function(){
+        switch(this.tagName.toLowerCase()){
+            case "area":
+            case "base":
+            case "basefont":
+            case "col":
+            case "frame":
+            case "hr":
+            case "img":
+            case "br":
+            case "input":
+            case "isindex":
+            case "link":
+            case "meta":
+            case "param":
+                return false;
+            }
+        return true;
+        });
+    HTMLElement.prototype.__defineSetter__("innerText",function(sText){
+        var parsedText=document.createTextNode(sText);
+        this.innerHTML=parsedText;
+        return parsedText;
+        });
+    HTMLElement.prototype.__defineGetter__("innerText",function(){
+        var r=this.ownerDocument.createRange();
+        r.selectNodeContents(this);
+        return r.toString();
+        });
+}
+var $E = {};
+$E.getParent = function(tagName,ele){
+	ele = ele || this;
+	ele = $(ele);
+	while(ele){
+		if(ele.tagName.toLowerCase()==tagName.toLowerCase()){
+			return $(ele);
+		}
+		ele = ele.parentNode;
+	}
+	return null;
+}
+var Selector = {};
+Selector.initCtrl = function(ele){
+	ele = $(ele);	
+	var id = ele.id;
+	var disabled = ele.disabled;
+	var input = ele.getAttribute("input");
+	Selector.initHTML(ele);
+	ele = $(id);
+	Selector.initMethod(ele);
+	if(ele.Items.length>10){
+		$(id+"_list").style.height = "15em";
+	}
+	ele.disabled = disabled;
+	Selector.setDisabled(ele,ele.disabled);
+	ele.input = input;
+}
+Selector.showList = function(ele){
+	ele = $E.getParent("div",ele);
+	if(Selector.showFlag&&Selector.showingID == ele.id){
+		Selector.close();
+	}
+	else if(Selector.showFlag&&Selector.showingID != ele.id){
+		Selector.close();
+		$(ele.id+"_div").style.display='';
+		ele.style.zIndex='999';
+		ele.Items[ele.selectedIndex].className = "selected";
+		Selector.showingID = ele.id;
+		Selector.showFlag = true;
+	}
+	else if(!Selector.showFlag){
+		$(ele.id+"_div").style.display='';
+		ele.style.zIndex='999';
+		ele.Items[ele.selectedIndex].className = "selected";
+		Selector.showingID = ele.id;
+		Selector.showFlag = true;
+	}
+}
+Selector.onArrowMouseOver = function(ele){
+	var div = ele.parentNode;
+	div.options[div.selectedIndex].className = "";
+	//鼠标移入，在这儿可以对控件的外观作更多的改变
+	div.textField.style.borderColor = "#0099ee";
+}
+Selector.onArrowMouseOut = function(ele){
+	var div = ele.parentNode;
+	//鼠标移出
+	div.textField.style.borderColor = "#6688aa";
+}
+Selector.onItemClick = function(ele,flag){
+	var id = ele.parentNode.id;
+	id = id.substring(0,id.lastIndexOf("_"));
+	var div = $(id);
+	var oldValue = div.value;
+	div.textField.value = ele.innerText;
+	div.ItemClickFlag = true;
+	if(isIE){
+		div.value = ele.getAttribute("value");
+	}else{
+		div._value = ele.getAttribute("value");
+	}
+	var items = ele.parentNode.childNodes;
+	for(var i=0;i<items.length;i++){
+		items[i].className = "";
+		if(items[i]==ele){
+				div._selectedIndex = i;
+			if(isIE){
+				div.selectedIndex = i
+			}
+		}
+	}
+	div.ItemClickFlag = false;
+	ele.className = "selected";
+	if(!(div.style.display=="none")){
+		div.focus();
+	}
+	if(oldValue!=ele.getAttribute("value")){
+		try{
+			Selector.invokeOnChange(div);
+		}catch(ex){alert("Selector.invokeOnChange():"+ex.message);};
+	}
+	Selector.close();
+}
+Selector.close = function(){
+	if(Selector.showingID&&Selector.showFlag){
+			$(Selector.showingID+"_div").style.display="none";
+			$(Selector.showingID).style.zIndex='66';
+			Selector.showingID = null;
+			Selector.showFlag = false;
+	}
+}
+Selector.onItemMouseOver = function(ele){
+	var id = ele.parentNode.id;
+	id = id.substring(0,id.lastIndexOf("_"));
+	var div = $(id);
+	div.options[div.selectedIndex].className = "";
+	ele.className = "selected";
+}
+Selector.onIEDisabled = function(id){
+		Selector.setDisabled($(id),$(id).disabled);
+}
+Selector.setInput = function(ele,flag){//设置文本框是否可输入
+	if(!flag||flag=="false"){
+		if(isIE){
+			ele.textField.onselectstart = stopEvent;
+			ele.textField.onmousedown = stopEvent;
+		}else{
+			ele.textField.style.MozUserSelect = "none";
+			ele.textField.style.MozUserInput = "none";
+		}
+		ele.textField.oncontextmenu  = stopEvent;
+      }else{
+		if(isIE){
+			ele.textField.onselectstart = null;
+			ele.textField.onmousedown = null;
+		}else{
+			ele.textField.style.MozUserSelect = "";
+			ele.textField.style.MozUserInput = "";
+		}
+	}
+	ele.textField.onkeydown = Selector.onKeyDown;
+}
+Selector.onKeyDown = function(evt){
+	evt = getEvent(evt);
+	var txt = evt.srcElement;
+	var div = txt.parentNode;
+	if(evt.keyCode==37||evt.keyCode==38){
+		if(div.selectedIndex>0){
+			div.selectedIndex = div.selectedIndex-1;
+		}
+	}else	if(evt.keyCode==39||evt.keyCode==40){
+		if(div.selectedIndex<div.length-1){
+			div.selectedIndex = div.selectedIndex+1;
+		}
+	}
+	if(evt.keyCode!=9){
+		stopEvent(evt);//过滤tab键之外的其它键
+	}
+}
+Selector.invokeOnChange = function(_ele){
+	if(!_ele.InitFlag){
+		var _cv = _ele.getAttribute("changeEvent");
+		if(_cv){		
+			eval(_cv);
+		}
+	}
+}
+Selector.setValueEx = function(ele,v,t){
+	ele = $(ele);
+	ele.value = v;
+	ele.textField.value = t;
+}
+Selector.setValue = function(ele,v){
+		var flag = false;
+		for(var i=0;i<ele.Items.length;i++){
+			if(ele.Items[i].value == v){
+				ele.textField.value = ele.Items[i].innerText;
+				ele._value = v;
+				if(isGecko){
+					ele._selectedIndex = i;
+				}else{
+					ele.ItemClickFlag = true;
+					ele.selectedIndex = i;
+					ele.ItemClickFlag = false;	
+				}
+				flag = true;
+				break;
+			}
+		}	
+		if(!flag&&ele.input){//如果值是文本框输入的
+			ele.textField.value = v;
+			ele._value = v;
+		}
+		Selector.invokeOnChange(ele);
+}
+Selector.setDisabled = function(ele,flag){
+	if(flag){
+		ele.textField.disabled = true;
+		ele.arrow.onmouseover =  stopEvent;
+		ele.arrow.onmouseout =  stopEvent;
+		ele.arrow.onclick =  stopEvent;
+		ele.className = "zSelect zSelectDisabled";
+		ele.textField.onkeydown = stopEvent;
+	}else{
+		ele.textField.disabled = false;
+		ele.arrow.onmouseover =  function(){Selector.onArrowMouseOver(this)};
+		ele.arrow.onmouseout =  function(){Selector.onArrowMouseOut(this)};
+		ele.arrow.onclick =  function(){Selector.showList(this);};
+		ele.className = "zSelect";
+		ele.textField.onkeydown = Selector.onKeyDown;
+	}
+}
+Selector.initHTML = function(ele){
+	var arr = [];
+	var id = ele.id;
+	var name = ele.getAttribute("name");
+	if(!name||name==""){
+		name = id;
+	}
+	var w = $(ele).clientWidth;
+	ele.InitFlag = true;
+	var changeEvent = ele.getAttribute("onchange");
+	if(!changeEvent){
+		changeEvent = "";
+	}
+	if(isIE){
+		changeEvent = changeEvent.toString();
+		if(changeEvent.indexOf("{")>0){
+			changeEvent = changeEvent.substring(changeEvent.indexOf("{")+1,changeEvent.length-2);
+		}
+	}
+	arr.push("<div id='"+id+"' ztype='selector' class='zSelect' changeEvent='"+changeEvent+"' style='"+ele.style.cssText+";'>");
+	arr.push("<input id='"+id+"_textField' type='text' class='inputText' name='"+ele.name+"' readonly style='width:"+w+"px;' value=''/>");
+	//arr.push("<a id='"+id+"_arrow' class='arrowimg' href='javascript:Selector.showList($(\""+id+"_arrow\"));' hidefocus></a>");
+	arr.push("<a id='"+id+"_arrow' class='arrowimg' href='javascript:void(0);' hidefocus></a>");
+	arr.push("<div id='"+id+"_div' class='optgroup' style='width:"+(w+20)+"px;display: none;'>");
+	arr.push("<div id='"+id+"_list' class='optionsDiv'>");
+	var items = ele.options;
+	var selectedIndex = 0;
+	for(var i=0;i<items.length;i++){
+		var str = "";
+		if(items[i].selected){
+			str = "class='selected'";
+			selectedIndex = i;
+		}
+		arr.push("<a href='javascript:void(0);' "+str+" hidefocus onclick='Selector.onItemClick(this);' value=\""+items[i].value+"\">"+(items[i].text==""?"&nbsp;":items[i].text)+"</a>");
+	}
+	arr.push("</div>");
+	arr.push("</div>");
+	arr.push("</div>");
+	ele.outerHTML = arr.join('');
+	ele = $(id);
+	if(isGecko){
+		ele._selectedIndex = selectedIndex;
+	}else{
+		ele.selectedIndex = selectedIndex;
+	}
+}
+Selector.initMethod  = function(ele){
+	ele.textField = ele.childNodes[0];
+	ele.name = ele.textField.name;
+	ele.type = "select-one";//自定义类型，为取值函数$V(ele)预留。
+	ele.arrow = ele.childNodes[1];
+	ele.Items = $(ele.id+"_list").childNodes;
+	if(ele.Items.length>0){
+		if(isIE){
+			ele.value = ele.Items[ele.selectedIndex].value;
+		}else{
+			ele._value = ele.Items[ele._selectedIndex].value;
+		}
+	}
+	//ele.form = $E.getParent("form",ele);
+	ele.options = ele.Items;
+	ele.length = ele.options.length;
+	
+	ele.add = function(text,value){
+			ele.Item.push([text,value]);
+	}
+	
+	ele.onblur = function(){
+		this.textField.blur();	
+		this.textField.style.borderColor = "#6688aa";
+		Selector.close();
+	}
+	
+	ele.onfocus = function(){
+		this.textField.focus();	
+		this.textField.style.borderColor = "#0099ee";
+	}
+	
+	if(isIE){
+		Selector.initMethodIE(ele);
+	}else{
+		Selector.initMethodGecko(ele);
+	}
+	ele.selectedIndex = ele.selectedIndex;
+	ele.InitFlag = false;
+}
+Selector.initMethodIE = function(ele){
+	ele.onpropertychange = function(){//属性改变时调用方法
+		var s = event.srcElement;
+		var v = s[event.propertyName];
+		switch(event.propertyName.toLowerCase()){
+			case "disabled":
+				Selector.setDisabled(s,v);
+				break;
+			case "selectedindex":
+				if(!s.ItemClickFlag){//如果selectedindex发生了改变，并且不是由点击引起的改变
+					Selector.onItemClick(s.Items[s.selectedIndex]);
+				}
+				break;
+			case "input":
+				Selector.setInput(s,s.input);
+				break;
+			case "value":
+				if(!s.ItemClickFlag){//如果value发生了改变，并且不是由点击引起的改变
+					Selector.setValue(s,v);
+				}
+				break;
+		};
+	}
+}
+	
+Selector.initMethodGecko = function(ele){
+	ele.__defineGetter__("disabled",function(flag){
+		return this.textField.disabled;	
+	});
+	ele.__defineSetter__("disabled",function(flag){
+		Selector.setDisabled(this,flag);
+	});
+	
+	ele.__defineGetter__("selectedIndex",function(){
+		return this._selectedIndex;
+	});
+	
+	ele.__defineSetter__("selectedIndex",function(index){
+		index = parseInt(index);
+		if(index>=0&&index<this.Items.length){
+			this._selectedIndex = index
+		}else{
+			return;	
+		}
+		Selector.onItemClick(this.Items[this._selectedIndex]);
+	});
+	
+	ele.__defineGetter__("input",function(){
+		return this._input;
+	});
+	
+	ele.__defineSetter__("input",function(flag){
+		this._input = flag&&flag.toLowerCase()=="true";
+		Selector.setInput(this,this._input);
+	});
+	
+	ele.__defineGetter__("value",function(){
+		return this._value;
+	});
+	
+	ele.__defineSetter__("value",function(v){
+		Selector.setValue(this,v);
+	});
+}
+Selector.initAll = function(){
+	var eles = document.getElementsByTagName("select");
+	while(eles.length>0){//这种写法是因为select控件被div替换，数量在不断减少
+		if(eles[0].id=="")eles[0].id="select"+eles.length;
+		Selector.initCtrl(eles[0]);
+		eles = document.getElementsByTagName("select");
+	}
+}
+Selector.PageOnClick=function(evt){
+	if(Selector.showFlag){
+    var el = window.event?event.srcElement:evt.target;
+	if(el.id.indexOf(Selector.showingID)>-1 || el.parentNode.id.indexOf(Selector.showingID)>-1)
+      {
+        return;
+      }
+		Selector.close();
+	}
+}
+addEvent(window,'load',Selector.initAll);
+addEvent(document,'click',Selector.PageOnClick);
+</script>
+<div>当前站点:
+<select id="select" name="select">
+  <option value="123123">政府门户类演示站</option>
+  <option value="456456">新闻门户类演示站</option>
+  <option value="789789">企业形象类演示站</option>
+</select> 
+  &lt;&lt;
+当前站点:
+<select id="select2" name="select2">
+  <option value="123123" selected="selected">政府门户类演示站</option>
+  <option value="456456">新闻门户类演示站</option>
+  <option value="789789">企业形象类演示站</option>
+</select> 
+  &lt;&lt;
+</div>
+<div>当前站点:
+<select id="select3" name="select3" disabled="disabled">
+  <option value="123123">政府门户类演示站</option>
+  <option value="456456" selected="selected">新闻门户类演示站</option>
+  <option value="789789">企业形象类演示站</option>
+</select> 
+当前站点:
+<select id="select4" name="select4">
+  <option value="123123">政府门户类演示站</option>
+  <option value="456456">新闻门户类演示站</option>
+  <option value="789789" selected="selected">企业形象类演示站</option>
+</select> 
+</div>

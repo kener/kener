@@ -1,0 +1,677 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link type="text/css" href="../css/global.css" rel="stylesheet" />
+<script type="text/javascript" src="../js/core.js"></script>
+<script type="text/javascript" src="../js/config_mars.js"></script>
+<script type="text/javascript" src="../js/dwrOffline.js"></script>
+<script type="text/javascript" src="../js/default_report.js"></script>
+<title>常规报告</title>
+
+</head>
+<body>
+<div class="head">
+	<div class="head-wrapper">
+		<a href="#" id="Logo" class="logo"><img width="133px" height="43px" src="http://eiv.baidu.com/fcimg/img/logo_baidu_promo.gif" title="百度推广" alt="百度推广" /></a>
+		<div id="RightTopNav" class="right-top-nav">
+			<strong>这里是用户名</strong>
+			<span id="BridgeHi"></span>
+			<a id="ContactMenuBtn" href="javascript:void(0);">联系百度<span>|</span><img src="http://eiv.baidu.com/fcimg/img/show.gif"/></a>
+			<a id="RightNavHelpLink" target="_blank" href="#">帮助</a>
+			<a id="RightNavLogoutLink" href="#">退出</a>
+			<div id="ContactMenu">
+				<div id="BridgeService"></div>
+				<div><span class="block"><a id="RightNavMyPromoAdvLink" target="_blank" href="#">顾问信息</a></span></div>
+				<div><span class="block"><a id="RightNavMessToBdLink" target="_blank" href="#">留言</a></span></div>
+			</div>
+			<iframe id="ContactMenuMask" class="contact-mask"></iframe>
+		</div>
+		<div id="HelpTip" class="right-bottom-nav"></div>
+		<div id="MainNavigation" class="mainnav">
+			<span class="homepage"><u></u>
+				<a id="MainNavHomeLink" href="#">首页</a>
+			<i></i></span>
+			<span><u></u>
+				<a id="MainNavAccInfoLink" href="#">账户信息</a>
+			<i></i></span>
+			<span><u></u>
+				<a id="MainNavFinaLink" href="#">财务</a>
+			<i></i></span>
+			<span><u></u>
+				<a id="MainNavPromoManLink" href="#">推广管理</a>
+			<i></i></span>			
+			<span><u></u>
+				<a id="MainNavToolLink" href="#">工具</a>
+			<i></i></span>
+			<span class="current"><u></u>
+				<a id="MainNavReportLink" href="#">报告</a>
+			<i></i></span>						
+		</div>
+	</div>
+	<div id="SubNavigation" class="subnav">
+		<div class="subnav-wrapper">
+			<span class="current"><i></i><u></u><s></s><b></b><a id="SubNavDefRepLink" href="#">常规报告</a></span>
+			<span class="split">|</span>
+			<span><a id="SubNavCusRepLink" href="#">定制报告</a></span>
+		</div>
+	</div>
+	<div class="head-bottom"></div>
+</div>
+<div class="main-wrapper">
+	<div class="main">
+		<div class="mainbar">
+			<div class="historySelect">
+				最近浏览过的报告:
+				<select id="historySelectFilter"><option>暂无历史纪录</option></select>
+				<span class="btncont"><button id="historySelectSubmit" class="btn bp">查看</button></span>
+			</div>
+		</div>
+		<noscript id="NoScript"><p>为了您能够正确、完整的使用本系统的功能，请您开启浏览器对于JavaScript的支持</p></noscript>		
+		<div class="msgbar pb20"><b>常规报告</b></div>
+		<div id="ReportPageLoading" class="pcont">
+			页面读取中&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://eiv.baidu.com/fcimg/img/loading_1.gif">
+		</div>
+		<div class="pcont display_none">
+			<div class="clearfix">			
+				<div class="drt">
+					<h3>选择时间范围</h3>
+					<div id="DatePickerContainer" class="double-dp-avi"><span id="DatePickerValue"></span></div>
+					<span id="DateSelectError" class="wronginfoinline"></span>
+				</div>
+				<div id="AccountType" class="drt">
+					<h3><span id="AccountTypeLabel">选择</span>统计范围</h3>
+					<select id="AccountTypeSelect">
+						<option value="0">搜索推广</option>
+						<option value="2">搜索推广专业版</option>
+					</select>
+					<span id="AccountTypeSpan">搜索推广</span>
+				</div>
+				<div id="PromoMethod" class="drt">
+					<h3>选择推广方式</h3>
+					<select id="PromoMethodSelect">					
+						<option value="1">搜索推广</option>
+						<option value="2">网盟推广</option>
+						<option value="0" selected="selected">所有推广方式</option>
+					</select>
+				</div>
+			</div>
+			<p class="tipinfo accountTypeTip"><a href="#" id="accountTypeTipHref">点击查看历史统计报告</a></p>
+		</div>
+		<div class="pcont2 display_none">			
+			<div id="ReportSize" class="clearfix">
+				<input type="radio" name="Rr" id="Rr2" value="所有账户总报告" checked="checked" /><label id="Lr2" for="Rr2">所有账户总报告</label>
+				<input type="radio" name="Rr" id="Rr3" value="分账户报告" /><label id="Lr3" for="Rr3">分账户报告</label>
+				<span class="display_none"><input type="radio" name="Rr" id="Rr4" value="关键词组报告" /><label id="Lr4" for="Rr4">关键词组报告</label></span>
+				<input type="radio" name="Rr" id="Rr6" value="推广计划报告" /><label id="Lr6" for="Rr6">推广计划报告</label>
+				<input type="radio" name="Rr" id="Rr7" value="推广单元报告" /><label id="Lr7" for="Rr7">推广单元报告</label>
+				<input type="radio" name="Rr" id="Rr5" value="关键词报告" /><label id="Lr5" for="Rr5">关键词报告</label>
+				<input type="radio" name="Rr" id="Rr8" value="关键词报告" /><label id="Lr8" for="Rr8">创意报告</label>
+				<input type="radio" name="Rr" id="Rr9" value="关键词报告" /><label id="Lr9" for="Rr9">分地域报告</label>
+				<input type="radio" name="Rr" id="Rr1" value="指定范围报告"/><label id="Lr1" for="Rr1">指定范围报告</label>
+			</div>
+			<div id="ReportRange">
+				<div>
+					统计对象单位：
+					<select id="ReportUnitSelect"></select>
+				</div>
+				<div style="margin-top:10px">
+					统计对象范围：
+					<select id="ReportRangeSelect1"></select>
+					<select id="ReportRangeSelect2"></select>
+					<select id="ReportRangeSelect3"></select>
+					<input type="text" id="KeywordsInput" value="请输入关键词名称" />
+					<span id="AutoAllWord" class="tipinfo"> (输入框内为空可以查看全部关键词)</span>
+				</div>
+				<p id="ReportRangeInfo"></p>
+				<p id="ReportMethodInfo">请注意报告中不包含网盟推广数据，如果希望同时了解网盟推广消费情况，请查看“关键词报告”。</p>
+				<div class="clear"></div>
+			</div>
+			<div id="ReportByDay">
+				<input type="checkbox" name="DailyReport" id="DailyReport" />
+				<label for="DailyReport">分日统计</label>
+				<span>为您提供当前时间范围内每天的数据分析报告</span>
+			</div>
+		</div>
+		<p class="btncont display_none"><button id="BuildReportBtn" class="btn">生成报告</button></p>
+		<div id="ReportBread"></div>
+		<div id="ReportTableDiv">
+			<h3 id="ReportTitle"></h3>
+			<h4 id="ReportDateRange"></h4>
+			<p id="ReportDown">
+				下载报告：
+				<a id="DownReportExcelLink" href="#"><img src="http://eiv.baidu.com/fcimg/img/downloadIco.gif" />Excel文件</a>
+				<a id="DownReportTextLink" href="#"><img src="http://eiv.baidu.com/fcimg/img/downloadIco.gif" />文本文件</a>
+				<span id="NumPerPageSpan">每页显示				
+					<select id="NumPerPageSelect">
+						<option selected="selected">20</option>
+						<option>50</option>
+						<option>100</option>
+						<option>200</option>
+					</select>	
+				</span>
+			</p>		
+			<div id="ReportTable"></div>
+			<div id="Page"></div>
+		</div>
+
+		<div id="ReportChartDiv">
+			<div id="ReportChart1">
+				<div class="report-graphy-op">
+					<b>图形报告类型：</b>
+					<input type="radio" name="reportType" value="0" id="typeLine" checked="checked" /><label for="typeLine">折线图</label>
+					<input type="radio" name="reportType" value="1" id="typeBar" /><label for="typeBar">柱状图</label>
+					<span id="item_radio">
+					</span>		
+				</div>
+				<div class="report-graphy">
+					<h3 id="ReportChartTitle1"></h3>
+					<h4 id="ReportChartDate1"></h4>
+					<div class="flashcontainer">
+						<div id="ReportGraphyLine1" class="flashcont">
+							<script type="text/javascript">createFlash("ReportGraphyLineFlash1", "../swf/line.swf", 960, 380);</script>
+						</div>
+						<div id="ReportGraphyBar1" class="flashcont">
+							<script type="text/javascript">createFlash("ReportGraphyBarFlash1", "../swf/bar.swf", 960, 380);</script>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="foot">
+	<div class="footads">
+		<script type="text/javascript">
+			var arrBaiduAds = [];
+			function baiduAdsDisplay(index){
+				document.write(arrBaiduAds[index]);
+			}
+		</script>
+		<script type="text/javascript" src="http://a.baidu.com/ecom?di=52&tm=baidufsbanner&word=SF后台banner"></script>
+		<script type="text/javascript">
+			baiduAdsDisplay(52);
+		</script>
+	</div>
+	<script type="text/javascript" src="http://eiv.baidu.com/fcimg/js/copyright.js"></script>
+</div>
+<div id="MaskDiv" class="maskDivNoColor"></div>
+<iframe id="MaskFrame" class="maskFrame"></iframe>
+
+<div id="SpaceHoverDiv">
+	<h4>查看：</h4>
+	<p><a id="SpaceReportLink" href="#"></a></p>
+	<p><a id="SpaceVenusLink" href="#"></a></p>
+</div>
+
+<form name="defaultReportForm" id="DefaultReportForm" method="POST">
+	<input type="hidden" id="Fuserid" name="uid" />
+	<input type="hidden" id="FaccountRange" name="accountRange" />
+	<input type="hidden" id="Fplatform" name="platform" />
+	<input type="hidden" id="FstartDate" name="startDate" />
+	<input type="hidden" id="FendDate" name="endDate" />
+	<input type="hidden" id="FreportType" name="reportType" />
+	<input type="hidden" id="FdaySensitive" name="daySensitive" />
+	<input type="hidden" id="Faccountid" name="accountid" />
+	<input type="hidden" id="FspecifyType" name="specifyType" />
+	<input type="hidden" id="Fgroupid" name="groupid" />
+	<input type="hidden" id="Fgroupid2" name="groupid2" />
+	<input type="hidden" id="Fwordid" name="wordid" />
+	<input type="hidden" id="Fplanid" name="planid" />
+	<input type="hidden" id="Funitid" name="unitid" />	
+	<input type="hidden" id="Fmtldim" name="mtldim" />
+	<input type="hidden" id="FisFengchao" name="isFengchao" />
+	<input type="hidden" id="Ffcstar" name="fcstar" />
+</form>
+<script type="text/javascript">
+	var OPT_UID = 2;
+	var USER_ID = 198329;
+	var SHOW_USER_ID = 198329;
+	var userType = 2;
+	var starttime = "20091001";
+	var endtime = "20091231"
+	var earlytime = "20010917";
+	var USER_NAME = "fdsafsd";
+	var SF_DETACH_DATE = "20091201" 
+	var defWord = "Word";
+	var defGroup = "101000";
+	var defAccount = "101";
+
+	// 报告部分不存在展现数据的最后一天，格式为mm/dd/yyyy
+	var NO_SHOWDATA_LASTDATE = '20080601';
+
+	// 时间点，当在这个时间点之前，只提供分日分关键字报告，在这个时间点之后正常
+	var ONLY_WORDDAILY_REPORT_DATE = '20080601';
+	var USER_NAME = 'kangti';
+	var ACCOUNT_NUMBER = 11;
+	var REG_DATE = '20091102';
+	var AUTH_ARRAY = [1];
+	var AREA_QUERY_START = "20090402";
+	domReady();
+</script>
+<style>
+/*
+ * AutoWideSelect表头样式
+ * .awSelect：整个表头，input为显示框
+ * .awArrow：下拉图标
+ * @author linzhif@baidu.com
+ */
+span.awSelect {
+	display:inline-block;
+	*display:inline;
+	zoom:1;
+	position:relative;	
+	border:1px solid #7f9db9;
+	height:19px;
+	padding-top:2px;
+	*padding-top:0;
+	vertical-align:top;	
+	*vertical-align:text-bottom;	
+}
+.awSelect input{
+	display:inline-block;	
+	*display: inline;
+	zoom:1;	
+	height:15px;
+	margin:3px 0 1px 1px;
+	*margin:1px 0 1px 1px;
+	padding:0px;
+	border:0;
+	vertical-align:top;
+	cursor:default;
+}
+.awSelect input.awSelectText {	
+	background-color:#fff;	
+	color:#000;
+}
+.awSelect input.awSelectTextFocus {
+	background-color:#316ac5;	
+	color:#fff;
+}
+.awSelect .awArrow {
+	display:inline-block;	
+	*display: inline;
+	zoom:1;
+	width:15px;
+	height:15px;
+	margin:3px 1px 1px 2px;
+	*margin:2px 1px 1px 2px;
+	padding:0px;
+	border:0;
+	vertical-align:top;
+	background:#fff url('../img/arrow.gif') no-repeat center center;
+}
+.awSelect .awArrow:hover {
+	background:#fff url('../img/arrow_over.gif') no-repeat center center;
+}
+/*
+ * AutoWideSelect下拉选项样式
+ * .optIframe：遮挡层
+ * .optGroup：下拉选项
+ * @author linzhif@baidu.com
+ */
+iframe.awOptIframe{
+	position:absolute;
+	z-index:-1;
+	top:19px;
+	left:-1px;
+	scrolling:no;
+	border:0;
+}
+div.awOptGroup{
+	position:absolute;
+	z-index:666;
+	left:-1px;
+	top:19px;
+	background:white;
+	border: 1px solid #7f9db9;
+	overflow-y:auto;
+	overflow-x:hidden;
+	padding:0;
+	margin:0;
+}
+.awOptGroup a,.awOptGroup a:visited{
+	text-decoration:none;
+	display:block;
+	white-space: nowrap;
+	color:#000;
+	padding:0 2px;
+	height:15px;
+	line-height:15px;
+	cursor:default;
+}
+.awOptGroup a.awOptSelected,.awOptGroup a:visited.awOptSelected,.awOptGroup a:focus{
+	color: #fff;
+	text-decoration:none;
+	background:#316ac5;
+	font-weight:normal;
+}
+</style>
+<script>
+/**
+ * 自适应宽度Select类。
+ * @param {Number} MonitorInterval 监控时间间隔；
+ * @param {Number} MaxRow 下拉对大条数；
+ * @param {Number} SelectWidth 选项框宽度；
+ * @return {Object} AutoWidthSelect类
+ * @author linzhifeng@baidu.com
+ */
+function AutoWidthSelect(MonitorInterval,MaxRow,SelectWidth)
+{
+	//私有成员变量
+	this.selects = new Array();					//保存被替换的SelectBox对象
+	this.selsectsDisplay=new Array();			//保存被替换的SelectBox显示隐藏状态
+	this.awSelectText = new Array();			//保存被替换的SelectText
+	this.focusSelectID=-1;						//当前选中的SelectBox,-1未选中
+	this.focusLineNum=0;						//当前选中的项
+	this.tMonitor=0;							//轮询Timer控制器
+	this.isInside=0;							//鼠标是否在控件内
+	this.awStateCache="";						//缓存:文字+显示+*;* eg:SelectText(0or1)*;*
+	this.awSelectIDBase='awSelect';						//自适应SelectID命名基础
+	this.awSelectTextIDBase='awSelectText';				//自适应Select显示框ID命名基础
+	this.awArrowIDBase='awArrow';						//自适应Select显示框ID命名基础
+	this.awOptGroupIDBase='optGroup';					//下拉列表组ID命名基础
+	this.awOptIframeIDBase='optIframe';					//下拉列表遮盖层ID命名基础
+	this.awSelectClass='awSelect';						//自适应Select样式类名
+	this.awSelectTextClass='awSelectText';				//自适应Select显示框默认样式类名
+	this.awSelectTextFocusClass='awSelectTextFocus';	//自适应Select显示框聚焦样式类名
+	this.awArrowClass='awArrow'							//自适应Select下拉箭头样式类名
+	this.awOptGroupClass='awOptGroup';					//下拉列表组样式类名
+	this.awOptIframeClass='awOptIframe';				//下拉列表遮盖层样式类名
+	this.awOptSelected='awOptSelected';					//下拉列表被选中样式类名
+	this.lineHeight=15;									//默认行高,需要同时修改相应1的CSS
+	//外部配置参数初始化
+	this.awMonitorInterval=MonitorInterval<=0?500:MonitorInterval;		//间隔时间
+	this.awMaxHeight=(MaxRow<=0?10:MaxRow)*this.lineHeight;				//默认下拉选项最大高度
+	this.awWidth=SelectWidth<=0?80:SelectWidth;							//选项宽度
+	
+	//选项：点击，显示下拉选项
+	this.onClick=function(e){
+		alert('ok');
+		var target = e.target || e.srcElement;
+		var id=target==null?e.id:target.id;
+		if(id==this.focusSelectID)			//再次点中自己，关闭
+		{
+			hideOptions();					//删除自己
+			var mySelectText = G(id);
+			mySelectText.className = this.awSelectTextFocusClass;
+			mySelectText.focus();		
+		}
+		else{								//点开
+			hideOptions();					//删除其他
+			showOptions(id);
+		}
+	};
+	//选项：键盘输入，上下
+	this.onKeyDown=function(e)
+	{		
+		var target = e.target || e.srcElement;
+		var keynum=e.which ? e.which : e.keyCode;	
+		if (keynum != 40 && keynum != 38) {
+			if (keynum==13) {//回车											
+				hideOptions();
+				G(target.id).className = this.awSelectTextFocusClass;	
+			}
+			return;
+		}
+		//改变原生select的值和模拟select的选项的显示
+		var selectNum=target.id.substring(this.awSelectTextIDBase.length,target.id.length);			//获得原生select的id
+		var optGroup = G(this.awOptGroupIDBase);
+		var linkNum=(optGroup==null?selects[selectNum]._select.selectedIndex:this.focusLineNum);	//定位当前选项
+		var mySelectText = G(target.id);															//模拟的select；
+		var optLinks;	
+		switch (keynum){
+			case 40://Down
+				if (linkNum < selects[selectNum]._select.length-1) {
+					linkNum++;
+					this.focusLineNum++;					
+					selects[selectNum]._select.options[linkNum - 1].selected = "";					
+				}
+				if (optGroup != null) {
+					optLinks= optGroup.getElementsByTagName("a");
+					optGroup.scrollTop+=(linkNum+1)*this.lineHeight>(this.awMaxHeight+optGroup.scrollTop)?this.lineHeight:0;					
+					optLinks[linkNum - 1].className = "";
+					optLinks[linkNum].className = this.awOptSelected;
+				}				
+				break;
+			case 38://Up
+				if (linkNum > 0) {
+					linkNum--;
+					this.focusLineNum--;
+					selects[selectNum]._select.options[linkNum + 1].selected = "";
+				}
+				if (optGroup != null) {
+					optLinks= optGroup.getElementsByTagName("a");
+					optGroup.scrollTop-=linkNum*this.lineHeight<optGroup.scrollTop?this.lineHeight:0;
+					optLinks[linkNum + 1].className = "";
+					optLinks[linkNum].className = this.awOptSelected;
+				}	
+				break;
+			default:
+			    return;
+		}
+		selects[selectNum].setSelect(selects[selectNum]._select.options[linkNum].value);		
+		this.awSelectText[selectNum]=selects[selectNum].getSelectedText();
+		mySelectText.value = this.awSelectText[selectNum];
+	}
+	//选项：鼠标移动，改变样式
+	this.onMouseOver=function(e){
+		var id=(e.target || e.srcElement).id.replace(this.awSelectTextIDBase,this.awArrowIDBase);
+		G(id).style.background="#fff url('../img/arrow_over.gif') no-repeat center center";
+		this.isInside=1;
+	};	
+	this.onMouseOut=function(e){
+		var id=(e.target || e.srcElement).id.replace(this.awSelectTextIDBase,this.awArrowIDBase);
+		G(id).style.background="#fff url('../img/arrow.gif') no-repeat center center";
+		this.isInside=0;
+	};	
+	//选项：失去焦点，恢复样式
+	this.onBlur=function(e){	
+		G((e.target || e.srcElement).id).className = this.awSelectTextClass='awSelectText';;
+		if (!this.isInside){
+			hideOptions();
+			this.isInside=0;
+		}		
+	}
+	//选项Group：移动鼠标，改变样式
+	this.onOptMouseOver=function(e){
+		this.isInside=1;
+	};
+	//选项Group：移出鼠标，改变位置状态位
+	this.onOptMouseOut=function(e){
+		this.isInside=0;			
+	}
+	//选项Link：移动鼠标，改变样式
+	this.onOptLinkMouseOver=function(e){
+		var ss=(e.target || e.srcElement)+"";
+		var linkNum=ss.substring(ss.indexOf('(')+1,ss.indexOf(','));
+		var selectNum=ss.substring(ss.indexOf(',')+1,ss.indexOf(')'));
+		var optLinks = G(this.awOptGroupIDBase).getElementsByTagName("a");
+		for (var k = 0; k < optLinks.length; k++) {
+			optLinks[k].className = "";
+		}
+		optLinks[linkNum].className=this.awOptSelected;
+		this.focusLineNum=linkNum;
+		this.isInside=1;
+	};	
+	//下拉列表：显示，传入如"awSelectText1"
+	this.showOptions=function (selectID) {
+		var g=selectID.substring(this.awSelectTextIDBase.length,selectID.length);		
+		this.focusSelectID=selectID;
+		//绘制覆盖层
+		var optIframe=C('iframe');
+		optIframe.src='about:blank';	
+		optIframe.id=this.awOptIframeIDBase;
+		optIframe.className=this.awOptIframeClass;
+		//绘制列表层，每次触发是重绘列表以保证异步加载数据后列表的数据一致			
+		var optGroup = C('div');
+		optGroup.id = this.awOptGroupIDBase;		
+		optGroup.className = this.awOptGroupClass;
+		optGroup.attachEvent('onmouseover',function(event){this.onOptMouseOver(event)});		//绑定列表鼠标移动响应
+		optGroup.attachEvent('onmouseout',function(event){this.onOptMouseOut(event)});			//绑定列表鼠标移出响应
+		for(var j=0; j < selects[g]._select.options.length; j++) {
+			var optLink = C('a');
+			var optText = document.createTextNode(selects[g]._select.options[j].text);
+			optLink.href = "javascript:aws.selectMe("+j+","+g+");";	           					//绑定列表鼠标点击响应
+			optLink.appendChild(optText);
+			optGroup.appendChild(optLink);
+			optLink.attachEvent('onmouseover',function(event){this.onOptLinkMouseOver(event)});	//绑定列表鼠标移动响应							
+		}
+		var mySelectText = G(selectID);
+		mySelectText.className = this.awSelectTextClass;
+		mySelectText.focus();		
+		//装载进入
+		var selectArea=G(this.awSelectIDBase+g);
+		selectArea.appendChild(optIframe);
+		selectArea.appendChild(optGroup);	
+		//调整宽高和显示
+		this.selects[g]._select.style.display='block';	
+		this.selects[g]._select.style.width='auto';	
+		var autoWidth=selects[g]._select.offsetWidth;											//自适应宽度：默认包含滚动条宽度18px
+		autoWidth=(autoWidth>this.awWidth?autoWidth:this.awWidth+19);							//自适应宽度：如果比指定短用指定宽度
+		this.selects[g]._select.style.display='none';
+		var autoHeight=optGroup.offsetHeight-2;													//自适应高度：包括上线2px边框	
+		var linkNum=selects[g]._select.selectedIndex;											//原生Select选项
+		optGroup.getElementsByTagName("a")[linkNum].className=this.awOptSelected;				//高亮显示
+		this.focusLineNum=linkNum;
+		if (autoHeight>this.awMaxHeight){														//超出指定最高需要调整
+			optGroup.style.width=autoWidth+'px';			
+			optGroup.style.height=this.awMaxHeight+'px';
+			optIframe.style.width=autoWidth+2+'px';												//外iframe无边框需要加上div左右各1px边框宽度
+			optIframe.style.height=this.awMaxHeight+'px';								
+			setTimeout("javascript:var optGroup = G('"+this.awOptGroupIDBase+"');optGroup.scrollTop='"+
+			(linkNum*this.lineHeight-Math.floor(this.awMaxHeight/this.lineHeight/2)*this.lineHeight)+"'",10); //定位显示
+		}
+		else{
+			optGroup.style.width=autoWidth-18+'px';												
+			optGroup.style.height=autoHeight+'px';
+			optIframe.style.width=autoWidth-16+'px';
+			optIframe.style.height=autoHeight+'px';
+		}
+		this.isInside=0;
+    }
+	//下拉列表：隐藏
+    this.hideOptions=function()
+	{
+		this.focusSelectID=-1;
+		var optGroup = G(this.awOptGroupIDBase);
+		var optIframe = G(this.awOptIframeIDBase);
+		if (optGroup!=null){
+            optGroup.parentNode.removeChild(optGroup);
+			optIframe.parentNode.removeChild(optIframe);
+		}		
+	}
+	//下拉列表：选中第selectNum个awSelect的第linkNum个下拉选项
+	this.selectMe=function (linkNum,selectNum) {	
+		hideOptions();		
+		for(var k = 0; k < selects[selectNum]._select.length; k++) {
+			if(k==linkNum) {
+				selects[selectNum].setSelect(selects[selectNum]._select.options[k].value);
+			}
+			else {
+				selects[selectNum]._select.options[k].selected = "";
+			}
+		}
+		var mySelectText = G(this.awSelectTextIDBase+selectNum);
+		this.awSelectText[selectNum]=selects[selectNum].getSelectedText();
+		mySelectText.value=this.awSelectText[selectNum];
+		mySelectText.className = this.awSelectTextFocusClass;
+		mySelectText.focus();
+    }
+	//监控被替换的select状态
+	this.startMonitor=function(){
+		this.tMonitor=setTimeout("this.startMonitor()",this.awMonitorInterval);
+		var tempCache="";
+		for (var i = 0; i < this.selects.length; i++) {
+			tempCache+=this.selects[i].getSelectedText()+this.selsectsDisplay[i]+"*;*";
+			this.selects[i]._select.style.visibility = "hidden";							//IE6中当同时设置visibility和display时visibility优先
+		}	
+		if (tempCache == this.awStateCache) {
+			return;
+		}
+		else {
+			if (this.awStateCache==""){
+					for (var i = 0; i < this.selects.length; i++) {
+						this.awStateCache+="fc0*;*";
+					}
+			}			
+			var oldStateArray=this.awStateCache.split('*;*');
+			var newStateArray=tempCache.split('*;*');			
+			var oldText="";
+			var newText="";
+			var oldDisplay=0;
+			var newDisplay=0;
+			var tempObj;
+			this.awStateCache=tempCache;
+			for(var i=0;i<newStateArray.length-1;i++){
+				if (oldStateArray[i]==newStateArray[i]) {continue;}
+				oldText=oldStateArray[i].slice(0,2);
+				newText=newStateArray[i].slice(0,newStateArray[i].length-1);				
+				if (oldText!=newText) {
+					tempObj = G(this.awSelectTextIDBase + i);
+					tempObj.value = newText;
+				}
+				oldDisplay=oldStateArray[i].slice(-1);
+				newDisplay=newStateArray[i].slice(-1);
+				if (oldDisplay!=newDisplay){
+					tempObj = G(this.awSelectIDBase + i);
+					tempObj.style.display = newDisplay== 1 ? 'inline' : 'none';
+				}
+			}
+		}
+	}
+	//取消监控
+	this.stopMonitor=function()	{
+		clearTimeout(this.tMonitor);
+	}	
+	//替换函数
+	this.init=function(){
+		//if (Browser.IE==0) {return;};
+	    for(var i=0; i < this.selects.length; i++) {
+			//模仿顶部选择框
+			var selectArea = C('span');
+			var textInput = C('input');
+			var button = C('a');
+			selectArea.id = this.awSelectIDBase+i;
+			selectArea.className = this.awSelectClass;
+			textInput.type = "text";
+			textInput.id = this.awSelectTextIDBase+i;
+			textInput.className = this.awSelectTextClass;
+			textInput.readOnly='true';
+			textInput.style.width=this.awWidth-18+"px";										//固定宽度=用户设定-输入框外边距-图片宽度-图片外边距
+			addEvent(textInput,'click',function(event){onClick(event)});				//绑定表项鼠标点击响应
+			addEvent(textInput,'mouseover',function(event){onMouseOver(event)});		//绑定表项鼠标移进响应
+			addEvent(textInput,'mouseout',function(event){onMouseOut(event)});			//绑定表项鼠标移出响应
+			addEvent(textInput,'blur',function(event){onBlur(event)});					//绑定表项焦点离开响应
+			addEvent(textInput,'keydown',function(event){onKeyDown(event)});			//绑定表项键盘按下响应
+			button.id=this.awArrowIDBase+i;
+			button.className = this.awArrowClass;
+			button.href="javascript:this.onClick("+this.awSelectTextIDBase+i+");this.onOptMouseOver();";
+			button.hideFocus='true';
+			addEvent(button,'mouseover',function(event){this.onMouseOver(event)});			//绑定表项鼠标移进响应
+			addEvent(button,'mouseout',function(event){this.onMouseOut(event)});			//绑定表项鼠标移出响应
+			selectArea.appendChild(textInput);
+			selectArea.appendChild(button);			
+			this.selects[i]._select.parentNode.insertBefore(selectArea, this.selects[i]._select);
+		}
+		this.startMonitor();
+	}
+	this.replaceSelects=function(sBox){
+		this.selects.push(sBox);
+		sBox.awSelect=this;
+		sBox.awIndex=this.selects.length-1;
+		sBox.show=function(){this.awSelect.selsectsDisplay[this.awIndex]=1;this._select.style.display='none';}
+		sBox.hide=function(){this.awSelect.selsectsDisplay[this.awIndex]=0;this._select.style.display='none';}
+	}
+	return this;
+}
+aws=AutoWidthSelect(200,4,123);		//声明对象：监控时间，下拉列最大条数，定宽，
+aws.replaceSelects(rs1);			//需要替换的SelectBox
+aws.replaceSelects(rs2);
+aws.replaceSelects(rs3);
+aws.init();
+</script>
+<script type="text/javascript" src="http://localhost:8080/bridge/bridge.php"/>
+
+</body>
+</html>
