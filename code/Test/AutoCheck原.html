@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>templates</title>
+  <meta name="description" content="自动检查" />
+  <meta name="author" content="Kener" />
+  <style type="text/css">
+  	#Nav li a{
+  		text-decoration:none;
+  	}
+  	#Nav li a:hover{
+  		text-decoration:underline;
+  	}
+  	#Nav li.cur{
+  		background-color:green;
+  	}
+  	#Nav li.fail{
+  		background-color:red;
+  	}
+  </style>
+</head>
+
+<body>
+	<h1 style="background-color:#add8e6">Auto check for xxx</h1>
+	<div id='Nav' style="width:200px;float:left;overflow:auto;border-right:1px dashed #add8e6">
+		目标网址
+	</div>
+	<div id='Content' style="padding:0 20px 0 210px">
+		<div id='Tar'></div>
+		Result <button onclick="javascript:document.getElementById('Res').innerHTML = ''">清空</button>
+		<div id='Res' style="width:100%;height:100px;overflow:auto;border-top:1px dashed #add8e6"></div>
+	</div>
+	<p style="clear:both;background-color:#add8e6"><a href="http://weibo.com/kenerlinfeng" target="_blank">@kener</a></p>
+	<script type="text/javascript">
+	var hash = window.location.hash;	
+	if (hash != ''){
+		//自己做自己的同源代理
+		parent.parent.location.hash = self.location.hash.substring(1); 
+	}else{
+		//配置项
+		var webSiteList = [
+				{
+					url : 'https://passport.360buy.com/new/login.aspx',	//目标网址
+					param : "loginname&user123&loginpwd&123456&loginsubmit&loginpwd_error&登录信息与密码不匹配"
+					//用户名输入框id & 输入 & 密码输入框id & 输入 & 登录按钮id & 信息校验框id & 校验信息
+				},
+				{
+					url : 'https://login.vancl.com/login/login.aspx',
+					param : "vanclUserName&user123&vanclPassword&123456&vanclLogin&vanclLoginError&用户名或者密码错误!"
+				},
+				{
+					url : 'https://xxxx.vxancl.com/login/login.aspx',
+					param : "vanclUserName&user123&vanclPassword&123456&vanclLogin&vanclLoginError&用户名或者密码错误!"
+				},
+				{
+					url : 'https://passport.yihaodian.com/passport/login_input.do',
+					param : "un&kanfang163@163.com&pwd&123456&loginform&pwd_desc&账号与密码不匹配"
+				}
+			]
+		
+        var nav = document.getElementById('Nav'),
+            iframeDom,iframewrp = document.getElementById('Tar'),
+            res = document.getElementById('Res'),
+        	viewHeight = document.compatMode == 'BackCompat' ? document.body.clientHeight : document.documentElement.clientHeight;
+		
+		iframeDom = document.createElement('iframe');
+		iframeDom.id = 'IframeDom';
+		iframeDom.style.width = '100%';
+		iframeDom.style.borderWidth = 0;
+        iframeDom.src = 'http://www.baidu.com';    // 注意该文件在"a.com"域下  
+        iframewrp.style.height = viewHeight - 150 - 100 + 'px';
+        iframewrp.appendChild(iframeDom);  
+        
+		nav.style.height = viewHeight - 150 + 'px';
+		iframeDom.style.height = viewHeight - 150 - 110 + 'px';
+		
+		var html = '目标网址<ul id="NavList">';
+		for (var i = 0, l = webSiteList.length; i < l; i++){
+			html += '<li id="WebOf'+ i + '"><a href="javascript:checkThis(' + i +')">' + webSiteList[i].url + '</a></li>';
+		}
+		html += '</ul>'
+		html += '<button id="StartCheck" onclick="autoStart()">开始检查</button>'
+		nav.innerHTML = html;
+		
+		var curCheckIdx = 0,
+		    retryCounter = 0,
+		    autoCheck = false;
+		//自动检查
+		function autoStart(){
+			curCheckIdx = 0;
+			retryCounter = 0;
+			autoCheck = true;
+			startCheck();
+		}
+		//手动检查
+		function checkThis(idx){
+			document.getElementById('WebOf' + curCheckIdx).className = '';
+			curCheckIdx = idx;
+			retryCounter = 0;
+			autoCheck = false;
+			startCheck();
+			return false;
+		}
+		//单个检查
+		function startCheck(){
+			var url = webSiteList[curCheckIdx].url;
+			document.getElementById('WebOf' + curCheckIdx).className = 'cur';
+			createIframe(url + '#' + encodeURIComponent(webSiteList[curCheckIdx].param+'&'+window.location.href.replace('#','')))
+			//iframeDom.src = ;
+			logResult(' open site ' + url);
+			setTimeout(checkResult,1000);//轮询检查
+		}
+		//检查结果
+		function checkResult(){
+			hash = window.location.hash;
+			if (hash == ''){
+				if (retryCounter < 5){
+					retryCounter ++;
+					setTimeout(checkResult,1000);//轮询检查
+					return;
+				}else{
+					hash = '#fail';
+				}
+			}
+			retryCounter = 0;
+			//console.log(hash)
+			if (hash == '#success'){
+				logResult(webSiteList[curCheckIdx].url + ' 正常');
+				document.getElementById('WebOf' + curCheckIdx).className = '';
+			} else if (hash == '#normal'){
+				logResult(webSiteList[curCheckIdx].url + ' <b> 网站可达，但登录异常</b>');
+				document.getElementById('WebOf' + curCheckIdx).className = '';		
+			} else {
+				logResult('<b><a target="_blank" href="' + webSiteList[curCheckIdx].url + '">' + webSiteList[curCheckIdx].url + '</a> 有问题</b>');
+				document.getElementById('WebOf' + curCheckIdx).className = 'fail';
+			}
+			window.location.hash = '';
+			if (autoCheck && curCheckIdx < webSiteList.length - 1){
+				iframeDom.src = 'about:blank';
+				curCheckIdx++;
+				startCheck();
+			}else{
+				logResult("-------------------------检查结束--------------------------------")
+			}
+		}
+		//记录
+		function logResult(str){
+			res.innerHTML += (new Date() + ' : ' +  str + '<br/>');
+		}
+		//动态创建Iframe
+		function createIframe (argument) {
+			iframeDom = null;
+			iframewrp.innerHTML = '';
+		  	iframeDom = document.createElement('iframe');
+			iframeDom.style.width = '100%';
+			iframeDom.style.height = viewHeight - 150 - 110 + 'px';
+			iframeDom.style.borderWidth = 0;
+	        iframeDom.src = argument; 
+	        iframewrp.appendChild(iframeDom); 
+		}
+	}		
+	</script>
+</body>
+</html>

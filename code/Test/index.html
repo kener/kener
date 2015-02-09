@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>templates</title>
+  <meta name="description" content="" />
+  <meta name="author" content="linzhifeng" />
+
+  <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references >
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> -->
+</head>
+
+<body>
+  <div>
+    <header>
+      <h1>Hello PhoneGap</h1>
+    </header>
+    <nav>
+      <p><a href="/">Home</a></p>
+      <p><a href="/contact">Contact</a></p>
+    </nav>
+<div id='sad' style="position: absolute;top:190px;left:30px;background-color: red;">sdf</div>
+<div id='sad2' style="position: absolute;top:170px;left:20px;background-color: green;width:100px;height:100px">sdf</div>
+    <div id='linfeng' style="background-color:#fff">
+    	<input id='loginname' value="username"/>
+    	<input id='loginpwd' value='pas'/>
+      <button  id='loginsubmit'>Hello</button>
+      <p id = 'loginpwd_error'>sdf</p>
+    </div>
+	
+    <footer>
+     <p>&copy; Copyright  by linzhifeng</p>
+    </footer>
+  </div>
+  <style type="text/css">
+#linfeng{
+	width: 100px;
+}
+</style>
+<script type="text/javascript">	
+/*
+	console.log(window.location.hash);
+	var _param = decodeURIComponent(window.location.hash.substring(1)).split('&'),
+		i,l = _param.length,
+	    _callback = _param[l -1];
+	
+	var ifrproxy = document.createElement('iframe');  
+       /// ifrproxy.style.display = 'none';  
+        ifrproxy.src = _callback + '#success';
+        document.body.appendChild(ifrproxy);  
+	*/
+	//alert(1);
+	console.log(document.getElementById('linfeng').offsetWidth);
+	window.onload = function  (argument) {
+	  //alert(3);
+	  console.log(document.getElementById('linfeng').offsetWidth);
+	}
+	
+	setTimeout(function(){
+		var script = document.createElement('script');
+	script.async = false ;
+	script.src='kener.js';
+		document.body.appendChild(script);
+	},500)
+	
+</script>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<style>
+    v\:* {
+            behavior:url(#default#VML)
+    }
+</style>
+<script language="javascript">
+    var s_x = 0, s_y = 0, _object;
+
+    with (document) {
+          onmouseup = function() {
+               _object.style.display = 'none';
+          }
+
+          onmousedown = function() {
+               s_x = event.x;
+               s_y = event.y;               
+             
+               with (_object) {
+                     style.width = 0;
+                     style.height = 0;
+                     style.display = 'inline';
+               }                
+          }
+
+          onmousemove = function() {
+               var e_x = event.x;
+               var e_y = event.y;
+
+               if (e_x - s_x > 0) {
+                   _object.style.left = s_x;
+                   _object.style.width = e_x - s_x;
+               } else {
+                   _object.style.left = e_x;
+                   _object.style.width = s_x - e_x;
+               }
+               if (e_y - s_y > 0) {
+                   _object.style.top = s_y;
+                   _object.style.height = e_y - s_y;
+               } else {
+                   _object.style.top = e_y;
+                   _object.style.height = s_y - e_y;
+               }        
+          }
+    }
+
+    onload = new Function('_object = self.oOval;');
+
+    function doShape(arg) {
+          _object = eval('self.' + arg);
+    }
+</script>
+</head>
+<body>
+   <select id="oShape" onchange="doShape(options[selectedIndex].value);">
+       <option value="oOval">圆形</option>
+       <option value="oRect">矩形</option>
+       <option value="oRoundRect">圆距</option>
+   </select>
+   <v:oval id="oOval" style="display: none;position: absolute;">
+       <v:stroke color="red" dashstyle="Dot" />
+   </v:oval>
+   <v:rect id="oRect" style="display: none;position: absolute;">
+       <v:stroke color="red" dashstyle="Dot" />
+   </v:rect>
+   <v:roundrect id="oRoundRect" style="display: none;position: absolute;">
+       <v:stroke color="red" dashstyle="Dot" />
+   </v:roundrect>
+</body>
+</html>

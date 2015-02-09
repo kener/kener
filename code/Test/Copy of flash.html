@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;">
+		<script src="flash.js" language="javascript"></script>
+		<script src="swf.js" language="javascript"></script>
+		<title>Flash</title>
+	</head>
+	<body>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>		
+		<input type="text" id="txtValue"/>
+		<input type="button" value="createFlash" onclick="init()"></input>
+		<input type="button" value="write" onclick="writeToFlash()"></input>
+		<input type="button" value="read" onclick="readaFromFlash()"></input>
+	
+		<script language="javascript" type="text/javascript">
+			function init(){
+				var fc = document.createElement('div');
+				fc.style.position="absolute";
+				fc.style.top="0";
+				fc.style.left="0";
+				fc.id='flashContainer';
+				document.body.appendChild(fc);
+				//fc.innerHTML = buildFlash('flashStorage',"LocalStorage.swf",10,10,'opaque');	
+				baidu.swf.create({'id': "flashStorage",'width': "1",'height': "1",'ver': "9.0.28",'errorMessage'	: "Please download the newest flash player.",'url': "LocalStorage.swf",'bgColor': "blue",'wmode': "window"},"flashContainer");
+			
+			}
+			
+			function writeToFlash(){
+				invokeFlash('flashStorage','write',['fengchao', 'key', document.getElementById('txtValue').value],function(res){document.getElementById('txtValue').value='ok'});
+				//baidu.swf.getMovie('flashStorage').write('fengchao', 'key', document.getElementById('txtValue').value);		
+			}
+			function readaFromFlash(){
+				invokeFlash('flashStorage','read',['fengchao', 'key'],function(res){;document.getElementById('txtValue').value=res});
+				//document.getElementById('txtValue').value = baidu.swf.getMovie('flashStorage').read('fengchao', 'key');
+			}
+		</script>
+	</body>
+</html>

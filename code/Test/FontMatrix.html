@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>FontMatrix</title>
+  <meta name="description" content="font matrix auto bulider!" />
+  <meta name="author" content="kener.linfeng" />
+
+  <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+
+  <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <style type="text/css">
+  	.l{
+  		float:left;
+  	}
+  	#MatrixWrap{
+  		clear:both;
+  		font-weight:bold;
+  		font-family:"微软雅黑", "宋体", Tahoma; 
+  		border:1px solid blue;
+  		width:600px;
+  		height:200px;
+  		overflow-y:visible;
+  	}
+  </style>
+</head>
+
+<body>
+  <div>
+    <header>
+      <h1>FontMatrix</h1>
+    </header>
+    
+    <nav>
+      <div class="l">
+      	内容：<textarea id="Name" rows="8" cols="40">Hello~</textarea>
+      </div>
+      	<div>间　隔：<input id="PBase" type="text" value="1"/><input id="PRange" type="range" value="1" min="0" max="10" step="1"/></div>
+      	<div>大　小：<input id="SBase" type="text" value="1"/><input id="SRange" type="range" value="10" min="0" max="10" step="1"/></div>
+      	<div>颜　色：<input id="CBase" type="color" value="#34538b" /><input id="CRange" type="range" value="10" min="0" max="100" step="1"/></div>
+      	<div>透明度：<input id="MBase" type="text" value="10"/><input id="MRange" type="range" value="10" min="0" max="100" step="1"/></div>
+    </nav>
+    
+    <div id="MatrixWrap">
+    	  
+    </div>
+    
+    <footer>
+     <p>&copy; Copyright by @Kener-林峰</p>
+    </footer>
+  </div>
+  <script type="text/javascript">
+  	var MW = document.getElementById("MatrixWrap"),
+  		N = document.getElementById('Name'),
+  		PB = document.getElementById('PBase'),
+  		PR = document.getElementById('PRange'),
+  		SB = document.getElementById('SBase'),
+  		SR = document.getElementById('SRange'),
+  		CB = document.getElementById('CBase'),
+  		CR = document.getElementById('CRange'),
+  		MB = document.getElementById('MBase'),
+  		MR = document.getElementById('MRange');
+  	
+  	N.onkeyup = repaint;
+  	
+  	function repaint () {
+		var nArray = N.value.split('\n'),
+			html = "";
+		for (var i = 0, l = nArray.length; i < l; i++){
+			html += '<div class="l">' + nArray[i] + '</div>';
+		}
+		MW.innerHTML = html;
+		refresh();
+	}
+	
+	function refresh () {
+	  	var dArray = MW.getElementsByTagName('DIV'),
+	  		pbv = PB.value,
+	  		prv = PR.value,
+	  		sbv = SB.value,
+	  		srv = SR.value,
+	  		cbv = CB.value,
+	  		crv = CR.value,
+	  		mbv = MB.value,
+	  		mrv = MR.value;
+
+	  	for (var i = 0, l = dArray.length; i < l; i++){
+			dArray[i].style.padding = pbv + Math.ceil(Math.random()*prv) + 'px';
+			dArray[i].style.fontSize = sbv + Math.ceil(Math.random()*srv) + 'px';
+		}
+	}
+  </script>
+</body>
+</html>

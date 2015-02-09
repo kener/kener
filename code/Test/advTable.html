@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset='utf-8'">
+		<meta charset="utf-8">
+		<title>Advance Table</title>
+		<script src='tangram-1.3.1.js'></script>
+		<style type='text/css'>
+			.con{
+				border:1px solid red;
+				margin:10px;
+				padding:10px 35px 35px 10px;
+				width:400px;
+				height:200px;		
+				overflow:hidden;	
+				position:relative;			
+			}
+			.adv_table_content{
+				width:400px;
+				height:200px;
+				overflow:hidden;
+			}
+			.scroll_y_handle {
+				position:absolute;
+				right:10px;
+				top:10px;
+				height:200px;
+				width:50px;
+				overflow-y:auto;				
+			}
+			.scroll_x_handle{
+				position:absolute;
+				left:10px;
+				bottom:10px;
+				height:20px;
+				width:400px;
+				overflow-x:scroll;
+			}
+			.currentLock {
+				background:#ccc;
+			}
+			.ui_drag_handle{
+				/*border:1px solid red;*/
+				width:10px;
+				height:20px;
+				zoom:1;
+				float:right;
+			}
+			table{
+				border-top:1px solid blue;
+				border-left:1px solid blue;
+				background:#fff;
+				border-collapse:collapse;  
+    			table-layout:fixed;  
+    			overflow:hidden;
+				width:100%;
+				height:100%;
+			}
+			td,th {
+				white-space: nowrap;				
+				overflow:hidden;							
+			}
+			td div,th div{				
+				height:20px;
+				border-bottom:1px solid blue;
+				border-right:1px solid blue;
+				/*width:100px;*/
+			}
+			.hide{
+				display:none;
+			}
+			.kener{
+				border:1px solid #ccc;
+				position:absolute;				
+				left:-1000px;
+				background:green;
+    			opacity: .2;
+    			filter:alpha(opacity=20);
+			}
+		</style>
+	</head>
+	<body>
+		点击表头锁定
+		<div id = 'con' class='con'></div>
+		<div id = 'mes'>0</div>
+		<div id = 'mes2'>0</div>
+		<script src='advTable.js'></script>
+	</body>	
+</html>

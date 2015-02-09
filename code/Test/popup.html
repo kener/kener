@@ -1,0 +1,93 @@
+<script type="text/javascript">
+	//配置项
+		var webSiteList = [
+				{
+					url : 'weibo.com',						//目标网址
+					input : [								//输入
+						{
+							id : 'loginname',				//输入框ID
+							value : 'aaa'					//填入值，可以没有，默认用adbcdefg代替
+						},
+						{
+							id : 'password',
+							value : 'bbb'
+						},
+					],
+					output : {								//检查输出
+						id : 'password',
+						value : '用户名或密码错误'			//期待结果，可以没有，默认非空
+					}
+				},
+				{
+					url : 'renren.com',						//目标网址
+					input : [								//输入
+						{
+							id : 'username',				//输入框ID
+						},
+						{
+							id : 'password',
+						},
+					],
+					output : {								//检查输出
+						id : 'password',
+						value : '用户名或密码错误'			//期待结果，可以没有，默认非空
+					}
+				}
+			]
+		/*
+        var nav = document.getElementById('Nav'),
+            iframeDom = document.getElementById('IframeDom'),
+            tarWeb = window.frames['TarWeb'],
+            res = document.getElementById('Res'),
+        	viewHeight = document.compatMode == 'BackCompat' ? document.body.clientHeight : document.documentElement.clientHeight;
+		nav.style.height = viewHeight - 150 + 'px';
+		iframeDom.style.height = viewHeight - 150 - 100 + 'px';
+		
+		var html = '目标网址<ul id="NavList">';
+		for (var i = 0, l = webSiteList.length; i < l; i++){
+			html += '<li idx="' + i + '">' + webSiteList[i].url + '</li>';
+		}
+		html += '</ul>'
+		html += '<button id="StartCheck" onclick="start()">开始检查</button>'
+		nav.innerHTML = html;
+		*/
+		var curCheckIdx = 0,
+		    retryCounter = 0;
+		//启动检查
+		function start(){
+			curCheckIdx = 0;
+			retryCounter = 0;
+			checkOpen();
+		}
+		
+		function checkOpen () {
+			if (curCheckIdx < webSiteList.length) {
+				var url = webSiteList[curCheckIdx].url;
+				window.location.href = 'http://' + url;
+				retryCounter = 0;
+			};
+			setTimeout(checkLogin, 1000);//1s后检查网址是否打开
+		}
+		
+		function checkLogin(){
+			alert(113331)
+			//document.getElementById('kener') = 'oksadfsdf'
+			//document.getElementById(webSiteList[curCheckIdx].input[0].id) = webSiteList[curCheckIdx].input[0].value;
+			document.getElementById('kw').value = 'kener'
+			alert(222)
+			document.getElementById('kener') = 'ok'
+		}
+		
+		function checkDone(){
+			
+		}
+		
+		function log(str){
+			res.innerHTML += (new Date() + ' : ' +  str + '<br/>');
+		}
+		start();
+</script>
+
+<div id='kener'>
+	
+</div>

@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<script language="javascript">
+    
+    //s_x，s_y代表上一时刻鼠标所在的坐标；e_x，e_y代表鼠标的当前坐标；dx,dy代表固定点的坐标
+    var s_x = 400, s_y =400;
+    var width, height;
+    var flag = false;
+    var e_x,e_y;
+    with(document) {
+          onmouseup = function() {
+               flag = false;            
+          }
+          onmousedown = function() {
+           var object = document.getElementById("layer1");
+               flag = true;
+           s_x = event.x;
+           dx = s_x;
+               s_y = event.y+document.body.scrollTop;
+           dy = s_y;
+           object.style.left = s_x;
+           object.style.top = s_y;
+           object.style.height = 0;
+           object.style.width = 0;
+          }    
+          onmousemove = function() {
+            if(flag) {
+            e_x = event.x;
+            e_y = event.y+document.body.scrollTop;
+            width = Math.abs(e_x-dx);
+            height = Math.abs(e_y - dy);
+            if (e_x - dx > 0) {
+                s_x = dx;
+            } else {
+                s_x = e_x;
+            }
+            if (e_y - dy > 0) {
+                 s_y = dy;
+            } else {
+                 s_y = e_y;
+            } 
+            var object = document.getElementById("layer1");
+            object.style.left = s_x;
+            object.style.top =  s_y;
+            object.style.height = height;
+            object.style.width = width;
+        }
+      }
+    }
+</script>
+</head>
+<body>
+	sdfsaf
+	sdfsadf
+	sdf
+	林峰
+<div id="layer1" style="position:absolute;left:0;top:0;height:0;width:0;background-color:#0066ff; z-index:1;filter:alpha(Opacity=30)"></div>
+</body>
+</html> 

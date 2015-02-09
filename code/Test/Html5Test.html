@@ -1,0 +1,169 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="utf-8">
+<title>HTML5 Test</title>
+<script src="tangram-1.3.1.js" type="text/javascript"></script>
+<script language="JavaScript">
+	function showFileName(){
+		var ctl = document.getElementById('file').files,html = "";
+		for (var i = 0, l = ctl.length; i<l; i++){
+			html += ctl[i].name;
+		}
+		document.getElementById('result').innerHTML = html;
+	}
+	function readAsD () {
+	  	var ctl = document.getElementById('file2').files[0];
+	  	var reader = new FileReader();
+	  	console.log(ctl)
+	  	reader.onloadend = reader.onload =  function(e){
+	  		console.log(this);
+	  		baidu.g('result').innerHTML = '<img src="' + this.result  + '" />';
+	  	}
+	  	reader.readAsDataURL(ctl);
+	}
+	function readAsB() {
+	  	var ctl = document.getElementById('file2').files[0];
+	  	var reader = new FileReader();
+	  	console.log(ctl)
+	  	reader.onloadend = reader.onload =  function(e){
+	  		console.log(this);
+	  		baidu.g('result').innerHTML = this.result;
+	  	}
+	  	reader.readAsBinaryString(ctl);
+	}
+	function readAsT() {
+	  	var ctl = document.getElementById('file2').files[0];
+	  	var reader = new FileReader();
+	  	console.log(ctl)
+	  	reader.onloadend = reader.onload =  function(e){
+	  		console.log(this);
+	  		baidu.g('result').innerHTML = this.result;
+	  	}
+	  	reader.readAsText(ctl);
+	}
+	function init(){
+		var source = baidu.g('dragme');
+		var dest = baidu.g('text');
+		source.addEventListener("dragstart",function(ev){
+			var dt = ev.dataTransfer;
+			dt.effectAllowed = "move";
+			dt.setData("text/plain","hello<br/>");
+			//var imgDrag = baidu.g('dragImg');
+			//dt.setDragImage(imgDrag,0,0)
+		},false);
+		dest.addEventListener("dragend",function(ev){
+			ev.preventDefault();
+		},false);
+		dest.addEventListener("drop",function(ev){
+			var dt = ev.dataTransfer;
+			var text = dt.getData("text/plain");
+			dest.innerHTML += text;
+			ev.preventDefault();
+			ev.stopPropagtion();
+		},false);
+		dest.addEventListener("dragover",function(ev){
+			var dt = ev.dataTransfer;
+			dt.dropEffect =  'move';
+			ev.preventDefault();	
+		},false);
+		
+		/*
+		var canvas = baidu.g('canvas');
+		if (canvas == null){
+			return false;
+		}
+		var context = canvas.getContext('2d');
+		//var g1 = context.createLinearGradient(0,0,300,300);
+		var g1 = context.createRadialGradient(400,0,0,400,0,400);
+		g1.addColorStop(0.1,'rgb(255,255,0)');
+		g1.addColorStop(0.3,'rgb(255,0,255)');
+		g1.addColorStop(1,'rgb(0,255,255)');
+		context.fillStyle = g1;
+		context.fillRect(0,0,400,400);
+		context.strokeStyle= 'blue';
+		context.lineWidth= 1;
+		context.strokeRect(10,10,380,380);
+		var n = 0,
+			dx = 200,
+			dy = 200,
+			s = 100,
+			x = Math.sin(0),
+			y = Math.cos(0),
+			dig = Math.PI/15*11;
+		context.beginPath();
+		context.fillStyle = "rgb(100,255,100)";
+		context.strokeStyle= 'rgb(0,0,100)';
+    	//context.bezierCurveTo(20,25,20,62.5,20,62.5);
+    	//context.bezierCurveTo(20,80,40,102,75,120);
+    	//context.bezierCurveTo(110,102,130,80,130,62.5);
+    	//context.bezierCurveTo(130,62.5,130,25,100,25);
+    	//context.bezierCurveTo(85,25,75,37,75,40);
+		for (var i = 0; i < 30; i++){
+			//context.arc(i*25, i *25, i * 10, 0, 360*Math.PI/180, true);
+			x = Math.sin(i * dig);
+			y = Math.cos(i * dig);
+			context.lineTo(dx + x * s, dy + y * s);
+			//context.bezierCurveTo(dx+x*s,dy+y*s-100,dx+x*s+100,dy+y*s,dx+x*s,dy+y*s)
+			//context.fillStyle = 'rgba(' + Math.ceil(Math.random()*255) +',' + Math.ceil(Math.random()*255) +',' + Math.ceil(Math.random()*255) +',0.45)'
+		}
+		context.closePath();
+		context.strokeStyle= 'blue';
+		context.stroke();
+		context.moveTo(10,200);
+   		context.bezierCurveTo(100,37,270,325,390,200);
+   		//context.quadraticCurveTo(380,380,200,380);
+   		context.quadraticCurveTo(200,480,10,200);
+		//context.fill();
+		context.stroke();
+		*/
+		
+		var canvas2 = baidu.g('canvas2');
+		var context2 = canvas2.getContext('2d');
+		context2.fillStyle="#eef";
+		context2.fillRect(0,0,400,400);
+		context2.translate(200,50);
+		context2.fillStyle = 'rgba(255,0,0,0.25)';
+		var idx = 0;
+		setTimeout(drawR,200);
+		canvas2.toDataURL("image/jpeg")
+		context2.fillRect(0,0,100,50);
+		function drawR () {
+			//context2.clearRect(0,0,100,50);
+		  	context2.translate(25,25);
+			context2.scale(0.95,0.95);
+			context2.rotate(Math.PI/10);
+			context2.fillRect(0,0,100,50);
+			if (++idx < 50){
+				setTimeout(drawR,100);
+			}
+		}
+	}
+	
+	document.ondragover = function (e) {e.preventDefault();}
+	document.ondrop = function(e){e.preventDefault();}
+</script>
+</head> 
+<body onload="init()"> 
+	Linfeng
+<details>
+	<summary>Kener</summary>
+	<span>Hello I'm Kener</span>
+</details>
+This's a <em>page</em> about <mark>HTML5</mark>!
+<meter value="91" min="0" max="100" low="40" high="90" optimum="100">A+</meter>
+<input type="file" id="file" multiple accept="image/*"/>
+<input type="button" onclick="showFileName()" value="upload"/>
+<br>
+
+<input type="file" id="file2" multiple accept="image/*"/>
+<input type="button" onclick="readAsD()" value="image"/>
+<input type="button" onclick="readAsB()" value="binary"/>
+<input type="button" onclick="readAsT()" value="text"/>
+<p id="result">result</p>
+<div id="dragme" draggable="true" style="width:200px;height:20px;border:1px solid red;">drag it</div>
+<div id="text" style="width:200px;height:100px;border:1px solid gray;margin-top:10px"></div>
+<!--canvas id="canvas" width="400" height="400" /-->
+<canvas id="canvas2" width="400" height="400"/>
+</body>
+</html>
